@@ -1246,4 +1246,288 @@ function resolveOpposition() {
 
   const previous = character.pa[k];
 
-  character.pa[k
+  character.pa[k] = Math.max(
+    0,
+    previous - cost - damage
+  );
+
+
+  if (
+    myPosture === "economique" &&
+    victory
+  ) {
+
+    character.pa[k] = Math.min(
+      maximum(character, k),
+      character.pa[k] + 1
+    );
+
+  }
+
+
+  if (!save()) {
+
+    character.pa[k] = previous;
+
+    return;
+
+  }
+
+
+  renderCounters();
+
+  updateOppositionLimit();
+
+  actionPreview();
+
+
+  output.textContent =
+    (victory ? "Victoire." : "Défaite.") +
+    " Votre score : " +
+    myScore +
+    ". Score adverse : " +
+    enemyScore +
+    ". Écart : " +
+    difference +
+    ". Mise payée : " +
+    cost +
+    " PA." +
+    (
+      victory
+        ? (
+            myPosture === "economique"
+              ? " Récupération : 1 PA."
+              : ""
+          )
+        : " Dégâts reçus : " + damage + " PA."
+    ) +
+    " Réserve restante : " +
+    character.pa[k] +
+    " / " +
+    maximum(character, k) +
+    ".";
+
+}
+
+
+/* ==========================================
+   ATOUTS
+   ========================================== */
+
+function activateAtout(atout) {
+
+  const output = $("atout-result");
+
+  const k = atout.reserve;
+
+  const cost = Number(
+    atout.cost
+  );
+
+  if (
+    !ATTRS.includes(k) ||
+    !Number.isInteger(cost) ||
+    cost < 1
+  ) {
+
+    output.textContent =
+      "Cet Atout possède un coût invalide.";
+
+    return;
+
+  }
+
+  if (character.pa[k] < cost) {
+
+    output.textContent =
+      "PA insuffisants pour activer cet Atout.";
+
+    return;
+
+  }
+
+  const previous = character.pa[k];
+
+  character.pa[k] -= cost;
+
+  if (!save()) {
+
+    character.pa[k] = previous;
+
+    return;
+
+  }
+
+  renderCounters();
+
+  renderAtouts();
+
+  actionPreview();
+
+  updateOppositionLimit();
+
+  output.textContent =
+    atout.name +
+    " activé. Coût : " +
+    cost +
+    " PA de " +
+    RESERVES[k] +
+    ".";
+
+}
+
+
+function renderAtouts() {
+
+  const host = $("atouts");
+
+  host.replaceChildren();
+
+  if (!character.atouts.length) {
+
+    const p = document.createElement("p");
+
+    p.className = "subtle";
+
+    p.textContent = "Aucun Atout.";
+
+    host.append(p);
+
+  }
+
+
+  for (const atout of character.atouts) {
+
+    const block = document.createElement(
+      "div"
+    );
+
+    block.className = "atout-action";
+
+
+    const button = document.createElement(
+      "button"
+    );
+
+    button.className = "box";
+
+    button.textContent =
+      atout.name +
+      " — Activer (" +
+      atout.cost +
+      " PA de " +
+      RESERVES[atout.reserve] +
+      ")";
+
+    button.disabled =
+      character.pa[atout.reserve] <
+      atout.cost;
+
+    button.onclick = () =>
+      activateAtout(atout);
+
+    block.append(button);
+
+
+    if (atout.description) {
+
+      const description = document.createElement(
+        "p"
+      );
+
+      description.className = "subtle";
+
+      description.textContent =
+        atout.description;
+
+      block.append(description);
+
+    }
+
+    host.append(block);
+
+  }
+
+}
+
+
+/* ==========================================
+   AFFICHAGE GÉNÉRAL
+   ========================================== */
+
+function render() {
+
+  $("character-name").textContent =
+    character.name;
+
+  renderCounters();
+
+  renderSkills();
+
+  renderAtouts();
+
+  actionPreview();
+
+  updateOppositionLimit();
+
+}
+
+
+/* ==========================================
+   ÉVÉNEMENTS
+   ========================================== */
+
+$("action-reserve").onchange =
+$("action-skill").onchange =
+$("action-sd").onchange =
+$("action-modifier").onchange =
+$("action-stake").oninput =
+  actionPreview;
+
+
+$("opp-reserve").onchange =
+  updateOppositionLimit;
+
+
+$("resolve-action").onclick =
+  resolveAction;
+
+
+$("resolve-opposition").onclick =
+  resolveOpposition;
+
+
+function exitGame() {
+
+  const url = new URL(
+    "index.html",
+    window.location.href
+  );
+
+  url.searchParams.set(
+    "id",
+    character.id
+  );
+
+  window.location.href = url.toString();
+
+}
+
+
+$("back").onclick = exitGame;
+
+$("exit").onclick = exitGame;
+
+
+/* ==========================================
+   DÉMARRAGE
+   ========================================== */
+
+render();
+
+})();
+
+</script>
+
+</body>
+  </html>
