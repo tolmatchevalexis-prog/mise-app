@@ -19,13 +19,13 @@
 <title>M.I.S.E. — Personnages</title>
 
 <link rel="stylesheet" href="style.css">
-
-<!-- APPLICATION MOBILE -->
 <link rel="manifest" href="./manifest.json">
 
 <style>
 
-/* CARTOUCHES */
+/* ==========================================
+   CARTOUCHES
+   ========================================== */
 
 .mise-cards {
   display: grid;
@@ -99,6 +99,25 @@
   font-size: 14px;
 }
 
+/* ==========================================
+   EMBLÈME M.I.S.E. — ACCUEIL
+   ========================================== */
+
+.mise-brand-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.mise-home-logo {
+  display: block;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  border-radius: 18px;
+}
+
 </style>
 
 </head>
@@ -107,15 +126,30 @@
 
 <main class="app">
 
-<!-- ACCUEIL -->
+<!-- ======================================
+     ACCUEIL
+     ====================================== -->
 
 <section id="home">
 
-  <header class="brand">M.I.S.E.</header>
+  <header class="brand mise-brand-home">
+
+    <img
+      class="mise-home-logo"
+      src="./mise-icon-192.png"
+      alt="Emblème M.I.S.E."
+      width="112"
+      height="112"
+    >
+
+    <span>M.I.S.E.</span>
+
+  </header>
 
   <div id="cards" class="stack"></div>
 
   <div class="home-bottom">
+
     <button
       class="box primary"
       id="create"
@@ -123,12 +157,15 @@
     >
       Créer un nouveau personnage
     </button>
+
   </div>
 
 </section>
 
 
-<!-- CRÉATION ET MODIFICATION -->
+<!-- ======================================
+     CRÉATION ET MODIFICATION
+     ====================================== -->
 
 <section id="form" hidden>
 
@@ -146,6 +183,8 @@
     </h1>
 
   </div>
+
+  <!-- NOM -->
 
   <label class="field">
 
@@ -171,33 +210,42 @@
   >
 
     <div class="attribute">
+
       <span class="attribute-label">
         Physique
       </span>
+
       <div
         class="dots"
         id="dots-physique"
       ></div>
+
     </div>
 
     <div class="attribute">
+
       <span class="attribute-label">
         Mental
       </span>
+
       <div
         class="dots"
         id="dots-mental"
       ></div>
+
     </div>
 
     <div class="attribute">
+
       <span class="attribute-label">
         Social
       </span>
+
       <div
         class="dots"
         id="dots-social"
       ></div>
+
     </div>
 
   </div>
@@ -278,7 +326,9 @@
 
   <label class="field">
 
-    <span class="label">Historique</span>
+    <span class="label">
+      Historique
+    </span>
 
     <textarea
       id="history"
@@ -293,6 +343,8 @@
     class="error"
     role="alert"
   ></p>
+
+  <!-- VALIDATION -->
 
   <div class="actions">
 
@@ -317,7 +369,9 @@
 </section>
 
 
-<!-- COMPÉTENCES -->
+<!-- ======================================
+     COMPÉTENCES
+     ====================================== -->
 
 <section id="skills" hidden>
 
@@ -339,6 +393,8 @@
     class="mise-cards"
   ></div>
 
+  <!-- NOUVELLE COMPÉTENCE -->
+
   <div class="group">
 
     <h2>Nouvelle compétence</h2>
@@ -358,6 +414,8 @@
       >
 
     </label>
+
+    <!-- CARACTÉRISTIQUE ASSOCIÉE -->
 
     <label class="field">
 
@@ -395,6 +453,8 @@
 
     </label>
 
+    <!-- MAÎTRISE -->
+
     <div class="label">
       Niveau de maîtrise
     </div>
@@ -411,6 +471,8 @@
       ></div>
 
     </div>
+
+    <!-- DESCRIPTION -->
 
     <label class="field group">
 
@@ -457,7 +519,9 @@
 </section>
 
 
-<!-- ATOUTS -->
+<!-- ======================================
+     ATOUTS
+     ====================================== -->
 
 <section id="atouts" hidden>
 
@@ -478,6 +542,8 @@
     id="atout-list"
     class="mise-cards"
   ></div>
+
+  <!-- NOUVEL ATOUT -->
 
   <div class="group">
 
@@ -525,6 +591,8 @@
 
     </label>
 
+    <!-- COÛT -->
+
     <label class="field">
 
       <span class="label">
@@ -542,6 +610,8 @@
       >
 
     </label>
+
+    <!-- DESCRIPTION -->
 
     <label class="field">
 
@@ -588,7 +658,9 @@
 </section>
 
 
-<!-- FICHE DU PERSONNAGE -->
+<!-- ======================================
+     FICHE DU PERSONNAGE
+     ====================================== -->
 
 <section id="detail" hidden>
 
@@ -605,6 +677,8 @@
 
   </div>
 
+  <!-- PORTRAIT -->
+
   <img
     id="detail-portrait"
     class="portrait"
@@ -612,16 +686,24 @@
     hidden
   >
 
+  <!-- NOM -->
+
   <div
     class="detail-name"
     id="detail-name"
   ></div>
 
+  <!-- ATTRIBUTS -->
+
   <h2>Attributs</h2>
   <div id="detail-attrs"></div>
 
+  <!-- RÉSERVES -->
+
   <h2>Réserves de PA</h2>
   <div id="detail-reserves"></div>
+
+  <!-- COMPÉTENCES -->
 
   <h2>Compétences</h2>
 
@@ -630,6 +712,8 @@
     class="mise-cards"
   ></div>
 
+  <!-- ATOUTS -->
+
   <h2>Atouts</h2>
 
   <div
@@ -637,12 +721,16 @@
     class="mise-cards"
   ></div>
 
+  <!-- HISTORIQUE -->
+
   <h2>Historique</h2>
 
   <p
     id="detail-history"
     class="detail-history"
   ></p>
+
+  <!-- ACTIONS -->
 
   <div class="actions">
 
@@ -677,14 +765,19 @@
 </main>
 
 
-<!-- APPLICATION -->
+<!-- ======================================
+     APPLICATION
+     ====================================== -->
 
 <script>
+
 (() => {
 
 "use strict";
 
-/* CONFIGURATION */
+/* ========================================
+   CONFIGURATION
+   ======================================== */
 
 const $ = id =>
   document.getElementById(id);
@@ -739,24 +832,34 @@ const baseMax = value =>
   value * 3 + 5;
 
 
-/* ÉTAT */
+/* ========================================
+   ÉTAT DE L'APPLICATION
+   ======================================== */
 
 let personnages = [];
+
 let brouillon = null;
+
 let personnageSelectionne = null;
+
 let niveauChoisi = 1;
 
 let portraitEnAttente = null;
+
 let supprimerPortrait = false;
 
 let urlApercu = null;
+
 let urlPortraitFiche = null;
 
 let versionApercu = 0;
+
 let versionFiche = 0;
 
 
-/* CHARGEMENT */
+/* ========================================
+   CHARGEMENT DES PERSONNAGES
+   ======================================== */
 
 try {
 
@@ -775,7 +878,9 @@ try {
 }
 
 
-/* SAUVEGARDE */
+/* ========================================
+   SAUVEGARDE
+   ======================================== */
 
 function sauvegarder() {
 
@@ -797,7 +902,9 @@ function sauvegarder() {
 }
 
 
-/* RÉSERVES */
+/* ========================================
+   RÉSERVES ET BLESSURES
+   ======================================== */
 
 function maximumPA(personnage, attribut) {
 
@@ -878,7 +985,9 @@ function preparerPersonnage(personnage) {
 }
 
 
-/* PORTRAITS — INDEXEDDB */
+/* ========================================
+   PORTRAITS — INDEXEDDB
+   ======================================== */
 
 let promesseBase = null;
 
@@ -1061,7 +1170,9 @@ async function effacerPortrait(id) {
 }
 
 
-/* AFFICHAGE DES IMAGES */
+/* ========================================
+   AFFICHAGE DES IMAGES
+   ======================================== */
 
 function afficherImage(element, image, type) {
 
@@ -1152,7 +1263,9 @@ async function chargerPortraitFiche(id) {
 }
 
 
-/* NAVIGATION */
+/* ========================================
+   NAVIGATION
+   ======================================== */
 
 function afficherPage(page) {
 
@@ -1181,7 +1294,9 @@ function afficherPage(page) {
 }
 
 
-/* CERCLES DES ATTRIBUTS */
+/* ========================================
+   CERCLES DES ATTRIBUTS
+   ======================================== */
 
 function afficherCercles(
   elementId,
@@ -1225,7 +1340,9 @@ function afficherCercles(
 }
 
 
-/* ACCUEIL */
+/* ========================================
+   ACCUEIL
+   ======================================== */
 
 function afficherAccueil() {
 
@@ -1260,7 +1377,9 @@ function afficherAccueil() {
 }
 
 
-/* NOUVEAU PERSONNAGE */
+/* ========================================
+   NOUVEAU PERSONNAGE
+   ======================================== */
 
 function nouveauPersonnage() {
 
@@ -1296,7 +1415,9 @@ function nouveauPersonnage() {
 }
 
 
-/* ÉDITION */
+/* ========================================
+   ÉDITION
+   ======================================== */
 
 function ouvrirEdition(personnage) {
 
@@ -1393,7 +1514,9 @@ function actualiserCompteurs() {
 }
 
 
-/* CARTOUCHES */
+/* ========================================
+   CRÉATION D'UN CARTOUCHE
+   ======================================== */
 
 function creerCartouche(
   nom,
@@ -1429,6 +1552,10 @@ function creerCartouche(
 }
 
 
+/* ========================================
+   LISTE VIDE
+   ======================================== */
+
 function afficherListeVide(conteneur, texte) {
 
   const paragraphe = document.createElement("p");
@@ -1442,7 +1569,9 @@ function afficherListeVide(conteneur, texte) {
 }
 
 
-/* ASSOCIATION COMPÉTENCE / CARACTÉRISTIQUE */
+/* ========================================
+   ASSOCIATION COMPÉTENCE / CARACTÉRISTIQUE
+   ======================================== */
 
 function reserveCompetence(competence) {
 
@@ -1486,7 +1615,9 @@ function informationsCompetence(competence) {
 }
 
 
-/* COMPÉTENCES — ÉDITEUR */
+/* ========================================
+   COMPÉTENCES — ÉDITEUR
+   ======================================== */
 
 function afficherCompetences() {
 
@@ -1592,7 +1723,9 @@ function afficherCompetences() {
 }
 
 
-/* NIVEAU DE MAÎTRISE */
+/* ========================================
+   NIVEAU DE MAÎTRISE
+   ======================================== */
 
 function afficherNiveau() {
 
@@ -1616,7 +1749,9 @@ function afficherNiveau() {
 }
 
 
-/* ATOUTS — ÉDITEUR */
+/* ========================================
+   ATOUTS — ÉDITEUR
+   ======================================== */
 
 function afficherAtouts() {
 
@@ -1682,7 +1817,9 @@ function afficherAtouts() {
 }
 
 
-/* LIGNES DE LA FICHE */
+/* ========================================
+   LIGNES DE LA FICHE
+   ======================================== */
 
 function ajouterLigne(
   conteneur,
@@ -1706,7 +1843,9 @@ function ajouterLigne(
 }
 
 
-/* PERSONNAGE SÉLECTIONNÉ */
+/* ========================================
+   PERSONNAGE SÉLECTIONNÉ
+   ======================================== */
 
 function personnageActuel() {
 
@@ -1718,7 +1857,9 @@ function personnageActuel() {
 }
 
 
-/* AFFICHAGE DE LA FICHE */
+/* ========================================
+   FICHE DU PERSONNAGE
+   ======================================== */
 
 function afficherFiche() {
 
@@ -1740,9 +1881,11 @@ function afficherFiche() {
   chargerPortraitFiche(personnage.id);
 
   const zoneAttributs = $("detail-attrs");
+
   zoneAttributs.replaceChildren();
 
   const zoneReserves = $("detail-reserves");
+
   zoneReserves.replaceChildren();
 
   for (const attribut of ATTRS) {
@@ -1830,7 +1973,9 @@ function afficherFiche() {
 }
 
 
-/* ÉVÉNEMENTS */
+/* ========================================
+   ÉVÉNEMENTS
+   ======================================== */
 
 /* CRÉATION */
 
@@ -1855,7 +2000,9 @@ $("cancel").onclick = () => {
 };
 
 
-/* IMPORTER UN PORTRAIT */
+/* ========================================
+   PORTRAITS
+   ======================================== */
 
 $("portrait-file").onchange = () => {
 
@@ -1876,6 +2023,7 @@ $("portrait-file").onchange = () => {
   versionApercu++;
 
   portraitEnAttente = fichier;
+
   supprimerPortrait = false;
 
   afficherImage(
@@ -1889,13 +2037,12 @@ $("portrait-file").onchange = () => {
 };
 
 
-/* RETIRER UN PORTRAIT */
-
 $("portrait-remove").onclick = () => {
 
   versionApercu++;
 
   portraitEnAttente = null;
+
   supprimerPortrait = true;
 
   $("portrait-file").value = "";
@@ -1909,7 +2056,9 @@ $("portrait-remove").onclick = () => {
 };
 
 
-/* OUVRIR LES COMPÉTENCES */
+/* ========================================
+   OUVRIR LES COMPÉTENCES
+   ======================================== */
 
 $("open-skills").onclick = () => {
 
@@ -1918,7 +2067,9 @@ $("open-skills").onclick = () => {
   niveauChoisi = 1;
 
   $("skill-name").value = "";
+
   $("skill-reserve").value = "";
+
   $("skill-description").value = "";
 
   $("skill-error").textContent = "";
@@ -1928,18 +2079,23 @@ $("open-skills").onclick = () => {
 };
 
 
-/* RETOUR DES COMPÉTENCES */
+/* ========================================
+   RETOUR DES COMPÉTENCES
+   ======================================== */
 
 $("skills-back").onclick =
 $("skills-done").onclick = () => {
 
   actualiserCompteurs();
+
   afficherPage("form");
 
 };
 
 
-/* AJOUTER UNE COMPÉTENCE */
+/* ========================================
+   AJOUTER UNE COMPÉTENCE
+   ======================================== */
 
 $("add-skill").onclick = () => {
 
@@ -1985,8 +2141,11 @@ $("add-skill").onclick = () => {
   brouillon.skills.push({
 
     id: uid(),
+
     name: nom,
+
     level: niveauChoisi,
+
     reserve: reserve,
 
     description:
@@ -1995,7 +2154,9 @@ $("add-skill").onclick = () => {
   });
 
   $("skill-name").value = "";
+
   $("skill-reserve").value = "";
+
   $("skill-description").value = "";
 
   $("skill-error").textContent = "";
@@ -2007,16 +2168,22 @@ $("add-skill").onclick = () => {
 };
 
 
-/* OUVRIR LES ATOUTS */
+/* ========================================
+   OUVRIR LES ATOUTS
+   ======================================== */
 
 $("open-atouts").onclick = () => {
 
   synchroniserChamps();
 
   $("atout-name").value = "";
+
   $("atout-description").value = "";
+
   $("atout-reserve").value = "physique";
+
   $("atout-cost").value = "1";
+
   $("atout-error").textContent = "";
 
   afficherPage("atouts");
@@ -2024,18 +2191,23 @@ $("open-atouts").onclick = () => {
 };
 
 
-/* RETOUR DES ATOUTS */
+/* ========================================
+   RETOUR DES ATOUTS
+   ======================================== */
 
 $("atouts-back").onclick =
 $("atouts-done").onclick = () => {
 
   actualiserCompteurs();
+
   afficherPage("form");
 
 };
 
 
-/* AJOUTER UN ATOUT */
+/* ========================================
+   AJOUTER UN ATOUT
+   ======================================== */
 
 $("add-atout").onclick = () => {
 
@@ -2097,8 +2269,11 @@ $("add-atout").onclick = () => {
   brouillon.atouts.push({
 
     id: uid(),
+
     name: nom,
+
     cost: cout,
+
     reserve: reserve,
 
     description:
@@ -2107,8 +2282,11 @@ $("add-atout").onclick = () => {
   });
 
   $("atout-name").value = "";
+
   $("atout-description").value = "";
+
   $("atout-cost").value = "1";
+
   $("atout-error").textContent = "";
 
   afficherAtouts();
@@ -2116,7 +2294,9 @@ $("add-atout").onclick = () => {
 };
 
 
-/* ENREGISTRER LE PERSONNAGE */
+/* ========================================
+   ENREGISTRER LE PERSONNAGE
+   ======================================== */
 
 $("save").onclick = async () => {
 
@@ -2137,8 +2317,8 @@ $("save").onclick = async () => {
   const nouveau = !brouillon.id;
 
   /*
-    Les nouveaux personnages commencent
-    avec leurs réserves de PA pleines.
+    Un nouveau personnage commence
+    avec toutes ses réserves pleines.
   */
 
   if (nouveau) {
@@ -2159,8 +2339,8 @@ $("save").onclick = async () => {
   const anciens = personnages;
 
   /*
-    Les personnages existants conservent
-    leurs PA disponibles.
+    Un personnage existant conserve
+    ses PA disponibles.
   */
 
   if (!nouveau) {
@@ -2253,7 +2433,9 @@ $("save").onclick = async () => {
 };
 
 
-/* RETOUR À L'ACCUEIL */
+/* ========================================
+   RETOUR À L'ACCUEIL
+   ======================================== */
 
 $("detail-back").onclick = () => {
 
@@ -2262,7 +2444,9 @@ $("detail-back").onclick = () => {
 };
 
 
-/* MODIFIER LE PERSONNAGE */
+/* ========================================
+   MODIFIER LE PERSONNAGE
+   ======================================== */
 
 $("edit").onclick = () => {
 
@@ -2270,13 +2454,17 @@ $("edit").onclick = () => {
     personnageActuel();
 
   if (personnage) {
+
     ouvrirEdition(personnage);
+
   }
 
 };
 
 
-/* SUPPRIMER LE PERSONNAGE */
+/* ========================================
+   SUPPRIMER LE PERSONNAGE
+   ======================================== */
 
 $("delete-character").onclick = async () => {
 
@@ -2334,7 +2522,9 @@ $("delete-character").onclick = async () => {
 };
 
 
-/* JOUER CE PERSONNAGE */
+/* ========================================
+   JOUER CE PERSONNAGE
+   ======================================== */
 
 $("play").onclick = () => {
 
@@ -2359,7 +2549,9 @@ $("play").onclick = () => {
 };
 
 
-/* DÉMARRAGE */
+/* ========================================
+   DÉMARRAGE
+   ======================================== */
 
 const parametres = new URLSearchParams(
   window.location.search
@@ -2375,6 +2567,7 @@ if (
 ) {
 
   personnageSelectionne = idRetour;
+
   afficherPage("detail");
 
 } else {
@@ -2384,6 +2577,7 @@ if (
 }
 
 })();
+
 </script>
 
 
@@ -2423,4 +2617,4 @@ if ("serviceWorker" in navigator) {
 </script>
 
 </body>
-  </html>
+</html>
