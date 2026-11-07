@@ -1,1582 +1,2384 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff" id="theme-color">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#ffffff">
+
+<meta
+  name="description"
+  content="M.I.S.E. — Création et gestion de personnages"
+>
+
 <title>M.I.S.E. — Personnages</title>
 
-<style>
-:root {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: #171717;
-  background: #fff;
-}
-* { box-sizing: border-box; }
-body { margin: 0; }
-button, input, textarea, select { font: inherit; }
-button { cursor: pointer; }
+<link rel="stylesheet" href="style.css">
 
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid #888;
-  outline-offset: 3px;
-}
-
-.app {
-  max-width: 470px;
-  min-height: 100dvh;
-  margin: auto;
-  padding: 32px 24px max(32px, env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-}
-section {
-  min-height: calc(100dvh - 64px);
-  display: flex;
-  flex-direction: column;
-}
-section[hidden] { display: none; }
-
-.brand {
-  text-align: center;
-  font-size: clamp(36px, 10vw, 50px);
-  font-weight: 400;
-  letter-spacing: .2em;
-  padding-left: .2em;
-  margin: 12px 0 65px;
-}
-.stack, .actions {
-  display: grid;
-  gap: 15px;
-}
-.home-bottom {
-  margin-top: auto;
-  padding-top: 65px;
-}
-.box {
-  border: 1.5px solid currentColor;
-  border-radius: 13px;
-  background: transparent;
-  color: inherit;
-  width: 100%;
-  min-height: 59px;
-  padding: 12px 16px;
-}
-.card {
-  text-align: left;
-  font-size: 19px;
-  overflow-wrap: anywhere;
-  padding: 17px 21px;
-}
-.primary { font-weight: 600; }
-.secondary {
-  border-color: #aaa;
-  font-weight: 400;
-}
-.heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 28px;
-}
-.heading h1 {
-  font-size: 21px;
-  font-weight: 550;
-  margin: 0;
-}
-.back {
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font-size: 27px;
-  padding: 5px 10px 5px 0;
-}
-.field {
-  display: grid;
-  gap: 9px;
-  margin-bottom: 24px;
-}
-.label {
-  font-size: 15px;
-  font-weight: 550;
-}
-.input {
-  width: 100%;
-  border: 1.5px solid #171717;
-  border-radius: 12px;
-  padding: 14px 16px;
-  background: #fff;
-  color: #171717;
-}
-.long {
-  min-height: 155px;
-  resize: vertical;
-}
-.attribute {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin: 18px 0;
-}
-.attribute-label { font-size: 19px; }
-.dots {
-  display: flex;
-  gap: 9px;
-}
-.dot {
-  height: 26px;
-  width: 26px;
-  flex: none;
-  border: 1.7px solid #171717;
-  border-radius: 50%;
-  background: white;
-  padding: 0;
-}
-.dot.active { background: #171717; }
-.attributes { margin: 5px 0 25px; }
-
-.arrow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-  font-size: 18px;
-}
-.arrow span:last-child { font-size: 24px; }
-
-.subtle {
-  font-size: 14px;
-  color: #666;
-}
-.count { margin: 9px 0 24px; }
-.actions { margin-top: 23px; }
-
-.error {
-  color: #960000;
-  min-height: 16px;
-  font-size: 14px;
-}
-.group { margin-top: 28px; }
-
-.skillrow, .detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #c8c8c8;
-  padding: 12px 0;
-}
-.skillrow div:first-child {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.skillrow p {
-  margin: 4px 0;
-  color: #666;
-  font-size: 13px;
-}
-.small {
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  padding: 8px;
-  background: transparent;
-  color: inherit;
-}
-h2 {
-  font-size: 17px;
-  font-weight: 550;
-  margin: 28px 0 12px;
-}
-.detail-name {
-  font-size: 27px;
-  overflow-wrap: anywhere;
-  margin: 0 0 16px;
-}
-.detail-list {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0;
-}
-.detail-list li {
-  border-bottom: 1px solid #d3d3d3;
-  padding: 12px 0;
-  overflow-wrap: anywhere;
-}
-.detail-history {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.portrait {
-  max-height: 230px;
-  max-width: 100%;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 20px;
-  border-radius: 10px;
-}
-.portrait[hidden] { display: none; }
-
-.photo-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
-}
-.photo-actions button { font-size: 14px; }
-
-select.input { appearance: auto; }
-
-.reserve-counter {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.reserve-counter strong {
-  min-width: 66px;
-  text-align: center;
-}
-.counter {
-  width: 38px;
-  height: 38px;
-  border: 1.5px solid currentColor;
-  border-radius: 10px;
-  background: transparent;
-  color: inherit;
-  font-size: 22px;
-  line-height: 1;
-}
-.counter:disabled, .box:disabled {
-  opacity: .3;
-  cursor: not-allowed;
-}
-.atout-action {
-  margin: 10px 0 3px;
-  display: grid;
-  gap: 8px;
-}
-.atout-action .box {
-  text-align: left;
-  min-height: 52px;
-}
-.atout-action .subtle { margin: 0; }
-
-.danger {
-  margin-top: 28px;
-  color: #831515;
-  text-decoration: underline;
-  border: 0;
-  background: transparent;
-  text-align: center;
-  padding: 12px;
-}
-
-/* Interface de jeu : inversion du code graphique */
-
-body.playing {
-  background: #101010;
-  color: #fff;
-}
-body.playing .app { background: #101010; }
-body.playing .box {
-  background: #101010;
-  color: #fff;
-  border-color: #fff;
-}
-body.playing .primary {
-  background: #fff;
-  color: #101010;
-  border-color: #fff;
-}
-body.playing .secondary {
-  background: #101010;
-  color: #fff;
-  border-color: #888;
-}
-body.playing .subtle { color: #bbb; }
-body.playing .detail-row,
-body.playing .detail-list li { border-color: #555; }
-body.playing .counter { border-color: #fff; }
-body.playing .error { color: #ffb3b3; }
-
-@media (min-width: 650px) {
-  body:not(.playing) { background: #f5f5f5; }
-  .app {
-    background: #fff;
-    box-shadow: 0 0 20px #00000010;
-  }
-  body.playing .app {
-    box-shadow: 0 0 25px #ffffff10;
-  }
-}
-@media (max-width: 360px) {
-  .app { padding-inline: 15px; }
-  .dots { gap: 6px; }
-  .dot {
-    width: 23px;
-    height: 23px;
-  }
-  .attribute-label { font-size: 17px; }
-  .reserve-counter { gap: 7px; }
-  .counter {
-    width: 34px;
-    height: 34px;
-  }
-}
-</style>
 </head>
 
 <body>
+
 <main class="app">
 
-<!-- ACCUEIL -->
+
+<!-- ==========================================
+     ACCUEIL
+     ========================================== -->
 
 <section id="home">
-  <header class="brand">M.I.S.E.</header>
+
+  <header class="brand">
+    M.I.S.E.
+  </header>
+
   <div id="cards" class="stack"></div>
+
   <div class="home-bottom">
-    <button class="box primary" id="create">
+
+    <button
+      class="box primary"
+      id="create"
+      type="button"
+    >
       Créer un nouveau personnage
     </button>
+
   </div>
+
 </section>
 
-<!-- CRÉATION / MODIFICATION -->
+
+<!-- ==========================================
+     CRÉATION ET MODIFICATION
+     ========================================== -->
 
 <section id="form" hidden>
+
   <div class="heading">
-    <button class="back" id="form-back" aria-label="Retour">←</button>
-    <h1 id="form-heading">Nouveau personnage</h1>
+
+    <button
+      class="back"
+      id="form-back"
+      type="button"
+      aria-label="Retour"
+    >
+      ←
+    </button>
+
+    <h1 id="form-heading">
+      Nouveau personnage
+    </h1>
+
   </div>
 
+
+  <!-- NOM -->
+
   <label class="field">
-    <span class="label">Nom</span>
-    <input id="name" class="input"
-      placeholder="Nom du personnage" maxlength="100">
+
+    <span class="label">
+      Nom
+    </span>
+
+    <input
+      id="name"
+      class="input"
+      type="text"
+      maxlength="100"
+      autocomplete="off"
+      placeholder="Nom du personnage"
+    >
+
   </label>
 
-  <div class="attributes" role="group" aria-label="Attributs">
+
+  <!-- ATTRIBUTS -->
+
+  <div
+    class="attributes"
+    role="group"
+    aria-label="Attributs"
+  >
+
     <div class="attribute">
-      <span class="attribute-label">Physique</span>
-      <div class="dots" id="dots-physique"></div>
+
+      <span class="attribute-label">
+        Physique
+      </span>
+
+      <div
+        class="dots"
+        id="dots-physique"
+      ></div>
+
     </div>
+
+
     <div class="attribute">
-      <span class="attribute-label">Mental</span>
-      <div class="dots" id="dots-mental"></div>
+
+      <span class="attribute-label">
+        Mental
+      </span>
+
+      <div
+        class="dots"
+        id="dots-mental"
+      ></div>
+
     </div>
+
+
     <div class="attribute">
-      <span class="attribute-label">Social</span>
-      <div class="dots" id="dots-social"></div>
+
+      <span class="attribute-label">
+        Social
+      </span>
+
+      <div
+        class="dots"
+        id="dots-social"
+      ></div>
+
     </div>
+
   </div>
 
+
+  <!-- PORTRAIT -->
+
   <label class="field">
-    <span class="label">Portrait (facultatif)</span>
-    <input id="portrait-file" type="file"
-      accept="image/*" class="input">
+
+    <span class="label">
+      Portrait (facultatif)
+    </span>
+
+    <input
+      id="portrait-file"
+      class="input"
+      type="file"
+      accept="image/*"
+    >
+
   </label>
 
-  <img id="portrait-preview" class="portrait"
-    alt="Portrait choisi" hidden>
+  <img
+    id="portrait-preview"
+    class="portrait"
+    alt="Portrait sélectionné"
+    hidden
+  >
 
   <div class="photo-actions">
-    <button id="portrait-remove" class="small" type="button">
+
+    <button
+      id="portrait-remove"
+      class="small"
+      type="button"
+    >
       Retirer le portrait
     </button>
+
   </div>
 
-  <button class="box arrow" id="open-skills">
+
+  <!-- COMPÉTENCES -->
+
+  <button
+    class="box arrow"
+    id="open-skills"
+    type="button"
+  >
+
     <span>Compétences</span>
+
     <span aria-hidden="true">→</span>
+
   </button>
-  <p class="subtle count" id="skill-count">
+
+  <p
+    class="subtle count"
+    id="skill-count"
+  >
     Aucune compétence enregistrée
   </p>
 
-  <button class="box arrow" id="open-atouts">
+
+  <!-- ATOUTS -->
+
+  <button
+    class="box arrow"
+    id="open-atouts"
+    type="button"
+  >
+
     <span>Atouts</span>
+
     <span aria-hidden="true">→</span>
+
   </button>
-  <p class="subtle count" id="atout-count">
+
+  <p
+    class="subtle count"
+    id="atout-count"
+  >
     Aucun Atout enregistré
   </p>
 
+
+  <!-- HISTORIQUE -->
+
   <label class="field">
-    <span class="label">Historique</span>
-    <textarea id="history" class="input long"
-      placeholder="Histoire du personnage (facultatif)"></textarea>
+
+    <span class="label">
+      Historique
+    </span>
+
+    <textarea
+      id="history"
+      class="input long"
+      placeholder="Histoire du personnage (facultatif)"
+    ></textarea>
+
   </label>
 
-  <p id="form-error" class="error" role="alert"></p>
+
+  <p
+    id="form-error"
+    class="error"
+    role="alert"
+  ></p>
+
+
+  <!-- VALIDATION -->
 
   <div class="actions">
-    <button class="box secondary" id="cancel">Annuler</button>
-    <button class="box primary" id="save">
+
+    <button
+      class="box secondary"
+      id="cancel"
+      type="button"
+    >
+      Annuler
+    </button>
+
+    <button
+      class="box primary"
+      id="save"
+      type="button"
+    >
       Valider le personnage
     </button>
+
   </div>
+
 </section>
 
-<!-- COMPÉTENCES -->
+
+<!-- ==========================================
+     COMPÉTENCES
+     ========================================== -->
 
 <section id="skills" hidden>
+
   <div class="heading">
-    <button class="back" id="skills-back"
-      aria-label="Retour">←</button>
+
+    <button
+      class="back"
+      id="skills-back"
+      type="button"
+      aria-label="Retour"
+    >
+      ←
+    </button>
+
     <h1>Compétences</h1>
+
   </div>
+
 
   <div id="skill-list"></div>
 
+
   <div class="group">
+
     <label class="field">
-      <span class="label">Nom de la compétence</span>
-      <input class="input" id="skill-name" maxlength="100">
+
+      <span class="label">
+        Nom de la compétence
+      </span>
+
+      <input
+        id="skill-name"
+        class="input"
+        type="text"
+        maxlength="100"
+      >
+
     </label>
 
-    <div class="label">Niveau de maîtrise</div>
-    <div class="attribute">
-      <span id="level-label">Novice +1</span>
-      <div class="dots" id="level-dots"></div>
+
+    <div class="label">
+      Niveau de maîtrise
     </div>
 
+    <div class="attribute">
+
+      <span id="level-label">
+        Novice +1
+      </span>
+
+      <div
+        class="dots"
+        id="level-dots"
+      ></div>
+
+    </div>
+
+
     <label class="field group">
-      <span class="label">Description (facultative)</span>
-      <textarea class="input long" id="skill-description"
-        style="min-height:110px"></textarea>
+
+      <span class="label">
+        Description (facultative)
+      </span>
+
+      <textarea
+        id="skill-description"
+        class="input long"
+        style="min-height:110px"
+      ></textarea>
+
     </label>
 
-    <p id="skill-error" class="error" role="alert"></p>
 
-    <button class="box primary" id="add-skill">
+    <p
+      id="skill-error"
+      class="error"
+      role="alert"
+    ></p>
+
+
+    <button
+      class="box primary"
+      id="add-skill"
+      type="button"
+    >
       Ajouter la compétence
     </button>
+
   </div>
+
 
   <div class="actions">
-    <button class="box secondary" id="skills-done">
+
+    <button
+      class="box secondary"
+      id="skills-done"
+      type="button"
+    >
       Retour au personnage
     </button>
+
   </div>
+
 </section>
 
-<!-- ATOUTS -->
+
+<!-- ==========================================
+     ATOUTS
+     ========================================== -->
 
 <section id="atouts" hidden>
+
   <div class="heading">
-    <button class="back" id="atouts-back"
-      aria-label="Retour">←</button>
+
+    <button
+      class="back"
+      id="atouts-back"
+      type="button"
+      aria-label="Retour"
+    >
+      ←
+    </button>
+
     <h1>Atouts</h1>
+
   </div>
+
 
   <div id="atout-list"></div>
 
+
   <div class="group">
-    <label class="field">
-      <span class="label">Nom de l'Atout</span>
-      <input class="input" id="atout-name" maxlength="100">
-    </label>
 
     <label class="field">
-      <span class="label">Réserve utilisée</span>
-      <select class="input" id="atout-reserve">
-        <option value="physique">Vigueur</option>
-        <option value="mental">Volonté</option>
-        <option value="social">Influence</option>
+
+      <span class="label">
+        Nom de l'Atout
+      </span>
+
+      <input
+        id="atout-name"
+        class="input"
+        type="text"
+        maxlength="100"
+      >
+
+    </label>
+
+
+    <label class="field">
+
+      <span class="label">
+        Réserve utilisée
+      </span>
+
+      <select
+        id="atout-reserve"
+        class="input"
+      >
+
+        <option value="physique">
+          Vigueur
+        </option>
+
+        <option value="mental">
+          Volonté
+        </option>
+
+        <option value="social">
+          Influence
+        </option>
+
       </select>
+
     </label>
+
 
     <label class="field">
-      <span class="label">Coût fixe en PA</span>
-      <input class="input" id="atout-cost"
-        type="number" min="1" max="999" step="1" value="1">
+
+      <span class="label">
+        Coût fixe en PA
+      </span>
+
+      <input
+        id="atout-cost"
+        class="input"
+        type="number"
+        min="1"
+        max="999"
+        step="1"
+        value="1"
+      >
+
     </label>
+
 
     <label class="field">
-      <span class="label">Description (facultative)</span>
-      <textarea class="input long" id="atout-description"
-        style="min-height:110px"></textarea>
+
+      <span class="label">
+        Description (facultative)
+      </span>
+
+      <textarea
+        id="atout-description"
+        class="input long"
+        style="min-height:110px"
+      ></textarea>
+
     </label>
 
-    <p id="atout-error" class="error" role="alert"></p>
 
-    <button class="box primary" id="add-atout">
+    <p
+      id="atout-error"
+      class="error"
+      role="alert"
+    ></p>
+
+
+    <button
+      class="box primary"
+      id="add-atout"
+      type="button"
+    >
       Ajouter l'Atout
     </button>
+
   </div>
 
+
   <div class="actions">
-    <button class="box secondary" id="atouts-done">
+
+    <button
+      class="box secondary"
+      id="atouts-done"
+      type="button"
+    >
       Retour au personnage
     </button>
+
   </div>
+
 </section>
 
-<!-- FICHE DU PERSONNAGE -->
+
+<!-- ==========================================
+     FICHE DU PERSONNAGE
+     ========================================== -->
 
 <section id="detail" hidden>
+
   <div class="heading">
-    <button class="back" id="detail-back"
-      aria-label="Retour">←</button>
+
+    <button
+      class="back"
+      id="detail-back"
+      type="button"
+      aria-label="Retour à l'accueil"
+    >
+      ←
+    </button>
+
     <h1>Personnage</h1>
+
   </div>
 
-  <img id="detail-portrait" class="portrait"
-    alt="Portrait du personnage" hidden>
 
-  <div class="detail-name" id="detail-name"></div>
+  <!-- PORTRAIT -->
+
+  <img
+    id="detail-portrait"
+    class="portrait"
+    alt="Portrait du personnage"
+    hidden
+  >
+
+
+  <!-- NOM -->
+
+  <div
+    class="detail-name"
+    id="detail-name"
+  ></div>
+
+
+  <!-- ATTRIBUTS -->
+
+  <h2>Attributs</h2>
+
   <div id="detail-attrs"></div>
 
+
+  <!-- RÉSERVES -->
+
   <h2>Réserves de PA</h2>
+
   <div id="detail-reserves"></div>
 
+
+  <!-- COMPÉTENCES -->
+
   <h2>Compétences</h2>
-  <ul id="detail-skills" class="detail-list"></ul>
+
+  <ul
+    id="detail-skills"
+    class="detail-list"
+  ></ul>
+
+
+  <!-- ATOUTS -->
 
   <h2>Atouts</h2>
-  <ul id="detail-atouts" class="detail-list"></ul>
+
+  <ul
+    id="detail-atouts"
+    class="detail-list"
+  ></ul>
+
+
+  <!-- HISTORIQUE -->
 
   <h2>Historique</h2>
-  <p id="detail-history" class="detail-history"></p>
+
+  <p
+    id="detail-history"
+    class="detail-history"
+  ></p>
+
+
+  <!-- ACTIONS -->
 
   <div class="actions">
-    <button class="box primary" id="play">
+
+    <button
+      class="box primary play-button"
+      id="play"
+      type="button"
+    >
       Jouer ce personnage
     </button>
-    <button class="box secondary" id="edit">
+
+    <button
+      class="box secondary"
+      id="edit"
+      type="button"
+    >
       Modifier le personnage
     </button>
+
   </div>
 
-  <button class="danger" id="delete-character">
+
+  <button
+    class="danger"
+    id="delete-character"
+    type="button"
+  >
     Supprimer ce personnage
   </button>
+
 </section>
 
-<!-- INTERFACE DE JEU -->
-
-<section id="game" hidden>
-  <div class="heading">
-    <button class="back" id="game-back"
-      aria-label="Retour à la fiche">←</button>
-    <h1>En jeu</h1>
-  </div>
-
-  <div class="detail-name" id="game-name"></div>
-
-  <h2>Réserves de PA</h2>
-  <div id="game-reserves"></div>
-
-  <h2>Blessures</h2>
-  <p class="subtle">
-    Chaque blessure réduit de 3 PA le maximum de sa réserve.
-  </p>
-  <div id="game-wounds"></div>
-
-  <h2>Compétences</h2>
-  <ul id="game-skills" class="detail-list"></ul>
-
-  <h2>Atouts</h2>
-  <div id="game-atouts"></div>
-
-  <p id="game-message" class="error" role="status"></p>
-
-  <div class="actions group">
-    <button class="box secondary" id="game-exit">
-      Quitter le mode jeu
-    </button>
-  </div>
-</section>
 
 </main>
 
+
+<!-- ==========================================
+     APPLICATION
+     ========================================== -->
+
 <script>
+
 (() => {
-'use strict';
+
+"use strict";
+
+
+/* ------------------------------------------
+   CONFIGURATION
+   ------------------------------------------ */
 
 const $ = id => document.getElementById(id);
 
-const KEY = 'mise-app-characters-v1';
+const KEY = "mise-app-characters-v1";
 
-const names = {
-  physique: 'Vigueur',
-  mental: 'Volonté',
-  social: 'Influence'
-};
-
-const attrs = ['physique', 'mental', 'social'];
-const levels = ['Novice', 'Confirmé', 'Expert', 'Maître'];
-const bonuses = [1, 2, 3, 5];
-
-const screens = [
-  'home', 'form', 'skills', 'atouts', 'detail', 'game'
+const ATTRS = [
+  "physique",
+  "mental",
+  "social"
 ];
 
-const clone = x => JSON.parse(JSON.stringify(x));
+const RESERVES = {
+  physique: "Vigueur",
+  mental: "Volonté",
+  social: "Influence"
+};
+
+const NIVEAUX = [
+  "Novice",
+  "Confirmé",
+  "Expert",
+  "Maître"
+];
+
+const BONUS = [
+  1, 2, 3, 5
+];
+
+const SCREENS = [
+  "home",
+  "form",
+  "skills",
+  "atouts",
+  "detail"
+];
+
+const clone = value =>
+  JSON.parse(JSON.stringify(value));
+
 const uid = () => crypto.randomUUID();
-const baseMax = n => n * 3 + 5;
-const clamp = (n, min, max) =>
-  Math.max(min, Math.min(max, n));
 
-let chars = [];
-let draft = null;
-let selected = null;
-let level = 1;
+const clamp = (value, min, max) =>
+  Math.max(min, Math.min(max, value));
 
-let pendingPortrait = null;
-let removePortrait = false;
-let previewUrl = null;
-let shownPortraitUrl = null;
+const baseMax = value =>
+  value * 3 + 5;
+
+
+/* ------------------------------------------
+   ÉTAT DE L'APPLICATION
+   ------------------------------------------ */
+
+let personnages = [];
+
+let brouillon = null;
+
+let personnageSelectionne = null;
+
+let niveauChoisi = 1;
+
+let portraitEnAttente = null;
+
+let supprimerPortrait = false;
+
+let urlApercu = null;
+
+let urlPortraitFiche = null;
+
+let versionApercu = 0;
+
+let versionFiche = 0;
+
+
+/* ------------------------------------------
+   CHARGEMENT DES PERSONNAGES
+   ------------------------------------------ */
 
 try {
-  const stored = JSON.parse(localStorage.getItem(KEY) || '[]');
-  if (Array.isArray(stored)) chars = stored;
-} catch {}
 
-// PORTRAITS : STOCKAGE LOCAL INDEXEDDB
+  const donnees = JSON.parse(
+    localStorage.getItem(KEY) || "[]"
+  );
 
-let pictureDb = null;
+  if (Array.isArray(donnees)) {
+    personnages = donnees;
+  }
 
-function openPictures() {
-  if (!('indexedDB' in window)) return Promise.resolve(null);
+} catch (erreur) {
 
-  if (!pictureDb) {
-    pictureDb = new Promise(resolve => {
-      const req = indexedDB.open('mise-portraits-v1', 1);
+  personnages = [];
 
-      req.onupgradeneeded = () => {
-        if (!req.result.objectStoreNames.contains('images')) {
-          req.result.createObjectStore('images');
+}
+
+
+/* ------------------------------------------
+   SAUVEGARDE
+   ------------------------------------------ */
+
+function sauvegarder() {
+
+  try {
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(personnages)
+    );
+
+    return true;
+
+  } catch (erreur) {
+
+    return false;
+
+  }
+
+}
+
+
+/* ------------------------------------------
+   RÉSERVES ET BLESSURES
+   ------------------------------------------ */
+
+function preparerPersonnage(p) {
+
+  if (!p.wounds) {
+    p.wounds = {
+      physique: 0,
+      mental: 0,
+      social: 0
+    };
+  }
+
+  if (!p.pa) {
+    p.pa = {};
+  }
+
+  if (!Array.isArray(p.skills)) {
+    p.skills = [];
+  }
+
+  if (!Array.isArray(p.atouts)) {
+    p.atouts = [];
+  }
+
+  if (typeof p.history !== "string") {
+    p.history = "";
+  }
+
+  for (const attribut of ATTRS) {
+
+    const blessures = Number(
+      p.wounds[attribut]
+    );
+
+    p.wounds[attribut] =
+      Number.isFinite(blessures)
+        ? clamp(Math.trunc(blessures), 0, 20)
+        : 0;
+
+    const maximum = Math.max(
+      0,
+      baseMax(p[attribut]) -
+      3 * p.wounds[attribut]
+    );
+
+    const disponibles = Number(
+      p.pa[attribut]
+    );
+
+    p.pa[attribut] =
+      p.pa[attribut] == null ||
+      !Number.isFinite(disponibles)
+        ? maximum
+        : clamp(
+            Math.trunc(disponibles),
+            0,
+            maximum
+          );
+
+  }
+
+  return p;
+
+}
+
+
+function maximumPA(p, attribut) {
+
+  return Math.max(
+    0,
+    baseMax(p[attribut]) -
+    3 * (p.wounds?.[attribut] || 0)
+  );
+
+}
+
+
+/* ------------------------------------------
+   PORTRAITS — INDEXEDDB
+   ------------------------------------------ */
+
+let promesseBase = null;
+
+
+function ouvrirBaseImages() {
+
+  if (!("indexedDB" in window)) {
+    return Promise.resolve(null);
+  }
+
+  if (!promesseBase) {
+
+    promesseBase = new Promise(resolve => {
+
+      const requete = indexedDB.open(
+        "mise-portraits-v1",
+        1
+      );
+
+      requete.onupgradeneeded = () => {
+
+        const base = requete.result;
+
+        if (
+          !base.objectStoreNames.contains("images")
+        ) {
+
+          base.createObjectStore("images");
+
         }
+
       };
 
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
+      requete.onsuccess = () => {
+        resolve(requete.result);
+      };
+
+      requete.onerror = () => {
+        resolve(null);
+      };
+
     });
+
   }
 
-  return pictureDb;
+  return promesseBase;
+
 }
 
-async function pictureGet(id) {
-  const db = await openPictures();
-  if (!db) return null;
+
+async function lirePortrait(id) {
+
+  const base = await ouvrirBaseImages();
+
+  if (!base || !id) return null;
 
   return new Promise(resolve => {
-    try {
-      const r = db.transaction('images', 'readonly')
-        .objectStore('images').get(id);
 
-      r.onsuccess = () => resolve(r.result || null);
-      r.onerror = () => resolve(null);
+    try {
+
+      const transaction = base.transaction(
+        "images",
+        "readonly"
+      );
+
+      const requete = transaction
+        .objectStore("images")
+        .get(id);
+
+      requete.onsuccess = () => {
+        resolve(requete.result || null);
+      };
+
+      requete.onerror = () => {
+        resolve(null);
+      };
+
     } catch {
+
       resolve(null);
+
     }
+
   });
+
 }
 
-async function picturePut(id, blob) {
-  const db = await openPictures();
 
-  if (!db) throw new Error('IndexedDB indisponible');
+async function enregistrerPortrait(id, image) {
+
+  const base = await ouvrirBaseImages();
+
+  if (!base) {
+    throw new Error(
+      "Stockage des portraits indisponible"
+    );
+  }
 
   return new Promise((resolve, reject) => {
+
     try {
-      const tx = db.transaction('images', 'readwrite');
-      tx.objectStore('images').put(blob, id);
-      tx.oncomplete = resolve;
-      tx.onerror = () =>
-        reject(new Error('Impossible de conserver le portrait'));
-    } catch (err) {
-      reject(err);
+
+      const transaction = base.transaction(
+        "images",
+        "readwrite"
+      );
+
+      transaction
+        .objectStore("images")
+        .put(image, id);
+
+      transaction.oncomplete = () => {
+        resolve();
+      };
+
+      transaction.onerror = () => {
+        reject(
+          new Error(
+            "Impossible d'enregistrer le portrait"
+          )
+        );
+      };
+
+    } catch (erreur) {
+
+      reject(erreur);
+
     }
+
   });
+
 }
 
-async function pictureDelete(id) {
-  const db = await openPictures();
-  if (!db) return;
 
-  return new Promise(resolve => {
+async function effacerPortrait(id) {
+
+  const base = await ouvrirBaseImages();
+
+  if (!base) {
+    throw new Error(
+      "Stockage des portraits indisponible"
+    );
+  }
+
+  return new Promise((resolve, reject) => {
+
     try {
-      const tx = db.transaction('images', 'readwrite');
-      tx.objectStore('images').delete(id);
-      tx.oncomplete = resolve;
-      tx.onerror = resolve;
-    } catch {
-      resolve();
+
+      const transaction = base.transaction(
+        "images",
+        "readwrite"
+      );
+
+      transaction
+        .objectStore("images")
+        .delete(id);
+
+      transaction.oncomplete = () => {
+        resolve();
+      };
+
+      transaction.onerror = () => {
+        reject(
+          new Error(
+            "Impossible d'effacer le portrait"
+          )
+        );
+      };
+
+    } catch (erreur) {
+
+      reject(erreur);
+
     }
+
   });
+
 }
 
-function preview(img, blob) {
-  if (img.id === 'portrait-preview' && previewUrl) {
-    URL.revokeObjectURL(previewUrl);
-    previewUrl = null;
+
+/* ------------------------------------------
+   AFFICHAGE DES IMAGES
+   ------------------------------------------ */
+
+function afficherImage(element, image, type) {
+
+  const ancienneURL =
+    type === "apercu"
+      ? urlApercu
+      : urlPortraitFiche;
+
+  if (ancienneURL) {
+    URL.revokeObjectURL(ancienneURL);
   }
 
-  if (img.id === 'detail-portrait' && shownPortraitUrl) {
-    URL.revokeObjectURL(shownPortraitUrl);
-    shownPortraitUrl = null;
+  if (type === "apercu") {
+    urlApercu = null;
+  } else {
+    urlPortraitFiche = null;
   }
 
-  if (!blob) {
-    img.hidden = true;
-    img.removeAttribute('src');
+  element.hidden = true;
+  element.removeAttribute("src");
+
+  if (!image) return;
+
+  const nouvelleURL = URL.createObjectURL(
+    image
+  );
+
+  element.src = nouvelleURL;
+  element.hidden = false;
+
+  if (type === "apercu") {
+    urlApercu = nouvelleURL;
+  } else {
+    urlPortraitFiche = nouvelleURL;
+  }
+
+}
+
+
+async function chargerApercu(id) {
+
+  const version = ++versionApercu;
+
+  const element = $("portrait-preview");
+
+  afficherImage(element, null, "apercu");
+
+  if (!id) return;
+
+  const image = await lirePortrait(id);
+
+  if (
+    version !== versionApercu ||
+    !brouillon ||
+    brouillon.id !== id ||
+    portraitEnAttente ||
+    supprimerPortrait
+  ) {
     return;
   }
 
-  const url = URL.createObjectURL(blob);
-  img.src = url;
-  img.hidden = false;
+  afficherImage(element, image, "apercu");
 
-  if (img.id === 'portrait-preview') previewUrl = url;
-  else shownPortraitUrl = url;
 }
 
-async function loadPreview(id, img) {
-  const requested = id;
-  preview(img, null);
-  if (!requested) return;
 
-  const blob = await pictureGet(requested);
+async function chargerPortraitFiche(id) {
+
+  const version = ++versionFiche;
+
+  const element = $("detail-portrait");
+
+  afficherImage(element, null, "fiche");
+
+  if (!id) return;
+
+  const image = await lirePortrait(id);
 
   if (
-    img.id === 'portrait-preview'
-      ? draft?.id === requested
-      : selected === requested
+    version !== versionFiche ||
+    personnageSelectionne !== id
   ) {
-    preview(img, blob);
-  }
-}
-
-// SAUVEGARDE ET RÉSERVES
-
-function saveLocal() {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(chars));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function ensurePools(c) {
-  if (!c.wounds) {
-    c.wounds = { physique: 0, mental: 0, social: 0 };
+    return;
   }
 
-  if (!c.pa) c.pa = {};
+  afficherImage(element, image, "fiche");
 
-  for (const k of attrs) {
-    c.wounds[k] = clamp(Number(c.wounds[k]) || 0, 0, 20);
+}
 
-    const max = Math.max(
-      0,
-      baseMax(c[k]) - 3 * c.wounds[k]
-    );
 
-    c.pa[k] = Number.isFinite(c.pa[k])
-      ? clamp(c.pa[k], 0, max)
-      : max;
+/* ------------------------------------------
+   NAVIGATION
+   ------------------------------------------ */
+
+function afficherPage(page) {
+
+  for (const nom of SCREENS) {
+
+    $(nom).hidden = nom !== page;
+
   }
-
-  if (!Array.isArray(c.atouts)) c.atouts = [];
-  if (!Array.isArray(c.skills)) c.skills = [];
-
-  return c;
-}
-
-function maximum(c, k) {
-  return Math.max(
-    0,
-    baseMax(c[k]) - 3 * (c.wounds?.[k] || 0)
-  );
-}
-
-// NAVIGATION
-
-function show(id) {
-  screens.forEach(x => {
-    $(x).hidden = x !== id;
-  });
-
-  document.body.classList.toggle('playing', id === 'game');
-
-  $('theme-color').content =
-    id === 'game' ? '#101010' : '#ffffff';
 
   window.scrollTo(0, 0);
 
-  if (id === 'home') drawHome();
-  if (id === 'detail') drawDetail();
-  if (id === 'skills') drawSkills();
-  if (id === 'atouts') drawAtouts();
-  if (id === 'game') drawGame();
-}
-
-function dots(id, value, onSet, label) {
-  const root = $(id);
-  root.replaceChildren();
-
-  for (let i = 1; i <= 4; i++) {
-    const b = document.createElement('button');
-
-    b.className = 'dot' + (i <= value ? ' active' : '');
-    b.type = 'button';
-
-    b.setAttribute(
-      'aria-label',
-      label + ' : ' + i + ' sur 4'
-    );
-    b.setAttribute('aria-pressed', String(i <= value));
-
-    b.onclick = () => onSet(i);
-    root.append(b);
+  if (page === "home") {
+    afficherAccueil();
   }
+
+  if (page === "detail") {
+    afficherFiche();
+  }
+
+  if (page === "skills") {
+    afficherCompetences();
+  }
+
+  if (page === "atouts") {
+    afficherAtouts();
+  }
+
 }
 
-// ACCUEIL
 
-function drawHome() {
-  const list = $('cards');
-  list.replaceChildren();
+/* ------------------------------------------
+   CERCLES DES ATTRIBUTS
+   ------------------------------------------ */
 
-  for (const c of chars) {
-    const b = document.createElement('button');
-    b.className = 'box card';
-    b.textContent = c.name;
+function afficherCercles(
+  elementId,
+  valeur,
+  modifier,
+  nom
+) {
 
-    b.onclick = () => {
-      selected = c.id;
-      show('detail');
+  const element = $(elementId);
+
+  element.replaceChildren();
+
+  for (let n = 1; n <= 4; n++) {
+
+    const bouton = document.createElement(
+      "button"
+    );
+
+    bouton.type = "button";
+
+    bouton.className =
+      "dot" +
+      (n <= valeur ? " active" : "");
+
+    bouton.setAttribute(
+      "aria-label",
+      nom + " : " + n + " sur 4"
+    );
+
+    bouton.setAttribute(
+      "aria-pressed",
+      String(n <= valeur)
+    );
+
+    bouton.onclick = () => modifier(n);
+
+    element.append(bouton);
+
+  }
+
+}
+
+
+/* ------------------------------------------
+   ACCUEIL
+   ------------------------------------------ */
+
+function afficherAccueil() {
+
+  const conteneur = $("cards");
+
+  conteneur.replaceChildren();
+
+  for (const personnage of personnages) {
+
+    const bouton = document.createElement(
+      "button"
+    );
+
+    bouton.type = "button";
+
+    bouton.className = "box card";
+
+    bouton.textContent = personnage.name;
+
+    bouton.onclick = () => {
+
+      personnageSelectionne = personnage.id;
+
+      afficherPage("detail");
+
     };
 
-    list.append(b);
+    conteneur.append(bouton);
+
   }
+
 }
 
-// CRÉATION
 
-function newChar() {
+/* ------------------------------------------
+   NOUVEAU PERSONNAGE
+   ------------------------------------------ */
+
+function nouveauPersonnage() {
+
   return {
+
     id: null,
-    name: '',
+
+    name: "",
+
     physique: 1,
     mental: 1,
     social: 1,
-    history: '',
+
+    history: "",
+
     skills: [],
     atouts: [],
-    wounds: { physique: 0, mental: 0, social: 0 },
-    pa: { physique: 8, mental: 8, social: 8 }
+
+    wounds: {
+      physique: 0,
+      mental: 0,
+      social: 0
+    },
+
+    pa: {
+      physique: 8,
+      mental: 8,
+      social: 8
+    }
+
   };
+
 }
 
-function beginEdit(c) {
-  draft = ensurePools(clone(c));
 
-  pendingPortrait = null;
-  removePortrait = false;
+/* ------------------------------------------
+   ÉDITION
+   ------------------------------------------ */
 
-  $('portrait-file').value = '';
-  $('name').value = draft.name;
-  $('history').value = draft.history;
+function ouvrirEdition(personnage) {
 
-  $('form-heading').textContent = draft.id
-    ? 'Modifier le personnage'
-    : 'Nouveau personnage';
+  brouillon = preparerPersonnage(
+    clone(personnage)
+  );
 
-  $('form-error').textContent = '';
+  portraitEnAttente = null;
 
-  drawAttrs();
-  counts();
-  show('form');
+  supprimerPortrait = false;
 
-  loadPreview(draft.id, $('portrait-preview'));
+  $("portrait-file").value = "";
+
+  $("name").value = brouillon.name;
+
+  $("history").value = brouillon.history;
+
+  $("form-heading").textContent =
+    brouillon.id
+      ? "Modifier le personnage"
+      : "Nouveau personnage";
+
+  $("form-error").textContent = "";
+
+  afficherAttributs();
+
+  actualiserCompteurs();
+
+  afficherPage("form");
+
+  chargerApercu(brouillon.id);
+
 }
 
-function drawAttrs() {
-  for (const k of attrs) {
-    dots('dots-' + k, draft[k], n => {
-      draft[k] = n;
-      drawAttrs();
-    }, k);
-  }
-}
 
-function sync() {
-  draft.name = $('name').value;
-  draft.history = $('history').value;
-}
+function afficherAttributs() {
 
-function counts() {
-  let n = draft.skills.length;
+  for (const attribut of ATTRS) {
 
-  $('skill-count').textContent = n
-    ? n + ' compétence' + (n > 1 ? 's' : '') +
-      ' enregistrée' + (n > 1 ? 's' : '')
-    : 'Aucune compétence enregistrée';
+    afficherCercles(
+      "dots-" + attribut,
 
-  n = draft.atouts.length;
+      brouillon[attribut],
 
-  $('atout-count').textContent = n
-    ? n + ' Atout' + (n > 1 ? 's' : '') +
-      ' enregistré' + (n > 1 ? 's' : '')
-    : 'Aucun Atout enregistré';
-}
+      valeur => {
 
-// COMPÉTENCES ET ATOUTS
+        brouillon[attribut] = valeur;
 
-function rowList(parent, items, describe, onRemove) {
-  parent.replaceChildren();
+        afficherAttributs();
 
-  if (!items.length) {
-    const p = document.createElement('p');
-    p.className = 'subtle';
-    p.textContent = 'Aucun élément enregistré.';
-    parent.append(p);
-  }
+      },
 
-  for (const item of items) {
-    const row = document.createElement('div');
-    row.className = 'skillrow';
-
-    const info = document.createElement('div');
-    const title = document.createElement('div');
-    title.textContent = item.name;
-
-    const sub = document.createElement('p');
-    sub.textContent = describe(item);
-
-    info.append(title, sub);
-
-    const del = document.createElement('button');
-    del.className = 'small';
-    del.textContent = 'Retirer';
-
-    del.setAttribute(
-      'aria-label',
-      'Retirer ' + item.name
+      attribut
     );
 
-    del.onclick = () => onRemove(item);
-
-    row.append(info, del);
-    parent.append(row);
-  }
-}
-
-function drawSkills() {
-  rowList(
-    $('skill-list'),
-    draft.skills,
-    s => levels[s.level - 1] + ' +' +
-      bonuses[s.level - 1] +
-      (s.description ? ' — ' + s.description : ''),
-    s => {
-      draft.skills = draft.skills.filter(
-        x => x.id !== s.id
-      );
-      drawSkills();
-    }
-  );
-
-  drawLevel();
-}
-
-function drawLevel() {
-  dots('level-dots', level, n => {
-    level = n;
-    drawLevel();
-  }, 'Maîtrise');
-
-  $('level-label').textContent =
-    levels[level - 1] + ' +' + bonuses[level - 1];
-}
-
-function drawAtouts() {
-  rowList(
-    $('atout-list'),
-    draft.atouts,
-    a => a.cost + ' PA · ' + names[a.reserve] +
-      (a.description ? ' — ' + a.description : ''),
-    a => {
-      draft.atouts = draft.atouts.filter(
-        x => x.id !== a.id
-      );
-      drawAtouts();
-    }
-  );
-}
-
-// FICHE DU PERSONNAGE
-
-function addDetailRow(parent, label, value) {
-  const row = document.createElement('div');
-  row.className = 'detail-row';
-
-  const l = document.createElement('span');
-  l.textContent = label;
-
-  const v = document.createElement('strong');
-  v.textContent = value;
-
-  row.append(l, v);
-  parent.append(row);
-}
-
-function listItems(id, items, describe) {
-  const root = $(id);
-  root.replaceChildren();
-
-  if (!items.length) {
-    const li = document.createElement('li');
-    li.className = 'subtle';
-    li.textContent = 'Aucun élément.';
-    root.append(li);
   }
 
-  for (const item of items) {
-    const li = document.createElement('li');
-    li.textContent = describe(item);
-    root.append(li);
-  }
 }
 
-function current() {
-  return chars.find(x => x.id === selected);
+
+function synchroniserChamps() {
+
+  brouillon.name = $("name").value;
+
+  brouillon.history = $("history").value;
+
 }
 
-function drawDetail() {
-  const c = current();
 
-  if (!c) {
-    show('home');
-    return;
-  }
+function actualiserCompteurs() {
 
-  ensurePools(c);
+  const competences = brouillon.skills.length;
 
-  $('detail-name').textContent = c.name;
-  loadPreview(c.id, $('detail-portrait'));
+  const atouts = brouillon.atouts.length;
 
-  $('detail-attrs').replaceChildren();
-  $('detail-reserves').replaceChildren();
+  $("skill-count").textContent =
+    competences
+      ? competences +
+        " compétence" +
+        (competences > 1 ? "s" : "") +
+        " enregistrée" +
+        (competences > 1 ? "s" : "")
+      : "Aucune compétence enregistrée";
 
-  for (const k of attrs) {
-    addDetailRow(
-      $('detail-attrs'),
-      k[0].toUpperCase() + k.slice(1),
-      c[k] + ' / 4'
-    );
+  $("atout-count").textContent =
+    atouts
+      ? atouts +
+        " Atout" +
+        (atouts > 1 ? "s" : "") +
+        " enregistré" +
+        (atouts > 1 ? "s" : "")
+      : "Aucun Atout enregistré";
 
-    addDetailRow(
-      $('detail-reserves'),
-      names[k],
-      c.pa[k] + ' / ' + maximum(c, k) + ' PA'
-    );
-  }
-
-  listItems(
-    'detail-skills',
-    c.skills,
-    s => s.name + ' — ' +
-      levels[s.level - 1] +
-      ' (+' + bonuses[s.level - 1] + ')' +
-      (s.description ? ' · ' + s.description : '')
-  );
-
-  listItems(
-    'detail-atouts',
-    c.atouts,
-    a => a.name + ' — ' +
-      a.cost + ' PA de ' + names[a.reserve] +
-      (a.description ? ' · ' + a.description : '')
-  );
-
-  $('detail-history').textContent =
-    c.history || 'Aucun historique.';
 }
 
-// INTERFACE DE JEU
 
-function gameRow(
-  host, label, value, minus, plus,
-  disableMinus, disablePlus
+/* ------------------------------------------
+   LISTES MODIFIABLES
+   ------------------------------------------ */
+
+function afficherListeEditable(
+  conteneur,
+  elements,
+  description,
+  retirer
 ) {
-  const row = document.createElement('div');
-  row.className = 'detail-row';
 
-  const name = document.createElement('span');
-  name.textContent = label;
+  conteneur.replaceChildren();
 
-  const buttons = document.createElement('div');
-  buttons.className = 'reserve-counter';
+  if (!elements.length) {
 
-  const neg = document.createElement('button');
-  neg.className = 'counter';
-  neg.textContent = '−';
-  neg.disabled = disableMinus;
+    const texte = document.createElement("p");
 
-  neg.setAttribute(
-    'aria-label',
-    'Diminuer ' + label
-  );
+    texte.className = "subtle";
 
-  neg.onclick = minus;
+    texte.textContent =
+      "Aucun élément enregistré.";
 
-  const val = document.createElement('strong');
-  val.textContent = value;
+    conteneur.append(texte);
 
-  const pos = document.createElement('button');
-  pos.className = 'counter';
-  pos.textContent = '+';
-  pos.disabled = disablePlus;
-
-  pos.setAttribute(
-    'aria-label',
-    'Augmenter ' + label
-  );
-
-  pos.onclick = plus;
-
-  buttons.append(neg, val, pos);
-  row.append(name, buttons);
-  host.append(row);
-}
-
-function changePA(k, delta) {
-  const c = current();
-
-  c.pa[k] = clamp(
-    c.pa[k] + delta,
-    0,
-    maximum(c, k)
-  );
-
-  if (saveLocal()) {
-    drawGame();
-  } else {
-    $('game-message').textContent =
-      'Impossible d’enregistrer cette modification.';
-  }
-}
-
-function changeWound(k, delta) {
-  const c = current();
-
-  c.wounds[k] = clamp(
-    c.wounds[k] + delta,
-    0,
-    20
-  );
-
-  c.pa[k] = Math.min(
-    c.pa[k],
-    maximum(c, k)
-  );
-
-  if (saveLocal()) {
-    drawGame();
-  } else {
-    $('game-message').textContent =
-      'Impossible d’enregistrer cette modification.';
-  }
-}
-
-function activate(id) {
-  const c = current();
-  const a = c.atouts.find(x => x.id === id);
-
-  if (!a) return;
-
-  const cost = Number(a.cost);
-  const k = a.reserve;
-
-  if (
-    !attrs.includes(k) ||
-    !Number.isInteger(cost) ||
-    cost < 1
-  ) return;
-
-  if (c.pa[k] < cost) {
-    $('game-message').textContent =
-      'PA insuffisants pour activer ' + a.name + '.';
-    return;
   }
 
-  c.pa[k] -= cost;
+  for (const element of elements) {
 
-  if (saveLocal()) {
-    drawGame();
+    const ligne = document.createElement("div");
 
-    $('game-message').textContent =
-      a.name + ' activé : −' +
-      cost + ' PA de ' + names[k] + '.';
-  } else {
-    $('game-message').textContent =
-      'Impossible d’enregistrer cette activation.';
-  }
-}
+    ligne.className = "skillrow";
 
-function drawGame() {
-  const c = current();
-
-  if (!c) {
-    show('home');
-    return;
-  }
-
-  ensurePools(c);
-
-  $('game-name').textContent = c.name;
-  $('game-message').textContent = '';
-
-  const rr = $('game-reserves');
-  const ww = $('game-wounds');
-
-  rr.replaceChildren();
-  ww.replaceChildren();
-
-  for (const k of attrs) {
-    const max = maximum(c, k);
-
-    gameRow(
-      rr,
-      names[k],
-      c.pa[k] + ' / ' + max,
-      () => changePA(k, -1),
-      () => changePA(k, 1),
-      c.pa[k] <= 0,
-      c.pa[k] >= max
+    const informations = document.createElement(
+      "div"
     );
 
-    gameRow(
-      ww,
-      names[k],
-      String(c.wounds[k]),
-      () => changeWound(k, -1),
-      () => changeWound(k, 1),
-      c.wounds[k] <= 0,
-      c.wounds[k] >= 20
+    const titre = document.createElement("div");
+
+    titre.textContent = element.name;
+
+    const detail = document.createElement("p");
+
+    detail.textContent = description(element);
+
+    informations.append(titre, detail);
+
+    const bouton = document.createElement(
+      "button"
     );
+
+    bouton.type = "button";
+
+    bouton.className = "small";
+
+    bouton.textContent = "Retirer";
+
+    bouton.setAttribute(
+      "aria-label",
+      "Retirer " + element.name
+    );
+
+    bouton.onclick = () => retirer(element);
+
+    ligne.append(informations, bouton);
+
+    conteneur.append(ligne);
+
   }
 
-  listItems(
-    'game-skills',
-    c.skills,
-    s => s.name + ' — ' +
-      levels[s.level - 1] +
-      ' (+' + bonuses[s.level - 1] + ')'
-  );
+}
 
-  const host = $('game-atouts');
-  host.replaceChildren();
 
-  if (!c.atouts.length) {
-    const p = document.createElement('p');
-    p.className = 'subtle';
-    p.textContent = 'Aucun Atout.';
-    host.append(p);
-  }
+/* ------------------------------------------
+   COMPÉTENCES
+   ------------------------------------------ */
 
-  for (const a of c.atouts) {
-    const block = document.createElement('div');
-    block.className = 'atout-action';
+function afficherCompetences() {
 
-    const b = document.createElement('button');
-    b.className = 'box';
+  afficherListeEditable(
 
-    b.textContent =
-      a.name + ' — Activer (−' +
-      a.cost + ' PA de ' +
-      names[a.reserve] + ')';
+    $("skill-list"),
 
-    b.disabled = c.pa[a.reserve] < a.cost;
-    b.onclick = () => activate(a.id);
+    brouillon.skills,
 
-    block.append(b);
+    competence => {
 
-    if (a.description) {
-      const p = document.createElement('p');
-      p.className = 'subtle';
-      p.textContent = a.description;
-      block.append(p);
+      return (
+        NIVEAUX[competence.level - 1] +
+        " +" +
+        BONUS[competence.level - 1] +
+        (
+          competence.description
+            ? " — " + competence.description
+            : ""
+        )
+      );
+
+    },
+
+    competence => {
+
+      brouillon.skills =
+        brouillon.skills.filter(
+          item => item.id !== competence.id
+        );
+
+      afficherCompetences();
+
     }
 
-    host.append(block);
-  }
+  );
+
+  afficherNiveau();
+
 }
 
-// ÉVÉNEMENTS
 
-$('create').onclick = () => beginEdit(newChar());
+function afficherNiveau() {
 
-$('form-back').onclick =
-$('cancel').onclick = () => {
-  show(draft.id ? 'detail' : 'home');
-};
+  afficherCercles(
 
-$('portrait-file').onchange = () => {
-  const file = $('portrait-file').files[0];
+    "level-dots",
 
-  if (!file) return;
+    niveauChoisi,
 
-  if (!file.type.startsWith('image/')) {
-    $('form-error').textContent =
-      'Choisissez un fichier image.';
-    return;
+    valeur => {
+
+      niveauChoisi = valeur;
+
+      afficherNiveau();
+
+    },
+
+    "Niveau de maîtrise"
+
+  );
+
+  $("level-label").textContent =
+    NIVEAUX[niveauChoisi - 1] +
+    " +" +
+    BONUS[niveauChoisi - 1];
+
+}
+
+
+/* ------------------------------------------
+   ATOUTS
+   ------------------------------------------ */
+
+function afficherAtouts() {
+
+  afficherListeEditable(
+
+    $("atout-list"),
+
+    brouillon.atouts,
+
+    atout => {
+
+      return (
+        atout.cost +
+        " PA de " +
+        RESERVES[atout.reserve] +
+        (
+          atout.description
+            ? " — " + atout.description
+            : ""
+        )
+      );
+
+    },
+
+    atout => {
+
+      brouillon.atouts =
+        brouillon.atouts.filter(
+          item => item.id !== atout.id
+        );
+
+      afficherAtouts();
+
+    }
+
+  );
+
+}
+
+
+/* ------------------------------------------
+   LIGNES DE LA FICHE
+   ------------------------------------------ */
+
+function ajouterLigne(
+  conteneur,
+  libelle,
+  valeur
+) {
+
+  const ligne = document.createElement("div");
+
+  ligne.className = "detail-row";
+
+  const titre = document.createElement("span");
+
+  titre.textContent = libelle;
+
+  const donnees = document.createElement(
+    "strong"
+  );
+
+  donnees.textContent = valeur;
+
+  ligne.append(titre, donnees);
+
+  conteneur.append(ligne);
+
+}
+
+
+function afficherListe(
+  conteneurId,
+  elements,
+  description
+) {
+
+  const conteneur = $(conteneurId);
+
+  conteneur.replaceChildren();
+
+  if (!elements.length) {
+
+    const ligne = document.createElement("li");
+
+    ligne.className = "subtle";
+
+    ligne.textContent = "Aucun élément.";
+
+    conteneur.append(ligne);
+
   }
 
-  pendingPortrait = file;
-  removePortrait = false;
+  for (const element of elements) {
 
-  preview($('portrait-preview'), file);
+    const ligne = document.createElement("li");
 
-  $('form-error').textContent = '';
-};
+    ligne.textContent = description(element);
 
-$('portrait-remove').onclick = () => {
-  pendingPortrait = null;
-  removePortrait = true;
+    conteneur.append(ligne);
 
-  $('portrait-file').value = '';
-  preview($('portrait-preview'), null);
-};
-
-$('open-skills').onclick = () => {
-  sync();
-  level = 1;
-
-  $('skill-name').value = '';
-  $('skill-description').value = '';
-  $('skill-error').textContent = '';
-
-  show('skills');
-};
-
-$('skills-back').onclick =
-$('skills-done').onclick = () => {
-  counts();
-  show('form');
-};
-
-$('add-skill').onclick = () => {
-  const name = $('skill-name').value.trim();
-
-  if (!name) {
-    $('skill-error').textContent = 'Indiquez un nom.';
-    return;
   }
 
-  if (
-    draft.skills.some(s =>
-      s.name.toLocaleLowerCase('fr') ===
-      name.toLocaleLowerCase('fr')
-    )
-  ) {
-    $('skill-error').textContent =
-      'Cette compétence existe déjà.';
+}
+
+
+/* ------------------------------------------
+   PERSONNAGE SÉLECTIONNÉ
+   ------------------------------------------ */
+
+function personnageActuel() {
+
+  return personnages.find(
+    p => p.id === personnageSelectionne
+  );
+
+}
+
+
+/* ------------------------------------------
+   AFFICHAGE DE LA FICHE
+   ------------------------------------------ */
+
+function afficherFiche() {
+
+  const personnage = personnageActuel();
+
+  if (!personnage) {
+
+    afficherPage("home");
+
     return;
+
   }
 
-  draft.skills.push({
+  preparerPersonnage(personnage);
+
+  $("detail-name").textContent =
+    personnage.name;
+
+  chargerPortraitFiche(personnage.id);
+
+
+  /* Attributs */
+
+  const zoneAttributs = $("detail-attrs");
+
+  zoneAttributs.replaceChildren();
+
+
+  /* Réserves */
+
+  const zoneReserves = $("detail-reserves");
+
+  zoneReserves.replaceChildren();
+
+
+  for (const attribut of ATTRS) {
+
+    const nom =
+      attribut.charAt(0).toUpperCase() +
+      attribut.slice(1);
+
+    ajouterLigne(
+      zoneAttributs,
+      nom,
+      personnage[attribut] + " / 4"
+    );
+
+    ajouterLigne(
+      zoneReserves,
+      RESERVES[attribut],
+      personnage.pa[attribut] +
+      " / " +
+      maximumPA(personnage, attribut) +
+      " PA"
+    );
+
+  }
+
+
+  /* Compétences */
+
+  afficherListe(
+
+    "detail-skills",
+
+    personnage.skills,
+
+    competence => {
+
+      return (
+        competence.name +
+        " — " +
+        NIVEAUX[competence.level - 1] +
+        " (+" +
+        BONUS[competence.level - 1] +
+        ")" +
+        (
+          competence.description
+            ? " · " + competence.description
+            : ""
+        )
+      );
+
+    }
+
+  );
+
+
+  /* Atouts */
+
+  afficherListe(
+
+    "detail-atouts",
+
+    personnage.atouts,
+
+    atout => {
+
+      return (
+        atout.name +
+        " — " +
+        atout.cost +
+        " PA de " +
+        RESERVES[atout.reserve] +
+        (
+          atout.description
+            ? " · " + atout.description
+            : ""
+        )
+      );
+
+    }
+
+  );
+
+
+  /* Historique */
+
+  $("detail-history").textContent =
+    personnage.history || "Aucun historique.";
+
+}
+
+
+/* ==========================================
+   ÉVÉNEMENTS
+   ========================================== */
+
+
+/* ------------------------------------------
+   CRÉER
+   ------------------------------------------ */
+
+$("create").onclick = () => {
+
+  ouvrirEdition(
+    nouveauPersonnage()
+  );
+
+};
+
+
+/* ------------------------------------------
+   ANNULER
+   ------------------------------------------ */
+
+$("form-back").onclick =
+$("cancel").onclick = () => {
+
+  afficherPage(
+    brouillon.id ? "detail" : "home"
+  );
+
+};
+
+
+/* ------------------------------------------
+   IMPORTER UN PORTRAIT
+   ------------------------------------------ */
+
+$("portrait-file").onchange = () => {
+
+  const fichier =
+    $("portrait-file").files[0];
+
+  if (!fichier) return;
+
+  if (!fichier.type.startsWith("image/")) {
+
+    $("form-error").textContent =
+      "Choisissez un fichier image.";
+
+    return;
+
+  }
+
+  versionApercu++;
+
+  portraitEnAttente = fichier;
+
+  supprimerPortrait = false;
+
+  afficherImage(
+    $("portrait-preview"),
+    fichier,
+    "apercu"
+  );
+
+  $("form-error").textContent = "";
+
+};
+
+
+/* ------------------------------------------
+   RETIRER UN PORTRAIT
+   ------------------------------------------ */
+
+$("portrait-remove").onclick = () => {
+
+  versionApercu++;
+
+  portraitEnAttente = null;
+
+  supprimerPortrait = true;
+
+  $("portrait-file").value = "";
+
+  afficherImage(
+    $("portrait-preview"),
+    null,
+    "apercu"
+  );
+
+};
+
+
+/* ------------------------------------------
+   OUVRIR LES COMPÉTENCES
+   ------------------------------------------ */
+
+$("open-skills").onclick = () => {
+
+  synchroniserChamps();
+
+  niveauChoisi = 1;
+
+  $("skill-name").value = "";
+
+  $("skill-description").value = "";
+
+  $("skill-error").textContent = "";
+
+  afficherPage("skills");
+
+};
+
+
+/* ------------------------------------------
+   RETOUR DES COMPÉTENCES
+   ------------------------------------------ */
+
+$("skills-back").onclick =
+$("skills-done").onclick = () => {
+
+  actualiserCompteurs();
+
+  afficherPage("form");
+
+};
+
+
+/* ------------------------------------------
+   AJOUTER UNE COMPÉTENCE
+   ------------------------------------------ */
+
+$("add-skill").onclick = () => {
+
+  const nom =
+    $("skill-name").value.trim();
+
+  if (!nom) {
+
+    $("skill-error").textContent =
+      "Indiquez un nom de compétence.";
+
+    return;
+
+  }
+
+  const existe = brouillon.skills.some(
+    competence =>
+      competence.name.toLocaleLowerCase("fr") ===
+      nom.toLocaleLowerCase("fr")
+  );
+
+  if (existe) {
+
+    $("skill-error").textContent =
+      "Cette compétence existe déjà.";
+
+    return;
+
+  }
+
+  brouillon.skills.push({
+
     id: uid(),
-    name,
-    level,
-    description: $('skill-description').value.trim()
+
+    name: nom,
+
+    level: niveauChoisi,
+
+    description:
+      $("skill-description").value.trim()
+
   });
 
-  $('skill-name').value = '';
-  $('skill-description').value = '';
-  $('skill-error').textContent = '';
+  $("skill-name").value = "";
 
-  level = 1;
-  drawSkills();
+  $("skill-description").value = "";
+
+  $("skill-error").textContent = "";
+
+  niveauChoisi = 1;
+
+  afficherCompetences();
+
 };
 
-$('open-atouts').onclick = () => {
-  sync();
 
-  $('atout-name').value = '';
-  $('atout-description').value = '';
-  $('atout-reserve').value = 'physique';
-  $('atout-cost').value = '1';
-  $('atout-error').textContent = '';
+/* ------------------------------------------
+   OUVRIR LES ATOUTS
+   ------------------------------------------ */
 
-  show('atouts');
+$("open-atouts").onclick = () => {
+
+  synchroniserChamps();
+
+  $("atout-name").value = "";
+
+  $("atout-description").value = "";
+
+  $("atout-reserve").value = "physique";
+
+  $("atout-cost").value = "1";
+
+  $("atout-error").textContent = "";
+
+  afficherPage("atouts");
+
 };
 
-$('atouts-back').onclick =
-$('atouts-done').onclick = () => {
-  counts();
-  show('form');
+
+/* ------------------------------------------
+   RETOUR DES ATOUTS
+   ------------------------------------------ */
+
+$("atouts-back").onclick =
+$("atouts-done").onclick = () => {
+
+  actualiserCompteurs();
+
+  afficherPage("form");
+
 };
 
-$('add-atout').onclick = () => {
-  const name = $('atout-name').value.trim();
-  const cost = Number($('atout-cost').value);
-  const reserve = $('atout-reserve').value;
 
-  if (!name) {
-    $('atout-error').textContent =
+/* ------------------------------------------
+   AJOUTER UN ATOUT
+   ------------------------------------------ */
+
+$("add-atout").onclick = () => {
+
+  const nom =
+    $("atout-name").value.trim();
+
+  const cout =
+    Number($("atout-cost").value);
+
+  const reserve =
+    $("atout-reserve").value;
+
+  if (!nom) {
+
+    $("atout-error").textContent =
       "Indiquez un nom d'Atout.";
+
     return;
+
   }
 
   if (
-    !Number.isInteger(cost) ||
-    cost < 1 ||
-    cost > 999
+    !Number.isInteger(cout) ||
+    cout < 1 ||
+    cout > 999
   ) {
-    $('atout-error').textContent =
-      'Indiquez un coût entier entre 1 et 999 PA.';
+
+    $("atout-error").textContent =
+      "Indiquez un coût entier entre 1 et 999 PA.";
+
     return;
+
   }
 
-  if (
-    draft.atouts.some(a =>
-      a.name.toLocaleLowerCase('fr') ===
-      name.toLocaleLowerCase('fr')
-    )
-  ) {
-    $('atout-error').textContent =
-      'Cet Atout existe déjà.';
+  if (!ATTRS.includes(reserve)) {
+
+    $("atout-error").textContent =
+      "Sélectionnez une réserve valide.";
+
     return;
+
   }
 
-  draft.atouts.push({
+  const existe = brouillon.atouts.some(
+    atout =>
+      atout.name.toLocaleLowerCase("fr") ===
+      nom.toLocaleLowerCase("fr")
+  );
+
+  if (existe) {
+
+    $("atout-error").textContent =
+      "Cet Atout existe déjà.";
+
+    return;
+
+  }
+
+  brouillon.atouts.push({
+
     id: uid(),
-    name,
-    cost,
-    reserve,
-    description: $('atout-description').value.trim()
+
+    name: nom,
+
+    cost: cout,
+
+    reserve: reserve,
+
+    description:
+      $("atout-description").value.trim()
+
   });
 
-  $('atout-name').value = '';
-  $('atout-description').value = '';
-  $('atout-cost').value = '1';
-  $('atout-error').textContent = '';
+  $("atout-name").value = "";
 
-  drawAtouts();
+  $("atout-description").value = "";
+
+  $("atout-cost").value = "1";
+
+  $("atout-error").textContent = "";
+
+  afficherAtouts();
+
 };
 
-// ENREGISTRER LE PERSONNAGE
 
-$('save').onclick = async () => {
-  sync();
-  draft.name = draft.name.trim();
+/* ------------------------------------------
+   ENREGISTRER LE PERSONNAGE
+   ------------------------------------------ */
 
-  if (!draft.name) {
-    $('form-error').textContent =
-      'Indiquez le nom du personnage.';
+$("save").onclick = async () => {
+
+  synchroniserChamps();
+
+  brouillon.name =
+    brouillon.name.trim();
+
+  if (!brouillon.name) {
+
+    $("form-error").textContent =
+      "Indiquez le nom du personnage.";
+
     return;
+
   }
 
-  const isNew = !draft.id;
+  const nouveau = !brouillon.id;
 
-  if (isNew) draft.id = uid();
+  if (nouveau) {
+    brouillon.id = uid();
+  }
 
-  ensurePools(draft);
+  preparerPersonnage(brouillon);
 
-  const old = chars;
+  const anciens = personnages;
 
-  chars = [
-    ...chars.filter(c => c.id !== draft.id),
-    clone(draft)
+  const ancienPersonnage =
+    personnages.find(
+      p => p.id === brouillon.id
+    );
+
+  /*
+     Si les attributs ont été modifiés,
+     on conserve les PA disponibles
+     dans la limite du nouveau maximum.
+  */
+
+  if (ancienPersonnage) {
+
+    for (const attribut of ATTRS) {
+
+      brouillon.pa[attribut] = Math.min(
+        brouillon.pa[attribut],
+        maximumPA(brouillon, attribut)
+      );
+
+    }
+
+  }
+
+  const nouveaux = [
+
+    ...personnages.filter(
+      p => p.id !== brouillon.id
+    ),
+
+    clone(brouillon)
+
   ];
 
-  if (!saveLocal()) {
-    chars = old;
+  personnages = nouveaux;
 
-    if (isNew) draft.id = null;
+  if (!sauvegarder()) {
 
-    $('form-error').textContent =
-      'Impossible de sauvegarder sur cet appareil.';
+    personnages = anciens;
+
+    if (nouveau) {
+      brouillon.id = null;
+    }
+
+    $("form-error").textContent =
+      "Impossible de sauvegarder sur cet appareil.";
+
     return;
+
   }
 
-  $('save').disabled = true;
+  const bouton = $("save");
 
-  let imageError = false;
+  bouton.disabled = true;
+
+  let erreurPortrait = false;
 
   try {
-    if (removePortrait) {
-      await pictureDelete(draft.id);
-    } else if (pendingPortrait) {
-      await picturePut(draft.id, pendingPortrait);
+
+    if (supprimerPortrait) {
+
+      await effacerPortrait(
+        brouillon.id
+      );
+
+    } else if (portraitEnAttente) {
+
+      await enregistrerPortrait(
+        brouillon.id,
+        portraitEnAttente
+      );
+
     }
+
   } catch {
-    imageError = true;
+
+    erreurPortrait = true;
+
   } finally {
-    $('save').disabled = false;
+
+    bouton.disabled = false;
+
   }
 
-  selected = draft.id;
-  show('detail');
+  personnageSelectionne = brouillon.id;
 
-  if (imageError) {
+  afficherPage("detail");
+
+  if (erreurPortrait) {
+
     alert(
-      'Personnage enregistré, mais le portrait ' +
-      'n’a pas pu être sauvegardé.'
+      "Le personnage a été enregistré, " +
+      "mais le portrait n'a pas pu être sauvegardé."
     );
+
   }
+
 };
 
-// RETOUR, MODIFICATION ET SUPPRESSION
 
-$('detail-back').onclick = () => show('home');
+/* ------------------------------------------
+   RETOUR À L'ACCUEIL
+   ------------------------------------------ */
 
-$('edit').onclick = () => {
-  const c = current();
-  if (c) beginEdit(c);
+$("detail-back").onclick = () => {
+
+  afficherPage("home");
+
 };
 
-$('delete-character').onclick = async () => {
-  const c = current();
-  if (!c) return;
 
-  if (!confirm(
-    'Supprimer définitivement « ' + c.name +
-    ' » ? Cette action est irréversible.'
-  )) return;
+/* ------------------------------------------
+   MODIFIER LE PERSONNAGE
+   ------------------------------------------ */
 
-  const old = chars;
+$("edit").onclick = () => {
 
-  chars = chars.filter(x => x.id !== c.id);
+  const personnage =
+    personnageActuel();
 
-  if (!saveLocal()) {
-    chars = old;
+  if (personnage) {
+
+    ouvrirEdition(personnage);
+
+  }
+
+};
+
+
+/* ------------------------------------------
+   SUPPRIMER LE PERSONNAGE
+   ------------------------------------------ */
+
+$("delete-character").onclick = async () => {
+
+  const personnage =
+    personnageActuel();
+
+  if (!personnage) return;
+
+  const confirmation = confirm(
+    "Supprimer définitivement « " +
+    personnage.name +
+    " » ?\n\nCette action est irréversible."
+  );
+
+  if (!confirmation) return;
+
+  const anciens = personnages;
+
+  personnages = personnages.filter(
+    p => p.id !== personnage.id
+  );
+
+  if (!sauvegarder()) {
+
+    personnages = anciens;
 
     alert(
-      'Suppression impossible : sauvegarde indisponible.'
+      "Impossible de supprimer le personnage."
     );
+
     return;
+
   }
 
-  await pictureDelete(c.id);
+  try {
 
-  selected = null;
-  show('home');
+    await effacerPortrait(
+      personnage.id
+    );
+
+  } catch (erreur) {
+
+    console.warn(
+      "Le portrait n'a pas pu être effacé.",
+      erreur
+    );
+
+  }
+
+  personnageSelectionne = null;
+
+  afficherPage("home");
+
 };
 
-// BASCULE EN MODE JEU
 
-$('play').onclick = () => show('game');
+/* ------------------------------------------
+   JOUER CE PERSONNAGE
+   ------------------------------------------ */
 
-$('game-back').onclick =
-$('game-exit').onclick = () => show('detail');
+$("play").onclick = () => {
 
-// DÉMARRAGE
+  const personnage =
+    personnageActuel();
 
-show('home');
+  if (!personnage) return;
+
+  /*
+     L'interface de jeu sera désormais
+     une page HTML indépendante.
+
+     L'identifiant du personnage est
+     transmis dans l'adresse.
+
+     Exemple :
+     jeu.html?id=xxxxxxxx
+  */
+
+  const adresse = new URL(
+    "jeu.html",
+    window.location.href
+  );
+
+  adresse.searchParams.set(
+    "id",
+    personnage.id
+  );
+
+  window.location.href =
+    adresse.toString();
+
+};
+
+
+/* ------------------------------------------
+   DÉMARRAGE
+   ------------------------------------------ */
+
+const parametres = new URLSearchParams(
+  window.location.search
+);
+
+const idRetour = parametres.get("id");
+
+if (
+  idRetour &&
+  personnages.some(p => p.id === idRetour)
+) {
+
+  personnageSelectionne = idRetour;
+
+  afficherPage("detail");
+
+} else {
+
+  afficherPage("home");
+
+}
 
 })();
+
 </script>
+
 </body>
-</html>
+  </html>
