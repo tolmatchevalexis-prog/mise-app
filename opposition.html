@@ -30,10 +30,8 @@
 .opposition-association {
   margin: 0 0 24px;
   padding: 14px 18px;
-
   border: 1.5px solid #ffffff;
   border-radius: 12px;
-
   background: #111111;
   color: #ffffff;
 }
@@ -86,7 +84,6 @@
 
   </div>
 
-
   <!-- PERSONNAGE -->
 
   <div
@@ -96,18 +93,15 @@
 
   <h2>Résoudre une opposition</h2>
 
-
   <!-- RÉSERVES -->
 
   <div id="reserves"></div>
-
 
   <!-- FORMULAIRE -->
 
   <form id="opposition-form">
 
     <h2>Votre personnage</h2>
-
 
     <!-- COMPÉTENCE -->
 
@@ -124,7 +118,6 @@
       ></select>
 
     </label>
-
 
     <!-- ASSOCIATION AUTOMATIQUE -->
 
@@ -144,7 +137,6 @@
       ></p>
 
     </div>
-
 
     <!-- CHOIX MANUEL SANS COMPÉTENCE -->
 
@@ -187,7 +179,6 @@
 
     </label>
 
-
     <!-- MISE -->
 
     <label class="field">
@@ -212,7 +203,6 @@
       class="subtle opposition-note"
       id="stake-limit"
     ></p>
-
 
     <!-- POSTURE -->
 
@@ -252,11 +242,9 @@
 
     </label>
 
-
     <!-- ADVERSAIRE -->
 
     <h2>Adversaire</h2>
-
 
     <!-- MAÎTRISE ADVERSE -->
 
@@ -304,7 +292,6 @@
 
     </label>
 
-
     <!-- MISE ADVERSE -->
 
     <label class="field">
@@ -324,7 +311,6 @@
       >
 
     </label>
-
 
     <!-- POSTURE ADVERSE -->
 
@@ -364,7 +350,6 @@
 
     </label>
 
-
     <!-- RÉSOLUTION -->
 
     <button
@@ -376,7 +361,6 @@
     </button>
 
   </form>
-
 
   <!-- RÉSULTAT -->
 
@@ -396,7 +380,6 @@
 
   </div>
 
-
   <!-- ERREURS -->
 
   <p
@@ -404,7 +387,6 @@
     id="error"
     role="alert"
   ></p>
-
 
   <!-- RETOUR -->
 
@@ -424,13 +406,11 @@
 
 </main>
 
-
 <!-- ======================================
      MOTEUR COMMUN
      ====================================== -->
 
 <script src="app.js"></script>
-
 
 <!-- ======================================
      INTERFACE DES OPPOSITIONS
@@ -441,7 +421,6 @@
 (() => {
 
 "use strict";
-
 
 /* ========================================
    CONFIGURATION
@@ -465,7 +444,6 @@ const ATTR_NAMES = {
 const RESERVE_NAMES = MISE.RESERVES;
 
 let character;
-
 
 /* ========================================
    CHARGER LE PERSONNAGE
@@ -491,7 +469,6 @@ try {
 
 }
 
-
 /* ========================================
    NAVIGATION
    ======================================== */
@@ -513,7 +490,6 @@ function returnToGame() {
 
 }
 
-
 /* ========================================
    ACTUALISER LE PERSONNAGE
    ======================================== */
@@ -525,7 +501,6 @@ function refreshCharacter() {
   );
 
 }
-
 
 /* ========================================
    AFFICHER LES RÉSERVES
@@ -570,7 +545,6 @@ function renderReserves() {
 
 }
 
-
 /* ========================================
    AFFICHER LES COMPÉTENCES
    ======================================== */
@@ -580,7 +554,6 @@ function renderSkills() {
   const select = $("skill");
 
   select.replaceChildren();
-
 
   /* Choix initial */
 
@@ -598,7 +571,6 @@ function renderSkills() {
 
   select.append(placeholder);
 
-
   /* Sans compétence */
 
   const noSkill = document.createElement(
@@ -611,7 +583,6 @@ function renderSkills() {
     "Sans compétence (+0)";
 
   select.append(noSkill);
-
 
   /* Compétences du personnage */
 
@@ -646,9 +617,9 @@ function renderSkills() {
     } else {
 
       /*
-        Une compétence ancienne sans
-        caractéristique associée reste
-        visible, mais indisponible.
+        Les compétences anciennes sans
+        caractéristique restent visibles,
+        mais ne sont pas utilisables.
       */
 
       option.textContent =
@@ -665,7 +636,6 @@ function renderSkills() {
 
 }
 
-
 /* ========================================
    TROUVER UNE COMPÉTENCE
    ======================================== */
@@ -678,7 +648,6 @@ function findSkill(id) {
 
 }
 
-
 /* ========================================
    DÉTERMINER LA RÉSERVE
    ======================================== */
@@ -690,7 +659,6 @@ function selectedReserve() {
   if (!skillId) {
     return null;
   }
-
 
   /*
     Sans compétence :
@@ -707,7 +675,6 @@ function selectedReserve() {
       : null;
 
   }
-
 
   /*
     Avec compétence :
@@ -730,7 +697,6 @@ function selectedReserve() {
 
 }
 
-
 /* ========================================
    AFFICHER L'ASSOCIATION
    ======================================== */
@@ -747,13 +713,11 @@ function updateAssociation() {
   const manualSelect =
     $("manual-reserve");
 
-
   association.hidden = true;
 
   manualField.hidden = true;
 
   manualSelect.required = false;
-
 
   /* Aucun choix */
 
@@ -766,7 +730,6 @@ function updateAssociation() {
     return;
 
   }
-
 
   /* Sans compétence */
 
@@ -783,7 +746,6 @@ function updateAssociation() {
     return;
 
   }
-
 
   /* Compétence associée */
 
@@ -807,7 +769,6 @@ function updateAssociation() {
 
   }
 
-
   $("association-value").textContent =
     ATTR_NAMES[skill.reserve] +
     " → " +
@@ -818,7 +779,6 @@ function updateAssociation() {
   updateLimit();
 
 }
-
 
 /* ========================================
    LIMITE DE MISE
@@ -839,7 +799,6 @@ function updateLimit() {
     return;
 
   }
-
 
   /*
     La mise ne peut dépasser :
@@ -862,9 +821,7 @@ function updateLimit() {
     disponibles
   );
 
-
   input.max = limite;
-
 
   $("stake-limit").textContent =
     "Mise maximale : " +
@@ -876,7 +833,6 @@ function updateLimit() {
     " PA.";
 
 }
-
 
 /* ========================================
    RÉINITIALISER LES CHAMPS
@@ -900,7 +856,6 @@ function resetFields() {
 
   $("enemy-stake").value = "";
 
-
   $("association").hidden = true;
 
   $("manual-reserve-field").hidden = true;
@@ -915,7 +870,6 @@ function resetFields() {
 
 }
 
-
 /* ========================================
    RÉSOLUTION DE L'OPPOSITION
    ======================================== */
@@ -925,7 +879,6 @@ function resolveOpposition(event) {
   event.preventDefault();
 
   $("error").textContent = "";
-
 
   const skillId =
     $("skill").value;
@@ -948,7 +901,6 @@ function resolveOpposition(event) {
   const enemyBonusText =
     $("enemy-bonus").value;
 
-
   /* Vérification des choix */
 
   if (!skillId) {
@@ -960,7 +912,6 @@ function resolveOpposition(event) {
 
   }
 
-
   if (!reserve) {
 
     $("error").textContent =
@@ -969,7 +920,6 @@ function resolveOpposition(event) {
     return;
 
   }
-
 
   if (
     !posture ||
@@ -986,7 +936,6 @@ function resolveOpposition(event) {
 
   }
 
-
   const stake = Number(
     stakeText
   );
@@ -998,7 +947,6 @@ function resolveOpposition(event) {
   const enemyBonus = Number(
     enemyBonusText
   );
-
 
   if (
     !Number.isInteger(stake) ||
@@ -1012,7 +960,6 @@ function resolveOpposition(event) {
 
   }
 
-
   if (
     !Number.isInteger(enemyStake) ||
     enemyStake < 1
@@ -1024,7 +971,6 @@ function resolveOpposition(event) {
     return;
 
   }
-
 
   /*
     Vérifier que la compétence
@@ -1049,7 +995,6 @@ function resolveOpposition(event) {
 
   }
 
-
   /* Conserver les choix pour le résultat */
 
   const selectedPosture =
@@ -1062,17 +1007,17 @@ function resolveOpposition(event) {
       .selectedOptions[0]
       .textContent.trim();
 
-
   /*
     Résolution par le moteur commun.
 
-    Le moteur est responsable :
-    - des scores ;
-    - des postures ;
-    - du coût des mises ;
-    - des dégâts ;
-    - des blessures ;
-    - de la sauvegarde.
+    Le moteur calcule :
+    - les scores ;
+    - les bonus de posture ;
+    - le coût de la mise ;
+    - les dégâts infligés ;
+    - les dégâts reçus ;
+    - les blessures ;
+    - la sauvegarde du personnage.
   */
 
   try {
@@ -1100,85 +1045,150 @@ function resolveOpposition(event) {
 
     });
 
-
     /* Actualiser les données */
 
     refreshCharacter();
 
     renderReserves();
 
-
-    /* Préparer le résultat */
+    /* ========================================
+       PRÉPARER LE RÉSULTAT
+       ======================================== */
 
     let message = "";
 
+    /*
+      Informations communes aux
+      trois résultats.
+    */
+
+    const scores =
+      "Votre posture : " +
+      selectedPosture +
+
+      "\nPosture adverse : " +
+      selectedEnemyPosture +
+
+      "\n\nVotre score : " +
+      result.scoreJoueur +
+
+      "\nScore adverse : " +
+      result.scoreAdverse +
+
+      "\nÉcart : " +
+      result.ecart;
+
+    const mise =
+      "Mise payée : " +
+      result.misePayee +
+      " PA";
+
+    const reserveRestante =
+      "PA restants : " +
+      result.paRestants +
+      " / " +
+      result.maximumRestant;
+
+    /*
+      ÉGALITÉ
+
+      Conformément au livret :
+      - chaque camp paie sa mise ;
+      - aucun dégât ;
+      - aucune blessure ;
+      - aucune récupération.
+
+      Le Narrateur décrit la situation.
+    */
 
     if (result.egalite) {
 
       message =
-        "ÉGALITÉ\n\n" +
-
-        "Votre score : " +
-        result.scoreJoueur +
-
-        "\nScore adverse : " +
-        result.scoreAdverse +
+        "ÉGALITÉ" +
 
         "\n\n" +
 
-        "Décision du Narrateur.\n" +
-        "Aucun PA débité automatiquement.";
+        scores +
 
-    } else {
+        "\n\n" +
+
+        mise +
+
+        "\nAucun dégât." +
+
+        "\nAucune blessure." +
+
+        "\n\n" +
+
+        reserveRestante +
+
+        "\n\nLes deux camps paient " +
+        "leur mise entière. " +
+        "Le Narrateur décrit la situation.";
+
+    }
+
+    /*
+      VICTOIRE
+
+      Affichage des dégâts infligés
+      à l'adversaire.
+
+      La posture du perdant détermine
+      les dégâts qu'il reçoit.
+    */
+
+    else if (result.victoire) {
 
       message =
-        (
-          result.victoire
-            ? "VICTOIRE"
-            : "DÉFAITE"
-        ) +
+        "VICTOIRE" +
 
         "\n\n" +
 
-        "Votre posture : " +
-        selectedPosture +
-
-        "\nPosture adverse : " +
-        selectedEnemyPosture +
+        scores +
 
         "\n\n" +
 
-        "Votre score : " +
-        result.scoreJoueur +
-
-        "\nScore adverse : " +
-        result.scoreAdverse +
-
-        "\nÉcart : " +
-        result.ecart +
+        mise +
 
         "\n\n" +
 
-        "Mise payée : " +
-        result.misePayee +
-        " PA" +
+        "Dégâts infligés : " +
+        result.degatsInfliges +
 
-        "\nDégâts reçus : " +
-        result.degats +
-
-        "\nBlessures reçues : " +
-        result.blessures +
+        "\nBlessures infligées : " +
+        result.blessuresInfligees +
 
         "\n\n" +
 
-        "PA restants : " +
-        result.paRestants +
-        " / " +
-        result.maximumRestant +
+        "Dégâts reçus : 0" +
+
+        "\nBlessures reçues : 0" +
+
+        "\n\n" +
+
+        reserveRestante +
 
         "\nBlessures totales : " +
         result.blessuresTotales;
 
+      /*
+        Les blessures adverses
+        ne sont pas enregistrées
+        automatiquement sur une
+        autre fiche.
+      */
+
+      message +=
+        "\n\nLes blessures infligées " +
+        "à l'adversaire sont à reporter " +
+        "sur sa fiche, si nécessaire.";
+
+      /*
+        La posture économique
+        récupère 1 PA en cas
+        de victoire.
+      */
 
       if (result.recuperation > 0) {
 
@@ -1190,23 +1200,68 @@ function resolveOpposition(event) {
 
     }
 
+    /*
+      DÉFAITE
 
-    /* Afficher le résultat */
+      Affichage des dégâts reçus
+      par le personnage.
+
+      Les blessures reçues sont
+      automatiquement enregistrées.
+    */
+
+    else {
+
+      message =
+        "DÉFAITE" +
+
+        "\n\n" +
+
+        scores +
+
+        "\n\n" +
+
+        mise +
+
+        "\n\n" +
+
+        "Dégâts reçus : " +
+        result.degatsRecus +
+
+        "\nBlessures reçues : " +
+        result.blessuresRecues +
+
+        "\n\n" +
+
+        "Dégâts infligés : 0" +
+
+        "\nBlessures infligées : 0" +
+
+        "\n\n" +
+
+        reserveRestante +
+
+        "\nBlessures totales : " +
+        result.blessuresTotales;
+
+    }
+
+    /* ========================================
+       AFFICHER LE RÉSULTAT
+       ======================================== */
 
     $("result-panel").hidden = false;
 
     $("result").textContent = message;
 
-
     /*
-      Vider les champs après résolution.
+      Réinitialiser les champs après
+      une résolution réussie.
 
-      En cas d'erreur, les données saisies
-      restent en place.
+      Le résultat reste visible.
     */
 
     resetFields();
-
 
   } catch (error) {
 
@@ -1217,7 +1272,6 @@ function resolveOpposition(event) {
 
 }
 
-
 /* ========================================
    ÉVÉNEMENTS
    ======================================== */
@@ -1225,12 +1279,10 @@ function resolveOpposition(event) {
 $("character-name").textContent =
   character.name;
 
-
 $("opposition-form").addEventListener(
   "submit",
   resolveOpposition
 );
-
 
 /* Compétence */
 
@@ -1239,7 +1291,6 @@ $("skill").addEventListener(
   updateAssociation
 );
 
-
 /* Réserve manuelle */
 
 $("manual-reserve").addEventListener(
@@ -1247,13 +1298,11 @@ $("manual-reserve").addEventListener(
   updateLimit
 );
 
-
 /* Navigation */
 
 $("back").onclick = returnToGame;
 
 $("return").onclick = returnToGame;
-
 
 /* ========================================
    DÉMARRAGE
@@ -1270,4 +1319,4 @@ resetFields();
 </script>
 
 </body>
-  </html>
+</html>
