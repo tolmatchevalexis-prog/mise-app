@@ -1,1 +1,1249 @@
+<!doctype html>
+<html lang="fr">
 
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#111111">
+
+<meta
+  name="description"
+  content="M.I.S.E. — Interface de jeu"
+>
+
+<title>M.I.S.E. — En jeu</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="game-page">
+
+<main class="app">
+
+<section id="game">
+
+  <!-- EN-TÊTE -->
+
+  <div class="heading">
+
+    <button
+      class="back"
+      id="back"
+      type="button"
+      aria-label="Retour à la fiche"
+    >
+      ←
+    </button>
+
+    <h1>En jeu</h1>
+
+  </div>
+
+  <div
+    class="detail-name"
+    id="character-name"
+  ></div>
+
+
+  <!-- RÉSERVES -->
+
+  <h2>Réserves de PA</h2>
+
+  <div id="reserves"></div>
+
+
+  <!-- BLESSURES -->
+
+  <h2>Blessures</h2>
+
+  <p class="subtle">
+    Chaque blessure réduit de 3 PA
+    le maximum de la réserve concernée.
+  </p>
+
+  <div id="wounds"></div>
+
+
+  <!-- ACTIONS -->
+
+  <h2>Action</h2>
+
+  <p class="subtle">
+    Choisissez une réserve, une compétence
+    et une mise pour répondre à un SD.
+  </p>
+
+  <label class="field">
+
+    <span class="label">Réserve utilisée</span>
+
+    <select
+      class="input"
+      id="action-reserve"
+    >
+      <option value="physique">Vigueur</option>
+      <option value="mental">Volonté</option>
+      <option value="social">Influence</option>
+    </select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Compétence</span>
+
+    <select
+      class="input"
+      id="action-skill"
+    ></select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Seuil de difficulté</span>
+
+    <select
+      class="input"
+      id="action-sd"
+    >
+      <option value="3">
+        3 — Accessible sous pression
+      </option>
+
+      <option value="4">
+        4 — Difficile
+      </option>
+
+      <option value="5">
+        5 — Très difficile
+      </option>
+
+      <option value="6">
+        6 — Exceptionnelle
+      </option>
+
+      <option value="7">
+        7 — Extrême
+      </option>
+    </select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">
+      Ajustement de circonstance au SD
+    </span>
+
+    <select
+      class="input"
+      id="action-modifier"
+    >
+      <option value="-3">−3</option>
+      <option value="-2">−2</option>
+      <option value="-1">−1</option>
+      <option value="0" selected>Aucun</option>
+      <option value="1">+1</option>
+      <option value="2">+2</option>
+      <option value="3">+3</option>
+    </select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Mise en PA</span>
+
+    <input
+      class="input"
+      id="action-stake"
+      type="number"
+      min="0"
+      step="1"
+      value="1"
+    >
+
+  </label>
+
+
+  <p
+    class="subtle"
+    id="action-preview"
+  ></p>
+
+
+  <button
+    class="box primary"
+    id="resolve-action"
+    type="button"
+  >
+    Résoudre l'action
+  </button>
+
+  <p
+    class="subtle"
+    id="action-result"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+
+  <!-- OPPOSITIONS -->
+
+  <h2>Opposition</h2>
+
+  <p class="subtle">
+    Chaque adversaire choisit une mise
+    et une posture. La posture gagnante
+    apporte un bonus de +2.
+  </p>
+
+
+  <h3>Votre personnage</h3>
+
+
+  <label class="field">
+
+    <span class="label">Réserve</span>
+
+    <select
+      class="input"
+      id="opp-reserve"
+    >
+      <option value="physique">Vigueur</option>
+      <option value="mental">Volonté</option>
+      <option value="social">Influence</option>
+    </select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Compétence</span>
+
+    <select
+      class="input"
+      id="opp-skill"
+    ></select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Mise en PA</span>
+
+    <input
+      class="input"
+      id="opp-stake"
+      type="number"
+      min="1"
+      step="1"
+      value="1"
+    >
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Posture</span>
+
+    <select
+      class="input"
+      id="opp-posture"
+    >
+      <option value="offensive">Offensive</option>
+      <option value="defensive">Défensive</option>
+      <option value="economique">Économique</option>
+    </select>
+
+  </label>
+
+
+  <p
+    class="subtle"
+    id="opp-limit"
+  ></p>
+
+
+  <h3>Adversaire</h3>
+
+
+  <label class="field">
+
+    <span class="label">
+      Bonus de compétence adverse
+    </span>
+
+    <select
+      class="input"
+      id="enemy-bonus"
+    >
+      <option value="0">Sans compétence +0</option>
+      <option value="1">Novice +1</option>
+      <option value="2">Confirmé +2</option>
+      <option value="3">Expert +3</option>
+      <option value="5">Maître +5</option>
+    </select>
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Mise adverse en PA</span>
+
+    <input
+      class="input"
+      id="enemy-stake"
+      type="number"
+      min="1"
+      step="1"
+      value="1"
+    >
+
+  </label>
+
+
+  <label class="field">
+
+    <span class="label">Posture adverse</span>
+
+    <select
+      class="input"
+      id="enemy-posture"
+    >
+      <option value="offensive">Offensive</option>
+      <option value="defensive">Défensive</option>
+      <option value="economique">Économique</option>
+    </select>
+
+  </label>
+
+
+  <button
+    class="box primary"
+    id="resolve-opposition"
+    type="button"
+  >
+    Résoudre l'opposition
+  </button>
+
+  <p
+    class="subtle"
+    id="opposition-result"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+
+  <!-- COMPÉTENCES -->
+
+  <h2>Compétences</h2>
+
+  <ul
+    class="detail-list"
+    id="skills"
+  ></ul>
+
+
+  <!-- ATOUTS -->
+
+  <h2>Atouts</h2>
+
+  <div id="atouts"></div>
+
+  <p
+    class="subtle"
+    id="atout-result"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+
+  <!-- NAVIGATION -->
+
+  <div class="actions group">
+
+    <button
+      class="box secondary"
+      id="exit"
+      type="button"
+    >
+      Quitter le mode jeu
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<script>
+
+(() => {
+
+"use strict";
+
+
+/* ==========================================
+   CONFIGURATION
+   ========================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+const KEY = "mise-app-characters-v1";
+
+const ATTRS = [
+  "physique",
+  "mental",
+  "social"
+];
+
+const RESERVES = {
+  physique: "Vigueur",
+  mental: "Volonté",
+  social: "Influence"
+};
+
+const LEVELS = [
+  "Novice",
+  "Confirmé",
+  "Expert",
+  "Maître"
+];
+
+const BONUSES = [1, 2, 3, 5];
+
+const clamp = (n, min, max) =>
+  Math.max(min, Math.min(max, n));
+
+const maxBase = n =>
+  n * 3 + 5;
+
+
+let characters = [];
+
+try {
+
+  const data = JSON.parse(
+    localStorage.getItem(KEY) || "[]"
+  );
+
+  if (Array.isArray(data)) {
+    characters = data;
+  }
+
+} catch {
+
+  characters = [];
+
+}
+
+
+/* ==========================================
+   PERSONNAGE SÉLECTIONNÉ
+   ========================================== */
+
+const params = new URLSearchParams(
+  window.location.search
+);
+
+const characterId = params.get("id");
+
+const character = characters.find(
+  c => c.id === characterId
+);
+
+if (!character) {
+
+  alert(
+    "Personnage introuvable. Retour à l'accueil."
+  );
+
+  window.location.replace("index.html");
+
+  return;
+
+}
+
+
+/* ==========================================
+   RÉSERVES ET BLESSURES
+   ========================================== */
+
+function prepare(c) {
+
+  if (!c.wounds) {
+    c.wounds = {
+      physique: 0,
+      mental: 0,
+      social: 0
+    };
+  }
+
+  if (!c.pa) {
+    c.pa = {};
+  }
+
+  if (!Array.isArray(c.skills)) {
+    c.skills = [];
+  }
+
+  if (!Array.isArray(c.atouts)) {
+    c.atouts = [];
+  }
+
+  for (const k of ATTRS) {
+
+    c.wounds[k] = clamp(
+      Number(c.wounds[k]) || 0,
+      0,
+      20
+    );
+
+    const max = maximum(c, k);
+
+    c.pa[k] = Number.isFinite(c.pa[k])
+      ? clamp(c.pa[k], 0, max)
+      : max;
+
+  }
+
+}
+
+function maximum(c, k) {
+
+  return Math.max(
+    0,
+    maxBase(c[k]) -
+    3 * (c.wounds[k] || 0)
+  );
+
+}
+
+prepare(character);
+
+
+/* ==========================================
+   SAUVEGARDE
+   ========================================== */
+
+function save() {
+
+  try {
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(characters)
+    );
+
+    return true;
+
+  } catch {
+
+    alert(
+      "Impossible d'enregistrer les modifications."
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* ==========================================
+   COMPTEURS
+   ========================================== */
+
+function counterRow(
+  host,
+  label,
+  value,
+  minus,
+  plus,
+  disableMinus,
+  disablePlus
+) {
+
+  const row = document.createElement("div");
+
+  row.className = "detail-row";
+
+  const title = document.createElement("span");
+
+  title.textContent = label;
+
+  const controls = document.createElement("div");
+
+  controls.className = "reserve-counter";
+
+
+  const dec = document.createElement("button");
+
+  dec.className = "counter";
+
+  dec.textContent = "−";
+
+  dec.disabled = disableMinus;
+
+  dec.setAttribute(
+    "aria-label",
+    "Diminuer " + label
+  );
+
+  dec.onclick = minus;
+
+
+  const number = document.createElement(
+    "strong"
+  );
+
+  number.textContent = value;
+
+
+  const inc = document.createElement("button");
+
+  inc.className = "counter";
+
+  inc.textContent = "+";
+
+  inc.disabled = disablePlus;
+
+  inc.setAttribute(
+    "aria-label",
+    "Augmenter " + label
+  );
+
+  inc.onclick = plus;
+
+
+  controls.append(
+    dec,
+    number,
+    inc
+  );
+
+  row.append(
+    title,
+    controls
+  );
+
+  host.append(row);
+
+}
+
+
+/* ==========================================
+   MODIFIER LES PA
+   ========================================== */
+
+function changePA(k, delta) {
+
+  const previous = character.pa[k];
+
+  character.pa[k] = clamp(
+    previous + delta,
+    0,
+    maximum(character, k)
+  );
+
+  if (!save()) {
+
+    character.pa[k] = previous;
+
+  }
+
+  render();
+
+}
+
+
+/* ==========================================
+   MODIFIER LES BLESSURES
+   ========================================== */
+
+function changeWounds(k, delta) {
+
+  const previousWounds =
+    character.wounds[k];
+
+  const previousPA =
+    character.pa[k];
+
+  character.wounds[k] = clamp(
+    previousWounds + delta,
+    0,
+    20
+  );
+
+  character.pa[k] = Math.min(
+    character.pa[k],
+    maximum(character, k)
+  );
+
+  if (!save()) {
+
+    character.wounds[k] =
+      previousWounds;
+
+    character.pa[k] =
+      previousPA;
+
+  }
+
+  render();
+
+}
+
+
+/* ==========================================
+   AFFICHER RÉSERVES ET BLESSURES
+   ========================================== */
+
+function renderCounters() {
+
+  const reserves = $("reserves");
+
+  const wounds = $("wounds");
+
+  reserves.replaceChildren();
+
+  wounds.replaceChildren();
+
+
+  for (const k of ATTRS) {
+
+    const max = maximum(
+      character,
+      k
+    );
+
+    counterRow(
+
+      reserves,
+
+      RESERVES[k],
+
+      character.pa[k] + " / " + max,
+
+      () => changePA(k, -1),
+
+      () => changePA(k, 1),
+
+      character.pa[k] <= 0,
+
+      character.pa[k] >= max
+
+    );
+
+
+    counterRow(
+
+      wounds,
+
+      RESERVES[k],
+
+      String(character.wounds[k]),
+
+      () => changeWounds(k, -1),
+
+      () => changeWounds(k, 1),
+
+      character.wounds[k] <= 0,
+
+      character.wounds[k] >= 20
+
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   COMPÉTENCES
+   ========================================== */
+
+function skillBonus(id) {
+
+  if (!id) return 0;
+
+  const skill = character.skills.find(
+    s => s.id === id
+  );
+
+  if (!skill) return 0;
+
+  return BONUSES[skill.level - 1] || 0;
+
+}
+
+
+function renderSkillSelect(id) {
+
+  const select = $(id);
+
+  const previous = select.value;
+
+  select.replaceChildren();
+
+
+  const none = document.createElement(
+    "option"
+  );
+
+  none.value = "";
+
+  none.textContent =
+    "Sans compétence (+0)";
+
+  select.append(none);
+
+
+  for (const skill of character.skills) {
+
+    const option = document.createElement(
+      "option"
+    );
+
+    option.value = skill.id;
+
+    option.textContent =
+      skill.name +
+      " (+" +
+      skillBonus(skill.id) +
+      ")";
+
+    select.append(option);
+
+  }
+
+  if (
+    [...select.options].some(
+      o => o.value === previous
+    )
+  ) {
+
+    select.value = previous;
+
+  }
+
+}
+
+
+function renderSkills() {
+
+  const root = $("skills");
+
+  root.replaceChildren();
+
+  if (!character.skills.length) {
+
+    const li = document.createElement("li");
+
+    li.textContent = "Aucune compétence.";
+
+    root.append(li);
+
+  }
+
+  for (const skill of character.skills) {
+
+    const li = document.createElement("li");
+
+    li.textContent =
+      skill.name +
+      " — " +
+      LEVELS[skill.level - 1] +
+      " (+" +
+      skillBonus(skill.id) +
+      ")";
+
+    root.append(li);
+
+  }
+
+  renderSkillSelect("action-skill");
+
+  renderSkillSelect("opp-skill");
+
+}
+
+
+/* ==========================================
+   ACTIONS — PRÉVISUALISATION
+   ========================================== */
+
+function actionPreview() {
+
+  const k = $("action-reserve").value;
+
+  const stake = Number(
+    $("action-stake").value
+  );
+
+  const bonus = skillBonus(
+    $("action-skill").value
+  );
+
+  const sd = Number(
+    $("action-sd").value
+  );
+
+  const modifier = Number(
+    $("action-modifier").value
+  );
+
+  const adjustedSD = sd + modifier;
+
+  const score = stake + bonus;
+
+  $("action-preview").textContent =
+    "Score : " +
+    score +
+    " · SD ajusté : " +
+    adjustedSD +
+    " · PA disponibles : " +
+    character.pa[k];
+
+}
+
+
+/* ==========================================
+   RÉSOUDRE UNE ACTION
+   ========================================== */
+
+function resolveAction() {
+
+  const k = $("action-reserve").value;
+
+  const stake = Number(
+    $("action-stake").value
+  );
+
+  const bonus = skillBonus(
+    $("action-skill").value
+  );
+
+  const sd = Number(
+    $("action-sd").value
+  );
+
+  const modifier = Number(
+    $("action-modifier").value
+  );
+
+  const result = $("action-result");
+
+  if (
+    !Number.isInteger(stake) ||
+    stake < 0
+  ) {
+
+    result.textContent =
+      "La mise doit être un entier positif ou nul.";
+
+    return;
+
+  }
+
+  if (stake > character.pa[k]) {
+
+    result.textContent =
+      "PA insuffisants pour cette mise.";
+
+    return;
+
+  }
+
+  const adjustedSD = sd + modifier;
+
+  const score = stake + bonus;
+
+  const success = score >= adjustedSD;
+
+  const previous = character.pa[k];
+
+  character.pa[k] -= stake;
+
+  if (!save()) {
+
+    character.pa[k] = previous;
+
+    return;
+
+  }
+
+  renderCounters();
+
+  actionPreview();
+
+  result.textContent =
+    (success ? "Réussite." : "Échec.") +
+    " Score " +
+    score +
+    " contre SD " +
+    adjustedSD +
+    ". Mise dépensée : " +
+    stake +
+    " PA de " +
+    RESERVES[k] +
+    ".";
+
+}
+
+
+/* ==========================================
+   OPPOSITIONS — POSTURES
+   ========================================== */
+
+const BEATS = {
+  offensive: "economique",
+  economique: "defensive",
+  defensive: "offensive"
+};
+
+const POSTURE_NAMES = {
+  offensive: "Offensive",
+  defensive: "Défensive",
+  economique: "Économique"
+};
+
+
+function postureBonus(a, b) {
+
+  if (a === b) {
+    return [0, 0];
+  }
+
+  if (BEATS[a] === b) {
+    return [2, 0];
+  }
+
+  return [0, 2];
+
+}
+
+
+/* ==========================================
+   LIMITE DES MISES
+   ========================================== */
+
+function updateOppositionLimit() {
+
+  const k = $("opp-reserve").value;
+
+  const maximumStake = Math.ceil(
+    maximum(character, k) / 2
+  );
+
+  $("opp-limit").textContent =
+    "Mise maximale : " +
+    maximumStake +
+    " PA · Disponibles : " +
+    character.pa[k] +
+    " PA.";
+
+}
+
+
+/* ==========================================
+   RÉSOUDRE UNE OPPOSITION
+   ========================================== */
+
+function resolveOpposition() {
+
+  const output = $("opposition-result");
+
+  const k = $("opp-reserve").value;
+
+  const myStake = Number(
+    $("opp-stake").value
+  );
+
+  const enemyStake = Number(
+    $("enemy-stake").value
+  );
+
+  const myBonus = skillBonus(
+    $("opp-skill").value
+  );
+
+  const enemyBonus = Number(
+    $("enemy-bonus").value
+  );
+
+  const myPosture =
+    $("opp-posture").value;
+
+  const enemyPosture =
+    $("enemy-posture").value;
+
+  const cap = Math.ceil(
+    maximum(character, k) / 2
+  );
+
+
+  if (
+    !Number.isInteger(myStake) ||
+    myStake < 1 ||
+    myStake > cap
+  ) {
+
+    output.textContent =
+      "La mise doit être comprise entre 1 et " +
+      cap +
+      " PA.";
+
+    return;
+
+  }
+
+  if (myStake > character.pa[k]) {
+
+    output.textContent =
+      "PA insuffisants pour cette mise.";
+
+    return;
+
+  }
+
+  if (
+    !Number.isInteger(enemyStake) ||
+    enemyStake < 1
+  ) {
+
+    output.textContent =
+      "La mise adverse doit être un entier positif.";
+
+    return;
+
+  }
+
+
+  const [myPostureBonus, enemyPostureBonus] =
+    postureBonus(
+      myPosture,
+      enemyPosture
+    );
+
+
+  const myScore =
+    myStake +
+    myBonus +
+    myPostureBonus;
+
+  const enemyScore =
+    enemyStake +
+    enemyBonus +
+    enemyPostureBonus;
+
+
+  const difference =
+    Math.abs(myScore - enemyScore);
+
+
+  /*
+     Égalité :
+     le corpus ne fixe pas ici
+     de conséquence automatique.
+
+     Nous laissons le Narrateur
+     prendre sa décision.
+  */
+
+  if (myScore === enemyScore) {
+
+    output.textContent =
+      "Égalité : " +
+      myScore +
+      " contre " +
+      enemyScore +
+      ". Décision du Narrateur. " +
+      "Aucun PA débité automatiquement.";
+
+    return;
+
+  }
+
+
+  const victory = myScore > enemyScore;
+
+
+  /*
+     Coût de la mise personnelle.
+
+     Offensive : coût entier.
+     Défensive : coût entier.
+
+     Économique :
+     - victoire : coût entier puis +1 PA.
+     - défaite : moitié arrondie au supérieur.
+  */
+
+  let cost = myStake;
+
+  if (
+    myPosture === "economique" &&
+    !victory
+  ) {
+
+    cost = Math.ceil(myStake / 2);
+
+  }
+
+
+  /*
+     Dégâts subis en cas de défaite.
+
+     Offensive : doublés.
+     Défensive : moitié arrondie au supérieur,
+                 puis -1, minimum 0.
+     Économique : dégâts entiers.
+  */
+
+  let damage = 0;
+
+  if (!victory) {
+
+    damage = difference;
+
+    if (myPosture === "offensive") {
+
+      damage *= 2;
+
+    }
+
+    if (myPosture === "defensive") {
+
+      damage = Math.max(
+        0,
+        Math.ceil(damage / 2) - 1
+      );
+
+    }
+
+  }
+
+
+  const previous = character.pa[k];
+
+  character.pa[k
