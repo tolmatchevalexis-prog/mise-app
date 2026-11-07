@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fff">
+<meta name="theme-color" content="#ffffff" id="theme-color">
 <title>M.I.S.E. — Personnages</title>
 
 <style>
 :root {
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  color: #151515;
-  background: white;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #171717;
+  background: #fff;
 }
-
 * { box-sizing: border-box; }
 body { margin: 0; }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 
 button:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid #777;
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #888;
   outline-offset: 3px;
 }
 
@@ -29,10 +29,16 @@ textarea:focus-visible {
   max-width: 470px;
   min-height: 100dvh;
   margin: auto;
-  padding: 32px 24px max(24px, env(safe-area-inset-bottom));
+  padding: 32px 24px max(32px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
 }
+section {
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  flex-direction: column;
+}
+section[hidden] { display: none; }
 
 .brand {
   text-align: center;
@@ -40,211 +46,286 @@ textarea:focus-visible {
   font-weight: 400;
   letter-spacing: .2em;
   padding-left: .2em;
-  margin: 12px 0 70px;
+  margin: 12px 0 65px;
 }
-
-.stack { display: grid; gap: 18px; }
-.home-bottom { margin-top: auto; padding-top: 65px; }
-
+.stack, .actions {
+  display: grid;
+  gap: 15px;
+}
+.home-bottom {
+  margin-top: auto;
+  padding-top: 65px;
+}
 .box {
-  border: 1.5px solid #191919;
+  border: 1.5px solid currentColor;
   border-radius: 13px;
-  background: #fff;
+  background: transparent;
+  color: inherit;
   width: 100%;
-  color: #151515;
-  min-height: 60px;
+  min-height: 59px;
   padding: 12px 16px;
 }
-
-.box:hover { background: #f6f6f6; }
-
 .card {
   text-align: left;
   font-size: 19px;
-  padding: 17px 21px;
   overflow-wrap: anywhere;
+  padding: 17px 21px;
 }
-
 .primary { font-weight: 600; }
-
 .secondary {
   border-color: #aaa;
   font-weight: 400;
 }
-
 .heading {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 32px;
+  margin: 0 0 28px;
 }
-
 .heading h1 {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 550;
   margin: 0;
 }
-
 .back {
   border: 0;
   background: transparent;
+  color: inherit;
   font-size: 27px;
   padding: 5px 10px 5px 0;
 }
-
 .field {
   display: grid;
   gap: 9px;
-  margin: 0 0 26px;
+  margin-bottom: 24px;
 }
-
-.field-label {
-  font-weight: 550;
+.label {
   font-size: 15px;
+  font-weight: 550;
 }
-
 .input {
   width: 100%;
-  border: 1.5px solid #191919;
+  border: 1.5px solid #171717;
   border-radius: 12px;
   padding: 14px 16px;
-  background: white;
-  color: #151515;
+  background: #fff;
+  color: #171717;
 }
-
 .long {
-  min-height: 180px;
+  min-height: 155px;
   resize: vertical;
 }
-
-.attributes { margin: 8px 0 36px; }
-
 .attribute {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin: 18px 0;
 }
-
 .attribute-label { font-size: 19px; }
-.dots { display: flex; gap: 10px; }
-
-.dot {
-  width: 26px;
-  height: 26px;
-  border: 1.6px solid #111;
-  border-radius: 50%;
-  padding: 0;
-  background: #fff;
-  flex: none;
+.dots {
+  display: flex;
+  gap: 9px;
 }
-
-.dot.active { background: #151515; }
+.dot {
+  height: 26px;
+  width: 26px;
+  flex: none;
+  border: 1.7px solid #171717;
+  border-radius: 50%;
+  background: white;
+  padding: 0;
+}
+.dot.active { background: #171717; }
+.attributes { margin: 5px 0 25px; }
 
 .arrow {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   text-align: left;
   font-size: 18px;
 }
+.arrow span:last-child { font-size: 24px; }
 
-.arrow span:last-child {
-  font-size: 25px;
-  font-weight: 300;
+.subtle {
+  font-size: 14px;
+  color: #666;
 }
-
-.subtle { color: #666; font-size: 14px; }
-.count { margin: 8px 0 28px; }
-
-.actions {
-  display: grid;
-  gap: 12px;
-  margin-top: 20px;
-}
+.count { margin: 9px 0 24px; }
+.actions { margin-top: 23px; }
 
 .error {
-  color: #a00000;
-  min-height: 19px;
+  color: #960000;
+  min-height: 16px;
   font-size: 14px;
 }
+.group { margin-top: 28px; }
 
-.skillrow {
+.skillrow, .detail-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid #ccc;
-  padding: 13px 0;
+  border-bottom: 1px solid #c8c8c8;
+  padding: 12px 0;
 }
-
+.skillrow div:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .skillrow p {
   margin: 4px 0;
   color: #666;
   font-size: 13px;
 }
-
 .small {
-  background: white;
   border: 1px solid #aaa;
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 8px;
+  background: transparent;
+  color: inherit;
 }
-
-.group { margin-top: 30px; }
-
+h2 {
+  font-size: 17px;
+  font-weight: 550;
+  margin: 28px 0 12px;
+}
 .detail-name {
   font-size: 27px;
   overflow-wrap: anywhere;
-  margin: 4px 0 30px;
+  margin: 0 0 16px;
 }
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #ccc;
-  padding: 12px 0;
-}
-
 .detail-list {
   list-style: none;
-  margin: 12px 0 28px;
   padding: 0;
+  margin: 8px 0;
 }
-
 .detail-list li {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #d3d3d3;
   padding: 12px 0;
+  overflow-wrap: anywhere;
 }
-
 .detail-history {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+.portrait {
+  max-height: 230px;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+}
+.portrait[hidden] { display: none; }
 
-h2 {
-  font-size: 17px;
-  font-weight: 550;
+.photo-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.photo-actions button { font-size: 14px; }
+
+select.input { appearance: auto; }
+
+.reserve-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.reserve-counter strong {
+  min-width: 66px;
+  text-align: center;
+}
+.counter {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid currentColor;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-size: 22px;
+  line-height: 1;
+}
+.counter:disabled, .box:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+.atout-action {
+  margin: 10px 0 3px;
+  display: grid;
+  gap: 8px;
+}
+.atout-action .box {
+  text-align: left;
+  min-height: 52px;
+}
+.atout-action .subtle { margin: 0; }
+
+.danger {
   margin-top: 28px;
+  color: #831515;
+  text-decoration: underline;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  padding: 12px;
 }
 
-section[hidden] { display: none; }
+/* Interface de jeu : inversion du code graphique */
+
+body.playing {
+  background: #101010;
+  color: #fff;
+}
+body.playing .app { background: #101010; }
+body.playing .box {
+  background: #101010;
+  color: #fff;
+  border-color: #fff;
+}
+body.playing .primary {
+  background: #fff;
+  color: #101010;
+  border-color: #fff;
+}
+body.playing .secondary {
+  background: #101010;
+  color: #fff;
+  border-color: #888;
+}
+body.playing .subtle { color: #bbb; }
+body.playing .detail-row,
+body.playing .detail-list li { border-color: #555; }
+body.playing .counter { border-color: #fff; }
+body.playing .error { color: #ffb3b3; }
 
 @media (min-width: 650px) {
-  body { background: #f5f5f5; }
-
+  body:not(.playing) { background: #f5f5f5; }
   .app {
-    background: white;
+    background: #fff;
     box-shadow: 0 0 20px #00000010;
   }
+  body.playing .app {
+    box-shadow: 0 0 25px #ffffff10;
+  }
 }
-
 @media (max-width: 360px) {
   .app { padding-inline: 15px; }
-  .dots { gap: 7px; }
-  .dot { width: 23px; height: 23px; }
+  .dots { gap: 6px; }
+  .dot {
+    width: 23px;
+    height: 23px;
+  }
   .attribute-label { font-size: 17px; }
+  .reserve-counter { gap: 7px; }
+  .counter {
+    width: 34px;
+    height: 34px;
+  }
 }
 </style>
 </head>
@@ -253,10 +334,10 @@ section[hidden] { display: none; }
 <main class="app">
 
 <!-- ACCUEIL -->
+
 <section id="home">
   <header class="brand">M.I.S.E.</header>
   <div id="cards" class="stack"></div>
-
   <div class="home-bottom">
     <button class="box primary" id="create">
       Créer un nouveau personnage
@@ -264,7 +345,8 @@ section[hidden] { display: none; }
   </div>
 </section>
 
-<!-- CRÉATION DU PERSONNAGE -->
+<!-- CRÉATION / MODIFICATION -->
+
 <section id="form" hidden>
   <div class="heading">
     <button class="back" id="form-back" aria-label="Retour">←</button>
@@ -272,7 +354,7 @@ section[hidden] { display: none; }
   </div>
 
   <label class="field">
-    <span class="field-label">Nom</span>
+    <span class="label">Nom</span>
     <input id="name" class="input"
       placeholder="Nom du personnage" maxlength="100">
   </label>
@@ -292,17 +374,39 @@ section[hidden] { display: none; }
     </div>
   </div>
 
+  <label class="field">
+    <span class="label">Portrait (facultatif)</span>
+    <input id="portrait-file" type="file"
+      accept="image/*" class="input">
+  </label>
+
+  <img id="portrait-preview" class="portrait"
+    alt="Portrait choisi" hidden>
+
+  <div class="photo-actions">
+    <button id="portrait-remove" class="small" type="button">
+      Retirer le portrait
+    </button>
+  </div>
+
   <button class="box arrow" id="open-skills">
     <span>Compétences</span>
     <span aria-hidden="true">→</span>
   </button>
-
-  <p class="subtle count" id="count">
+  <p class="subtle count" id="skill-count">
     Aucune compétence enregistrée
   </p>
 
+  <button class="box arrow" id="open-atouts">
+    <span>Atouts</span>
+    <span aria-hidden="true">→</span>
+  </button>
+  <p class="subtle count" id="atout-count">
+    Aucun Atout enregistré
+  </p>
+
   <label class="field">
-    <span class="field-label">Historique</span>
+    <span class="label">Historique</span>
     <textarea id="history" class="input long"
       placeholder="Histoire du personnage (facultatif)"></textarea>
   </label>
@@ -318,9 +422,11 @@ section[hidden] { display: none; }
 </section>
 
 <!-- COMPÉTENCES -->
+
 <section id="skills" hidden>
   <div class="heading">
-    <button class="back" id="skills-back" aria-label="Retour">←</button>
+    <button class="back" id="skills-back"
+      aria-label="Retour">←</button>
     <h1>Compétences</h1>
   </div>
 
@@ -328,19 +434,18 @@ section[hidden] { display: none; }
 
   <div class="group">
     <label class="field">
-      <span class="field-label">Nom de la compétence</span>
+      <span class="label">Nom de la compétence</span>
       <input class="input" id="skill-name" maxlength="100">
     </label>
 
-    <div class="field-label">Niveau de maîtrise</div>
-
+    <div class="label">Niveau de maîtrise</div>
     <div class="attribute">
       <span id="level-label">Novice +1</span>
       <div class="dots" id="level-dots"></div>
     </div>
 
     <label class="field group">
-      <span class="field-label">Description (facultative)</span>
+      <span class="label">Description (facultative)</span>
       <textarea class="input long" id="skill-description"
         style="min-height:110px"></textarea>
     </label>
@@ -359,15 +464,71 @@ section[hidden] { display: none; }
   </div>
 </section>
 
+<!-- ATOUTS -->
+
+<section id="atouts" hidden>
+  <div class="heading">
+    <button class="back" id="atouts-back"
+      aria-label="Retour">←</button>
+    <h1>Atouts</h1>
+  </div>
+
+  <div id="atout-list"></div>
+
+  <div class="group">
+    <label class="field">
+      <span class="label">Nom de l'Atout</span>
+      <input class="input" id="atout-name" maxlength="100">
+    </label>
+
+    <label class="field">
+      <span class="label">Réserve utilisée</span>
+      <select class="input" id="atout-reserve">
+        <option value="physique">Vigueur</option>
+        <option value="mental">Volonté</option>
+        <option value="social">Influence</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="label">Coût fixe en PA</span>
+      <input class="input" id="atout-cost"
+        type="number" min="1" max="999" step="1" value="1">
+    </label>
+
+    <label class="field">
+      <span class="label">Description (facultative)</span>
+      <textarea class="input long" id="atout-description"
+        style="min-height:110px"></textarea>
+    </label>
+
+    <p id="atout-error" class="error" role="alert"></p>
+
+    <button class="box primary" id="add-atout">
+      Ajouter l'Atout
+    </button>
+  </div>
+
+  <div class="actions">
+    <button class="box secondary" id="atouts-done">
+      Retour au personnage
+    </button>
+  </div>
+</section>
+
 <!-- FICHE DU PERSONNAGE -->
+
 <section id="detail" hidden>
   <div class="heading">
-    <button class="back" id="detail-back" aria-label="Retour">←</button>
+    <button class="back" id="detail-back"
+      aria-label="Retour">←</button>
     <h1>Personnage</h1>
   </div>
 
-  <div class="detail-name" id="detail-name"></div>
+  <img id="detail-portrait" class="portrait"
+    alt="Portrait du personnage" hidden>
 
+  <div class="detail-name" id="detail-name"></div>
   <div id="detail-attrs"></div>
 
   <h2>Réserves de PA</h2>
@@ -376,12 +537,57 @@ section[hidden] { display: none; }
   <h2>Compétences</h2>
   <ul id="detail-skills" class="detail-list"></ul>
 
+  <h2>Atouts</h2>
+  <ul id="detail-atouts" class="detail-list"></ul>
+
   <h2>Historique</h2>
   <p id="detail-history" class="detail-history"></p>
 
   <div class="actions">
-    <button class="box primary" id="edit">
+    <button class="box primary" id="play">
+      Jouer ce personnage
+    </button>
+    <button class="box secondary" id="edit">
       Modifier le personnage
+    </button>
+  </div>
+
+  <button class="danger" id="delete-character">
+    Supprimer ce personnage
+  </button>
+</section>
+
+<!-- INTERFACE DE JEU -->
+
+<section id="game" hidden>
+  <div class="heading">
+    <button class="back" id="game-back"
+      aria-label="Retour à la fiche">←</button>
+    <h1>En jeu</h1>
+  </div>
+
+  <div class="detail-name" id="game-name"></div>
+
+  <h2>Réserves de PA</h2>
+  <div id="game-reserves"></div>
+
+  <h2>Blessures</h2>
+  <p class="subtle">
+    Chaque blessure réduit de 3 PA le maximum de sa réserve.
+  </p>
+  <div id="game-wounds"></div>
+
+  <h2>Compétences</h2>
+  <ul id="game-skills" class="detail-list"></ul>
+
+  <h2>Atouts</h2>
+  <div id="game-atouts"></div>
+
+  <p id="game-message" class="error" role="status"></p>
+
+  <div class="actions group">
+    <button class="box secondary" id="game-exit">
+      Quitter le mode jeu
     </button>
   </div>
 </section>
@@ -396,79 +602,265 @@ const $ = id => document.getElementById(id);
 
 const KEY = 'mise-app-characters-v1';
 
-const labels = ['Novice', 'Confirmé', 'Expert', 'Maître'];
-const bonus = [1, 2, 3, 5];
-const attrs = ['physique', 'mental', 'social'];
-
-const reserveNames = {
+const names = {
   physique: 'Vigueur',
   mental: 'Volonté',
   social: 'Influence'
 };
+
+const attrs = ['physique', 'mental', 'social'];
+const levels = ['Novice', 'Confirmé', 'Expert', 'Maître'];
+const bonuses = [1, 2, 3, 5];
+
+const screens = [
+  'home', 'form', 'skills', 'atouts', 'detail', 'game'
+];
+
+const clone = x => JSON.parse(JSON.stringify(x));
+const uid = () => crypto.randomUUID();
+const baseMax = n => n * 3 + 5;
+const clamp = (n, min, max) =>
+  Math.max(min, Math.min(max, n));
 
 let chars = [];
 let draft = null;
 let selected = null;
 let level = 1;
 
+let pendingPortrait = null;
+let removePortrait = false;
+let previewUrl = null;
+let shownPortraitUrl = null;
+
 try {
-  const x = JSON.parse(localStorage.getItem(KEY) || '[]');
-  if (Array.isArray(x)) chars = x;
-} catch (e) {}
+  const stored = JSON.parse(localStorage.getItem(KEY) || '[]');
+  if (Array.isArray(stored)) chars = stored;
+} catch {}
 
-const clone = x => JSON.parse(JSON.stringify(x));
+// PORTRAITS : STOCKAGE LOCAL INDEXEDDB
 
-function reserve(attribute) {
-  return attribute * 3 + 5;
+let pictureDb = null;
+
+function openPictures() {
+  if (!('indexedDB' in window)) return Promise.resolve(null);
+
+  if (!pictureDb) {
+    pictureDb = new Promise(resolve => {
+      const req = indexedDB.open('mise-portraits-v1', 1);
+
+      req.onupgradeneeded = () => {
+        if (!req.result.objectStoreNames.contains('images')) {
+          req.result.createObjectStore('images');
+        }
+      };
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+  }
+
+  return pictureDb;
 }
 
-function view(id) {
-  for (const x of ['home', 'form', 'skills', 'detail']) {
-    $(x).hidden = x !== id;
+async function pictureGet(id) {
+  const db = await openPictures();
+  if (!db) return null;
+
+  return new Promise(resolve => {
+    try {
+      const r = db.transaction('images', 'readonly')
+        .objectStore('images').get(id);
+
+      r.onsuccess = () => resolve(r.result || null);
+      r.onerror = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+async function picturePut(id, blob) {
+  const db = await openPictures();
+
+  if (!db) throw new Error('IndexedDB indisponible');
+
+  return new Promise((resolve, reject) => {
+    try {
+      const tx = db.transaction('images', 'readwrite');
+      tx.objectStore('images').put(blob, id);
+      tx.oncomplete = resolve;
+      tx.onerror = () =>
+        reject(new Error('Impossible de conserver le portrait'));
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+async function pictureDelete(id) {
+  const db = await openPictures();
+  if (!db) return;
+
+  return new Promise(resolve => {
+    try {
+      const tx = db.transaction('images', 'readwrite');
+      tx.objectStore('images').delete(id);
+      tx.oncomplete = resolve;
+      tx.onerror = resolve;
+    } catch {
+      resolve();
+    }
+  });
+}
+
+function preview(img, blob) {
+  if (img.id === 'portrait-preview' && previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = null;
   }
+
+  if (img.id === 'detail-portrait' && shownPortraitUrl) {
+    URL.revokeObjectURL(shownPortraitUrl);
+    shownPortraitUrl = null;
+  }
+
+  if (!blob) {
+    img.hidden = true;
+    img.removeAttribute('src');
+    return;
+  }
+
+  const url = URL.createObjectURL(blob);
+  img.src = url;
+  img.hidden = false;
+
+  if (img.id === 'portrait-preview') previewUrl = url;
+  else shownPortraitUrl = url;
+}
+
+async function loadPreview(id, img) {
+  const requested = id;
+  preview(img, null);
+  if (!requested) return;
+
+  const blob = await pictureGet(requested);
+
+  if (
+    img.id === 'portrait-preview'
+      ? draft?.id === requested
+      : selected === requested
+  ) {
+    preview(img, blob);
+  }
+}
+
+// SAUVEGARDE ET RÉSERVES
+
+function saveLocal() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(chars));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function ensurePools(c) {
+  if (!c.wounds) {
+    c.wounds = { physique: 0, mental: 0, social: 0 };
+  }
+
+  if (!c.pa) c.pa = {};
+
+  for (const k of attrs) {
+    c.wounds[k] = clamp(Number(c.wounds[k]) || 0, 0, 20);
+
+    const max = Math.max(
+      0,
+      baseMax(c[k]) - 3 * c.wounds[k]
+    );
+
+    c.pa[k] = Number.isFinite(c.pa[k])
+      ? clamp(c.pa[k], 0, max)
+      : max;
+  }
+
+  if (!Array.isArray(c.atouts)) c.atouts = [];
+  if (!Array.isArray(c.skills)) c.skills = [];
+
+  return c;
+}
+
+function maximum(c, k) {
+  return Math.max(
+    0,
+    baseMax(c[k]) - 3 * (c.wounds?.[k] || 0)
+  );
+}
+
+// NAVIGATION
+
+function show(id) {
+  screens.forEach(x => {
+    $(x).hidden = x !== id;
+  });
+
+  document.body.classList.toggle('playing', id === 'game');
+
+  $('theme-color').content =
+    id === 'game' ? '#101010' : '#ffffff';
 
   window.scrollTo(0, 0);
 
-  if (id === 'home') home();
-  if (id === 'detail') detail();
-  if (id === 'skills') skills();
+  if (id === 'home') drawHome();
+  if (id === 'detail') drawDetail();
+  if (id === 'skills') drawSkills();
+  if (id === 'atouts') drawAtouts();
+  if (id === 'game') drawGame();
 }
 
-function circles(parent, value, fn, label) {
-  parent.replaceChildren();
+function dots(id, value, onSet, label) {
+  const root = $(id);
+  root.replaceChildren();
 
   for (let i = 1; i <= 4; i++) {
-    let b = document.createElement('button');
+    const b = document.createElement('button');
 
-    b.type = 'button';
     b.className = 'dot' + (i <= value ? ' active' : '');
+    b.type = 'button';
 
-    b.setAttribute('aria-label', label + ' ' + i + ' sur 4');
+    b.setAttribute(
+      'aria-label',
+      label + ' : ' + i + ' sur 4'
+    );
     b.setAttribute('aria-pressed', String(i <= value));
 
-    b.addEventListener('click', () => fn(i));
-    parent.append(b);
+    b.onclick = () => onSet(i);
+    root.append(b);
   }
 }
 
-function home() {
+// ACCUEIL
+
+function drawHome() {
   const list = $('cards');
   list.replaceChildren();
 
   for (const c of chars) {
     const b = document.createElement('button');
-
     b.className = 'box card';
     b.textContent = c.name;
 
-    b.addEventListener('click', () => {
+    b.onclick = () => {
       selected = c.id;
-      view('detail');
-    });
+      show('detail');
+    };
 
     list.append(b);
   }
 }
+
+// CRÉATION
 
 function newChar() {
   return {
@@ -478,13 +870,20 @@ function newChar() {
     mental: 1,
     social: 1,
     history: '',
-    skills: []
+    skills: [],
+    atouts: [],
+    wounds: { physique: 0, mental: 0, social: 0 },
+    pa: { physique: 8, mental: 8, social: 8 }
   };
 }
 
-function edit(c) {
-  draft = clone(c);
+function beginEdit(c) {
+  draft = ensurePools(clone(c));
 
+  pendingPortrait = null;
+  removePortrait = false;
+
+  $('portrait-file').value = '';
   $('name').value = draft.name;
   $('history').value = draft.history;
 
@@ -495,26 +894,19 @@ function edit(c) {
   $('form-error').textContent = '';
 
   drawAttrs();
-  count();
-  view('form');
+  counts();
+  show('form');
+
+  loadPreview(draft.id, $('portrait-preview'));
 }
 
 function drawAttrs() {
   for (const k of attrs) {
-    circles($('dots-' + k), draft[k], n => {
+    dots('dots-' + k, draft[k], n => {
       draft[k] = n;
       drawAttrs();
     }, k);
   }
-}
-
-function count() {
-  const n = draft.skills.length;
-
-  $('count').textContent = n
-    ? n + ' compétence' + (n > 1 ? 's' : '') +
-      ' enregistrée' + (n > 1 ? 's' : '')
-    : 'Aucune compétence enregistrée';
 }
 
 function sync() {
@@ -522,154 +914,456 @@ function sync() {
   draft.history = $('history').value;
 }
 
-function skills() {
-  const root = $('skill-list');
-  root.replaceChildren();
+function counts() {
+  let n = draft.skills.length;
 
-  for (const s of draft.skills) {
+  $('skill-count').textContent = n
+    ? n + ' compétence' + (n > 1 ? 's' : '') +
+      ' enregistrée' + (n > 1 ? 's' : '')
+    : 'Aucune compétence enregistrée';
+
+  n = draft.atouts.length;
+
+  $('atout-count').textContent = n
+    ? n + ' Atout' + (n > 1 ? 's' : '') +
+      ' enregistré' + (n > 1 ? 's' : '')
+    : 'Aucun Atout enregistré';
+}
+
+// COMPÉTENCES ET ATOUTS
+
+function rowList(parent, items, describe, onRemove) {
+  parent.replaceChildren();
+
+  if (!items.length) {
+    const p = document.createElement('p');
+    p.className = 'subtle';
+    p.textContent = 'Aucun élément enregistré.';
+    parent.append(p);
+  }
+
+  for (const item of items) {
     const row = document.createElement('div');
     row.className = 'skillrow';
 
-    const label = document.createElement('div');
-
-    const t = document.createElement('div');
-    t.textContent = s.name;
+    const info = document.createElement('div');
+    const title = document.createElement('div');
+    title.textContent = item.name;
 
     const sub = document.createElement('p');
-    sub.textContent =
-      labels[s.level - 1] + ' +' + bonus[s.level - 1] +
-      (s.description ? ' — ' + s.description : '');
+    sub.textContent = describe(item);
 
-    label.append(t, sub);
+    info.append(title, sub);
 
     const del = document.createElement('button');
     del.className = 'small';
     del.textContent = 'Retirer';
 
-    del.setAttribute('aria-label', 'Retirer ' + s.name);
+    del.setAttribute(
+      'aria-label',
+      'Retirer ' + item.name
+    );
 
-    del.onclick = () => {
-      draft.skills = draft.skills.filter(x => x.id !== s.id);
-      skills();
-    };
+    del.onclick = () => onRemove(item);
 
-    row.append(label, del);
-    root.append(row);
+    row.append(info, del);
+    parent.append(row);
   }
+}
 
-  if (!draft.skills.length) {
-    const p = document.createElement('p');
-    p.className = 'subtle';
-    p.textContent = 'Aucune compétence.';
-    root.append(p);
-  }
+function drawSkills() {
+  rowList(
+    $('skill-list'),
+    draft.skills,
+    s => levels[s.level - 1] + ' +' +
+      bonuses[s.level - 1] +
+      (s.description ? ' — ' + s.description : ''),
+    s => {
+      draft.skills = draft.skills.filter(
+        x => x.id !== s.id
+      );
+      drawSkills();
+    }
+  );
 
   drawLevel();
 }
 
 function drawLevel() {
-  circles($('level-dots'), level, n => {
+  dots('level-dots', level, n => {
     level = n;
     drawLevel();
-  }, 'Niveau de maîtrise');
+  }, 'Maîtrise');
 
   $('level-label').textContent =
-    labels[level - 1] + ' +' + bonus[level - 1];
+    levels[level - 1] + ' +' + bonuses[level - 1];
 }
 
-function detail() {
-  const c = chars.find(x => x.id === selected);
+function drawAtouts() {
+  rowList(
+    $('atout-list'),
+    draft.atouts,
+    a => a.cost + ' PA · ' + names[a.reserve] +
+      (a.description ? ' — ' + a.description : ''),
+    a => {
+      draft.atouts = draft.atouts.filter(
+        x => x.id !== a.id
+      );
+      drawAtouts();
+    }
+  );
+}
 
-  if (!c) return view('home');
+// FICHE DU PERSONNAGE
 
-  $('detail-name').textContent = c.name;
+function addDetailRow(parent, label, value) {
+  const row = document.createElement('div');
+  row.className = 'detail-row';
 
-  // Attributs
-  const a = $('detail-attrs');
-  a.replaceChildren();
+  const l = document.createElement('span');
+  l.textContent = label;
 
-  for (const k of attrs) {
-    const row = document.createElement('div');
-    row.className = 'detail-row';
+  const v = document.createElement('strong');
+  v.textContent = value;
 
-    const name = document.createElement('span');
-    name.textContent = k[0].toUpperCase() + k.slice(1);
+  row.append(l, v);
+  parent.append(row);
+}
 
-    const val = document.createElement('strong');
-    val.textContent = c[k] + ' / 4';
+function listItems(id, items, describe) {
+  const root = $(id);
+  root.replaceChildren();
 
-    row.append(name, val);
-    a.append(row);
-  }
-
-  // Réserves de Points d'Action
-  const reserves = $('detail-reserves');
-  reserves.replaceChildren();
-
-  for (const k of attrs) {
-    const row = document.createElement('div');
-    row.className = 'detail-row';
-
-    const name = document.createElement('span');
-    name.textContent = reserveNames[k];
-
-    const val = document.createElement('strong');
-    val.textContent = reserve(c[k]) + ' PA';
-
-    row.append(name, val);
-    reserves.append(row);
-  }
-
-  // Compétences
-  const skills = $('detail-skills');
-  skills.replaceChildren();
-
-  for (const s of c.skills) {
-    const li = document.createElement('li');
-
-    li.textContent =
-      s.name + ' — ' +
-      labels[s.level - 1] +
-      ' (+' + bonus[s.level - 1] + ')' +
-      (s.description ? ' · ' + s.description : '');
-
-    skills.append(li);
-  }
-
-  if (!c.skills.length) {
+  if (!items.length) {
     const li = document.createElement('li');
     li.className = 'subtle';
-    li.textContent = 'Aucune compétence.';
-    skills.append(li);
+    li.textContent = 'Aucun élément.';
+    root.append(li);
   }
+
+  for (const item of items) {
+    const li = document.createElement('li');
+    li.textContent = describe(item);
+    root.append(li);
+  }
+}
+
+function current() {
+  return chars.find(x => x.id === selected);
+}
+
+function drawDetail() {
+  const c = current();
+
+  if (!c) {
+    show('home');
+    return;
+  }
+
+  ensurePools(c);
+
+  $('detail-name').textContent = c.name;
+  loadPreview(c.id, $('detail-portrait'));
+
+  $('detail-attrs').replaceChildren();
+  $('detail-reserves').replaceChildren();
+
+  for (const k of attrs) {
+    addDetailRow(
+      $('detail-attrs'),
+      k[0].toUpperCase() + k.slice(1),
+      c[k] + ' / 4'
+    );
+
+    addDetailRow(
+      $('detail-reserves'),
+      names[k],
+      c.pa[k] + ' / ' + maximum(c, k) + ' PA'
+    );
+  }
+
+  listItems(
+    'detail-skills',
+    c.skills,
+    s => s.name + ' — ' +
+      levels[s.level - 1] +
+      ' (+' + bonuses[s.level - 1] + ')' +
+      (s.description ? ' · ' + s.description : '')
+  );
+
+  listItems(
+    'detail-atouts',
+    c.atouts,
+    a => a.name + ' — ' +
+      a.cost + ' PA de ' + names[a.reserve] +
+      (a.description ? ' · ' + a.description : '')
+  );
 
   $('detail-history').textContent =
     c.history || 'Aucun historique.';
 }
 
-$('create').onclick = () => edit(newChar());
+// INTERFACE DE JEU
+
+function gameRow(
+  host, label, value, minus, plus,
+  disableMinus, disablePlus
+) {
+  const row = document.createElement('div');
+  row.className = 'detail-row';
+
+  const name = document.createElement('span');
+  name.textContent = label;
+
+  const buttons = document.createElement('div');
+  buttons.className = 'reserve-counter';
+
+  const neg = document.createElement('button');
+  neg.className = 'counter';
+  neg.textContent = '−';
+  neg.disabled = disableMinus;
+
+  neg.setAttribute(
+    'aria-label',
+    'Diminuer ' + label
+  );
+
+  neg.onclick = minus;
+
+  const val = document.createElement('strong');
+  val.textContent = value;
+
+  const pos = document.createElement('button');
+  pos.className = 'counter';
+  pos.textContent = '+';
+  pos.disabled = disablePlus;
+
+  pos.setAttribute(
+    'aria-label',
+    'Augmenter ' + label
+  );
+
+  pos.onclick = plus;
+
+  buttons.append(neg, val, pos);
+  row.append(name, buttons);
+  host.append(row);
+}
+
+function changePA(k, delta) {
+  const c = current();
+
+  c.pa[k] = clamp(
+    c.pa[k] + delta,
+    0,
+    maximum(c, k)
+  );
+
+  if (saveLocal()) {
+    drawGame();
+  } else {
+    $('game-message').textContent =
+      'Impossible d’enregistrer cette modification.';
+  }
+}
+
+function changeWound(k, delta) {
+  const c = current();
+
+  c.wounds[k] = clamp(
+    c.wounds[k] + delta,
+    0,
+    20
+  );
+
+  c.pa[k] = Math.min(
+    c.pa[k],
+    maximum(c, k)
+  );
+
+  if (saveLocal()) {
+    drawGame();
+  } else {
+    $('game-message').textContent =
+      'Impossible d’enregistrer cette modification.';
+  }
+}
+
+function activate(id) {
+  const c = current();
+  const a = c.atouts.find(x => x.id === id);
+
+  if (!a) return;
+
+  const cost = Number(a.cost);
+  const k = a.reserve;
+
+  if (
+    !attrs.includes(k) ||
+    !Number.isInteger(cost) ||
+    cost < 1
+  ) return;
+
+  if (c.pa[k] < cost) {
+    $('game-message').textContent =
+      'PA insuffisants pour activer ' + a.name + '.';
+    return;
+  }
+
+  c.pa[k] -= cost;
+
+  if (saveLocal()) {
+    drawGame();
+
+    $('game-message').textContent =
+      a.name + ' activé : −' +
+      cost + ' PA de ' + names[k] + '.';
+  } else {
+    $('game-message').textContent =
+      'Impossible d’enregistrer cette activation.';
+  }
+}
+
+function drawGame() {
+  const c = current();
+
+  if (!c) {
+    show('home');
+    return;
+  }
+
+  ensurePools(c);
+
+  $('game-name').textContent = c.name;
+  $('game-message').textContent = '';
+
+  const rr = $('game-reserves');
+  const ww = $('game-wounds');
+
+  rr.replaceChildren();
+  ww.replaceChildren();
+
+  for (const k of attrs) {
+    const max = maximum(c, k);
+
+    gameRow(
+      rr,
+      names[k],
+      c.pa[k] + ' / ' + max,
+      () => changePA(k, -1),
+      () => changePA(k, 1),
+      c.pa[k] <= 0,
+      c.pa[k] >= max
+    );
+
+    gameRow(
+      ww,
+      names[k],
+      String(c.wounds[k]),
+      () => changeWound(k, -1),
+      () => changeWound(k, 1),
+      c.wounds[k] <= 0,
+      c.wounds[k] >= 20
+    );
+  }
+
+  listItems(
+    'game-skills',
+    c.skills,
+    s => s.name + ' — ' +
+      levels[s.level - 1] +
+      ' (+' + bonuses[s.level - 1] + ')'
+  );
+
+  const host = $('game-atouts');
+  host.replaceChildren();
+
+  if (!c.atouts.length) {
+    const p = document.createElement('p');
+    p.className = 'subtle';
+    p.textContent = 'Aucun Atout.';
+    host.append(p);
+  }
+
+  for (const a of c.atouts) {
+    const block = document.createElement('div');
+    block.className = 'atout-action';
+
+    const b = document.createElement('button');
+    b.className = 'box';
+
+    b.textContent =
+      a.name + ' — Activer (−' +
+      a.cost + ' PA de ' +
+      names[a.reserve] + ')';
+
+    b.disabled = c.pa[a.reserve] < a.cost;
+    b.onclick = () => activate(a.id);
+
+    block.append(b);
+
+    if (a.description) {
+      const p = document.createElement('p');
+      p.className = 'subtle';
+      p.textContent = a.description;
+      block.append(p);
+    }
+
+    host.append(block);
+  }
+}
+
+// ÉVÉNEMENTS
+
+$('create').onclick = () => beginEdit(newChar());
 
 $('form-back').onclick =
 $('cancel').onclick = () => {
-  view(draft.id ? 'detail' : 'home');
+  show(draft.id ? 'detail' : 'home');
+};
+
+$('portrait-file').onchange = () => {
+  const file = $('portrait-file').files[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    $('form-error').textContent =
+      'Choisissez un fichier image.';
+    return;
+  }
+
+  pendingPortrait = file;
+  removePortrait = false;
+
+  preview($('portrait-preview'), file);
+
+  $('form-error').textContent = '';
+};
+
+$('portrait-remove').onclick = () => {
+  pendingPortrait = null;
+  removePortrait = true;
+
+  $('portrait-file').value = '';
+  preview($('portrait-preview'), null);
 };
 
 $('open-skills').onclick = () => {
   sync();
-
   level = 1;
 
   $('skill-name').value = '';
   $('skill-description').value = '';
   $('skill-error').textContent = '';
 
-  view('skills');
+  show('skills');
 };
 
 $('skills-back').onclick =
 $('skills-done').onclick = () => {
-  count();
-  view('form');
+  counts();
+  show('form');
 };
 
 $('add-skill').onclick = () => {
@@ -681,8 +1375,9 @@ $('add-skill').onclick = () => {
   }
 
   if (
-    draft.skills.some(
-      s => s.name.toLowerCase() === name.toLowerCase()
+    draft.skills.some(s =>
+      s.name.toLocaleLowerCase('fr') ===
+      name.toLocaleLowerCase('fr')
     )
   ) {
     $('skill-error').textContent =
@@ -691,7 +1386,7 @@ $('add-skill').onclick = () => {
   }
 
   draft.skills.push({
-    id: crypto.randomUUID(),
+    id: uid(),
     name,
     level,
     description: $('skill-description').value.trim()
@@ -702,12 +1397,79 @@ $('add-skill').onclick = () => {
   $('skill-error').textContent = '';
 
   level = 1;
-  skills();
+  drawSkills();
 };
 
-$('save').onclick = () => {
+$('open-atouts').onclick = () => {
   sync();
 
+  $('atout-name').value = '';
+  $('atout-description').value = '';
+  $('atout-reserve').value = 'physique';
+  $('atout-cost').value = '1';
+  $('atout-error').textContent = '';
+
+  show('atouts');
+};
+
+$('atouts-back').onclick =
+$('atouts-done').onclick = () => {
+  counts();
+  show('form');
+};
+
+$('add-atout').onclick = () => {
+  const name = $('atout-name').value.trim();
+  const cost = Number($('atout-cost').value);
+  const reserve = $('atout-reserve').value;
+
+  if (!name) {
+    $('atout-error').textContent =
+      "Indiquez un nom d'Atout.";
+    return;
+  }
+
+  if (
+    !Number.isInteger(cost) ||
+    cost < 1 ||
+    cost > 999
+  ) {
+    $('atout-error').textContent =
+      'Indiquez un coût entier entre 1 et 999 PA.';
+    return;
+  }
+
+  if (
+    draft.atouts.some(a =>
+      a.name.toLocaleLowerCase('fr') ===
+      name.toLocaleLowerCase('fr')
+    )
+  ) {
+    $('atout-error').textContent =
+      'Cet Atout existe déjà.';
+    return;
+  }
+
+  draft.atouts.push({
+    id: uid(),
+    name,
+    cost,
+    reserve,
+    description: $('atout-description').value.trim()
+  });
+
+  $('atout-name').value = '';
+  $('atout-description').value = '';
+  $('atout-cost').value = '1';
+  $('atout-error').textContent = '';
+
+  drawAtouts();
+};
+
+// ENREGISTRER LE PERSONNAGE
+
+$('save').onclick = async () => {
+  sync();
   draft.name = draft.name.trim();
 
   if (!draft.name) {
@@ -716,38 +1478,103 @@ $('save').onclick = () => {
     return;
   }
 
-  if (!draft.id) {
-    draft.id = crypto.randomUUID();
-  }
+  const isNew = !draft.id;
+
+  if (isNew) draft.id = uid();
+
+  ensurePools(draft);
 
   const old = chars;
 
   chars = [
-    ...chars.filter(x => x.id !== draft.id),
+    ...chars.filter(c => c.id !== draft.id),
     clone(draft)
   ];
 
-  try {
-    localStorage.setItem(KEY, JSON.stringify(chars));
-  } catch (e) {
+  if (!saveLocal()) {
     chars = old;
+
+    if (isNew) draft.id = null;
+
     $('form-error').textContent =
       'Impossible de sauvegarder sur cet appareil.';
     return;
   }
 
+  $('save').disabled = true;
+
+  let imageError = false;
+
+  try {
+    if (removePortrait) {
+      await pictureDelete(draft.id);
+    } else if (pendingPortrait) {
+      await picturePut(draft.id, pendingPortrait);
+    }
+  } catch {
+    imageError = true;
+  } finally {
+    $('save').disabled = false;
+  }
+
   selected = draft.id;
-  view('detail');
+  show('detail');
+
+  if (imageError) {
+    alert(
+      'Personnage enregistré, mais le portrait ' +
+      'n’a pas pu être sauvegardé.'
+    );
+  }
 };
 
-$('detail-back').onclick = () => view('home');
+// RETOUR, MODIFICATION ET SUPPRESSION
+
+$('detail-back').onclick = () => show('home');
 
 $('edit').onclick = () => {
-  const c = chars.find(x => x.id === selected);
-  if (c) edit(c);
+  const c = current();
+  if (c) beginEdit(c);
 };
 
-view('home');
+$('delete-character').onclick = async () => {
+  const c = current();
+  if (!c) return;
+
+  if (!confirm(
+    'Supprimer définitivement « ' + c.name +
+    ' » ? Cette action est irréversible.'
+  )) return;
+
+  const old = chars;
+
+  chars = chars.filter(x => x.id !== c.id);
+
+  if (!saveLocal()) {
+    chars = old;
+
+    alert(
+      'Suppression impossible : sauvegarde indisponible.'
+    );
+    return;
+  }
+
+  await pictureDelete(c.id);
+
+  selected = null;
+  show('home');
+};
+
+// BASCULE EN MODE JEU
+
+$('play').onclick = () => show('game');
+
+$('game-back').onclick =
+$('game-exit').onclick = () => show('detail');
+
+// DÉMARRAGE
+
+show('home');
 
 })();
 </script>
