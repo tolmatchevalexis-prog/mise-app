@@ -12,11 +12,12 @@ Gestion :
 - Réserves de PA
 - Blessures
 - Compétences
+- Association compétence / caractéristique
 - Atouts
 - Actions contre un SD
 - Oppositions
 
-Les interfaces HTML utiliseront ce moteur.
+Les interfaces HTML utilisent ce moteur.
 ==================================================
 */
 
@@ -74,6 +75,11 @@ window.MISE = (() => {
   const entier = valeur =>
     Number.isInteger(valeur);
 
+
+  /* ========================================
+     VÉRIFICATIONS GÉNÉRALES
+     ======================================== */
+
   function verifierReserve(reserve) {
 
     if (!ATTRIBUTS.includes(reserve)) {
@@ -81,6 +87,7 @@ window.MISE = (() => {
     }
 
   }
+
 
   function verifierMise(mise, minimum = 0) {
 
@@ -343,6 +350,15 @@ window.MISE = (() => {
 
     }
 
+    /*
+      Les compétences anciennes sont
+      conservées sans modification.
+
+      Une compétence dépourvue de réserve
+      ne pourra pas être utilisée avant
+      que son association soit définie.
+    */
+
     return fiche;
 
   }
@@ -469,14 +485,10 @@ window.MISE = (() => {
      COMPÉTENCES
      ======================================== */
 
-  function bonusCompetence(
+  function trouverCompetence(
     personnage,
     competenceId
   ) {
-
-    if (!competenceId) {
-      return 0;
-    }
 
     const competence = personnage.skills.find(
       element => element.id === competenceId
@@ -485,6 +497,30 @@ window.MISE = (() => {
     if (!competence) {
       throw new Error("Compétence introuvable.");
     }
+
+    return competence;
+
+  }
+
+
+  function bonusCompetence(
+    personnage,
+    competenceId
+  ) {
+
+    /*
+      Une action sans compétence
+      bénéficie d'un bonus de +0.
+    */
+
+    if (!competenceId) {
+      return 0;
+    }
+
+    const competence = trouverCompetence(
+      personnage,
+      competenceId
+    );
 
     const niveau = NIVEAUX[competence.level];
 
@@ -495,6 +531,94 @@ window.MISE = (() => {
     }
 
     return niveau.bonus;
+
+  }
+
+
+  /* ========================================
+     ASSOCIATION COMPÉTENCE / RÉSERVE
+     ======================================== */
+
+  function verifierAssociationCompetence(
+    personnage,
+    competenceId,
+    reserve
+  ) {
+
+    /*
+      La réserve doit toujours être valide.
+    */
+
+    verifierReserve(reserve);
+
+
+    /*
+      Sans compétence :
+      bonus +0 et libre choix de la réserve.
+    */
+
+    if (!competenceId) {
+      return true;
+    }
+
+
+    /*
+      Retrouver la compétence utilisée.
+    */
+
+    const competence = trouverCompetence(
+      personnage,
+      competenceId
+    );
+
+
+    /*
+      Une compétence ancienne peut ne pas
+      encore posséder d'association.
+
+      Elle doit être complétée sur la fiche
+      avant de pouvoir être utilisée.
+    */
+
+    if (
+      !ATTRIBUTS.includes(
+        competence.reserve
+      )
+    ) {
+
+      throw new Error(
+        "La compétence « " +
+        competence.name +
+        " » n'a pas de caractéristique associée."
+      );
+
+    }
+
+
+    /*
+      Règle fondamentale :
+
+      Une compétence utilise exclusivement
+      la réserve associée à sa caractéristique.
+
+      Physique -> Vigueur
+      Mental   -> Volonté
+      Social   -> Influence
+    */
+
+    if (competence.reserve !== reserve) {
+
+      throw new Error(
+        "La compétence « " +
+        competence.name +
+        " » doit utiliser la réserve " +
+        RESERVES[competence.reserve] +
+        "."
+      );
+
+    }
+
+    return true;
 
   }
 
@@ -558,7 +682,18 @@ window.MISE = (() => {
       personnageId
     );
 
-    verifierReserve(reserve);
+
+    /*
+      Vérifier l'association AVANT
+      le calcul et toute dépense de PA.
+    */
+
+    verifierAssociationCompetence(
+      personnage,
+      competenceId,
+      reserve
+    );
+
 
     const bonus = bonusCompetence(
       personnage,
@@ -792,7 +927,18 @@ window.MISE = (() => {
       personnageId
     );
 
-    verifierReserve(reserve);
+
+    /*
+      Vérifier l'association compétence /
+      réserve AVANT toute résolution.
+    */
+
+    verifierAssociationCompetence(
+      personnage,
+      competenceId,
+      reserve
+    );
+
 
     const limite = limiteMiseOpposition(
       personnage,
@@ -1004,7 +1150,9 @@ window.MISE = (() => {
 
     /* Compétences */
 
+    trouverCompetence,
     bonusCompetence,
+    verifierAssociationCompetence,
 
     /* Actions */
 
