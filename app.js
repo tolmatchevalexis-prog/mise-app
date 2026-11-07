@@ -15,7 +15,9 @@ Gestion :
 - Association compétence / caractéristique
 - Atouts
 - Actions contre un SD
+- Réussites éclatantes
 - Oppositions
+- Dégâts infligés et reçus
 
 Les interfaces HTML utilisent ce moteur.
 ==================================================
@@ -249,8 +251,8 @@ window.MISE = (() => {
       Les portraits sont stockés séparément
       dans IndexedDB.
 
-      Leur suppression reste gérée par index.html
-      jusqu'à la migration de ce module.
+      Leur suppression reste gérée par
+      index.html.
     */
 
     return true;
@@ -469,8 +471,7 @@ window.MISE = (() => {
     );
 
     /*
-      Guérir une blessure augmente
-      le maximum possible.
+      Guérir augmente le maximum possible.
 
       Cela ne restaure pas automatiquement
       les PA disponibles.
@@ -545,12 +546,7 @@ window.MISE = (() => {
     reserve
   ) {
 
-    /*
-      La réserve doit toujours être valide.
-    */
-
     verifierReserve(reserve);
-
 
     /*
       Sans compétence :
@@ -561,16 +557,10 @@ window.MISE = (() => {
       return true;
     }
 
-
-    /*
-      Retrouver la compétence utilisée.
-    */
-
     const competence = trouverCompetence(
       personnage,
       competenceId
     );
-
 
     /*
       Une compétence ancienne peut ne pas
@@ -594,10 +584,7 @@ window.MISE = (() => {
 
     }
 
-
     /*
-      Règle fondamentale :
-
       Une compétence utilise exclusivement
       la réserve associée à sa caractéristique.
 
@@ -658,11 +645,36 @@ window.MISE = (() => {
 
     const score = mise + bonus;
 
+    /*
+      Résolution selon le livret :
+
+      Score < SD : échec
+      Score = SD : réussite simple
+      Score > SD : réussite éclatante
+    */
+
+    const reussite = score >= difficulte;
+
+    const reussiteEclatante =
+      score > difficulte;
+
+    let typeReussite = "echec";
+
+    if (score === difficulte) {
+      typeReussite = "simple";
+    }
+
+    if (reussiteEclatante) {
+      typeReussite = "eclatante";
+    }
+
     return {
       score,
       sdInitial: sd,
       sdAjuste: difficulte,
-      reussite: score >= difficulte,
+      reussite,
+      reussiteEclatante,
+      typeReussite,
       mise
     };
 
@@ -682,7 +694,6 @@ window.MISE = (() => {
       personnageId
     );
 
-
     /*
       Vérifier l'association AVANT
       le calcul et toute dépense de PA.
@@ -693,7 +704,6 @@ window.MISE = (() => {
       competenceId,
       reserve
     );
-
 
     const bonus = bonusCompetence(
       personnage,
@@ -763,6 +773,56 @@ window.MISE = (() => {
 
 
   /* ========================================
+     CALCUL DES DÉGÂTS
+     ======================================== */
+
+  function calculerDegats(
+    ecart,
+    posturePerdant
+  ) {
+
+    verifierMise(ecart, 0);
+
+    if (!POSTURES[posturePerdant]) {
+      throw new Error("Posture inconnue.");
+    }
+
+    /*
+      C'est toujours la posture
+      du PERDANT qui détermine
+      les dégâts qu'il reçoit.
+
+      Offensive :
+      dégâts doublés.
+
+      Défensive :
+      dégâts divisés par deux,
+      arrondis au supérieur,
+      puis -1, minimum 0.
+
+      Économique :
+      dégâts entiers.
+    */
+
+    if (posturePerdant === "offensive") {
+      return ecart * 2;
+    }
+
+    if (posturePerdant === "defensive") {
+
+      return Math.max(
+        0,
+        Math.ceil(ecart / 2) - 1
+      );
+
+    }
+
+    return ecart;
+
+  }
+
+
+  /* ========================================
      CALCUL D'UNE OPPOSITION
      ======================================== */
 
@@ -789,11 +849,13 @@ window.MISE = (() => {
       );
     }
 
-    const [bonusPostureJoueur, bonusPostureAdverse] =
-      bonusPostures(
-        postureJoueur,
-        postureAdverse
-      );
+    const [
+      bonusPostureJoueur,
+      bonusPostureAdverse
+    ] = bonusPostures(
+      postureJoueur,
+      postureAdverse
+    );
 
     const scoreJoueur =
       miseJoueur +
@@ -816,10 +878,12 @@ window.MISE = (() => {
       scoreJoueur > scoreAdverse;
 
     /*
-      En cas d'égalité, le Narrateur
-      décide des conséquences.
+      ÉGALITÉ
 
-      Aucun prélèvement automatique.
+      Chacun paie sa mise entière.
+      Aucun dégât.
+      Aucune blessure.
+      Aucune récupération.
     */
 
     if (egalite) {
@@ -830,16 +894,27 @@ window.MISE = (() => {
         scoreJoueur,
         scoreAdverse,
         ecart: 0,
-        misePayee: 0,
+        misePayee: miseJoueur,
         recuperation: 0,
+
         degats: 0,
-        blessures: 0
+        blessures: 0,
+
+        degatsRecus: 0,
+        blessuresRecues: 0,
+
+        degatsInfliges: 0,
+        blessuresInfligees: 0
       };
 
     }
 
+    /*
+      COÛT DE LA MISE
 
-    /* Coût de la mise */
+      La posture économique réduit
+      le coût en cas de défaite.
+    */
 
     let misePayee = miseJoueur;
 
@@ -854,8 +929,12 @@ window.MISE = (() => {
 
     }
 
+    /*
+      RÉCUPÉRATION ÉCONOMIQUE
 
-    /* Récupération économique */
+      En cas de victoire :
+      +1 PA après paiement.
+    */
 
     const recuperation =
       postureJoueur === "economique" &&
@@ -863,46 +942,73 @@ window.MISE = (() => {
         ? 1
         : 0;
 
+    /*
+      CALCUL SYMÉTRIQUE DES DÉGÂTS
 
-    /* Dégâts subis */
+      Si le joueur gagne :
+      dégâts subis par l'adversaire.
 
-    let degats = victoire ? 0 : ecart;
+      Si le joueur perd :
+      dégâts subis par le joueur.
+    */
 
-    if (!victoire) {
+    let degatsRecus = 0;
+    let degatsInfliges = 0;
 
-      if (postureJoueur === "offensive") {
+    if (victoire) {
 
-        degats *= 2;
+      degatsInfliges = calculerDegats(
+        ecart,
+        postureAdverse
+      );
 
-      }
+    } else {
 
-      if (postureJoueur === "defensive") {
-
-        degats = Math.max(
-          0,
-          Math.ceil(degats / 2) - 1
-        );
-
-      }
+      degatsRecus = calculerDegats(
+        ecart,
+        postureJoueur
+      );
 
     }
 
+    const blessuresRecues =
+      blessuresDepuisDegats(
+        degatsRecus
+      );
 
-    const blessures = blessuresDepuisDegats(
-      degats
-    );
+    const blessuresInfligees =
+      blessuresDepuisDegats(
+        degatsInfliges
+      );
 
+    /*
+      Compatibilité avec les interfaces
+      existantes :
+
+      degats et blessures conservent
+      leur sens initial : dégâts
+      et blessures reçus par le joueur.
+    */
 
     return {
       egalite: false,
       victoire,
+
       scoreJoueur,
       scoreAdverse,
       ecart,
+
       misePayee,
       recuperation,
-      degats,
-      blessures
+
+      degats: degatsRecus,
+      blessures: blessuresRecues,
+
+      degatsRecus,
+      blessuresRecues,
+
+      degatsInfliges,
+      blessuresInfligees
     };
 
   }
@@ -927,7 +1033,6 @@ window.MISE = (() => {
       personnageId
     );
 
-
     /*
       Vérifier l'association compétence /
       réserve AVANT toute résolution.
@@ -938,7 +1043,6 @@ window.MISE = (() => {
       competenceId,
       reserve
     );
-
 
     const limite = limiteMiseOpposition(
       personnage,
@@ -981,26 +1085,14 @@ window.MISE = (() => {
       postureAdverse
     });
 
-
     /*
-      Égalité : aucune modification automatique.
-    */
+      1. DÉBITER LA MISE
 
-    if (resultat.egalite) {
+      Même en cas d'égalité,
+      la mise entière est payée.
 
-      return {
-        ...resultat,
-        reserve,
-        paRestants: personnage.pa[reserve],
-        blessuresTotales:
-          personnage.wounds[reserve]
-      };
-
-    }
-
-
-    /*
-      1. Débiter la mise.
+      Le coût est calculé par
+      calculerOpposition().
     */
 
     depenserPA(
@@ -1009,10 +1101,10 @@ window.MISE = (() => {
       resultat.misePayee
     );
 
-
     /*
-      2. Récupération de la posture économique
-         en cas de victoire.
+      2. RÉCUPÉRATION ÉCONOMIQUE
+
+      En cas de victoire uniquement.
     */
 
     if (resultat.recuperation > 0) {
@@ -1025,43 +1117,55 @@ window.MISE = (() => {
 
     }
 
-
     /*
-      3. Enregistrer les blessures.
+      3. ENREGISTRER LES BLESSURES
+         REÇUES PAR LE JOUEUR
 
       Les dégâts ne sont PAS déduits
-      une seconde fois des PA disponibles.
+      une seconde fois des PA.
 
-      Ils provoquent des blessures qui
-      réduisent le maximum de la réserve.
+      Chaque blessure retire 3 PA
+      au maximum de la réserve.
+
+      Les blessures infligées à
+      l'adversaire sont calculées
+      mais ne sont pas enregistrées
+      sur une autre fiche.
     */
 
-    if (resultat.blessures > 0) {
+    if (resultat.blessuresRecues > 0) {
 
       ajouterBlessures(
         personnage,
         reserve,
-        resultat.blessures
+        resultat.blessuresRecues
       );
 
     }
 
-
     /*
-      4. Sauvegarder la fiche actualisée.
+      4. SAUVEGARDER LA FICHE
+
+      Cette sauvegarde s'effectue
+      également en cas d'égalité,
+      puisque la mise a été payée.
     */
 
     enregistrerPersonnage(personnage);
 
-
     return {
       ...resultat,
+
       reserve,
-      paRestants: personnage.pa[reserve],
+
+      paRestants:
+        personnage.pa[reserve],
+
       maximumRestant: maximumPA(
         personnage,
         reserve
       ),
+
       blessuresTotales:
         personnage.wounds[reserve]
     };
@@ -1163,6 +1267,7 @@ window.MISE = (() => {
 
     bonusPostures,
     limiteMiseOpposition,
+    calculerDegats,
     calculerOpposition,
     resoudreOpposition,
 
