@@ -1,1 +1,426 @@
+<!doctype html>
+<html lang="fr">
 
+<head>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#111111">
+
+<title>M.I.S.E. — Action</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="game-page">
+
+<main class="app">
+
+<section id="action-page">
+
+  <!-- EN-TÊTE -->
+
+  <div class="heading">
+
+    <button
+      class="back"
+      id="back"
+      type="button"
+      aria-label="Retour au jeu"
+    >
+      ←
+    </button>
+
+    <h1>M.I.S.E.</h1>
+
+  </div>
+
+  <div class="detail-name" id="character-name"></div>
+
+  <h2>Miser contre un SD</h2>
+
+  <!-- RÉSERVES DISPONIBLES -->
+
+  <div id="reserves"></div>
+
+  <!-- FORMULAIRE -->
+
+  <form id="action-form">
+
+    <label class="field">
+      <span class="label">Réserve utilisée</span>
+
+      <select class="input" id="reserve" required>
+        <option value="" selected disabled>
+          Choisir une réserve
+        </option>
+        <option value="physique">Vigueur</option>
+        <option value="mental">Volonté</option>
+        <option value="social">Influence</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="label">Compétence</span>
+
+      <select class="input" id="skill" required>
+        <option value="" selected disabled>
+          Choisir une compétence
+        </option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="label">Seuil de difficulté</span>
+
+      <select class="input" id="sd" required>
+        <option value="" selected disabled>
+          Choisir un SD
+        </option>
+        <option value="3">3 — Accessible sous pression</option>
+        <option value="4">4 — Difficile</option>
+        <option value="5">5 — Très difficile</option>
+        <option value="6">6 — Exceptionnelle</option>
+        <option value="7">7 — Extrême</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="label">
+        Ajustement de circonstance
+      </span>
+
+      <select class="input" id="modifier">
+        <option value="0" selected>Aucun</option>
+        <option value="-1">−1 au SD</option>
+        <option value="-2">−2 au SD</option>
+        <option value="-3">−3 au SD</option>
+        <option value="1">+1 au SD</option>
+        <option value="2">+2 au SD</option>
+        <option value="3">+3 au SD</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="label">Mise en PA</span>
+
+      <input
+        class="input"
+        id="stake"
+        type="number"
+        min="0"
+        step="1"
+        placeholder="Nombre de PA"
+        required
+      >
+    </label>
+
+    <p class="subtle" id="preview"></p>
+
+    <button
+      class="box primary"
+      id="resolve"
+      type="submit"
+    >
+      Résoudre l'action
+    </button>
+
+  </form>
+
+  <!-- RÉSULTAT -->
+
+  <div id="result-panel" hidden>
+
+    <h2>Résultat</h2>
+
+    <p
+      id="result"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+  </div>
+
+  <p
+    class="subtle"
+    id="error"
+    role="alert"
+  ></p>
+
+  <!-- RETOUR -->
+
+  <div class="actions group">
+
+    <button
+      class="box secondary"
+      id="return"
+      type="button"
+    >
+      Retour au jeu
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+<script src="app.js"></script>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const characterId = params.get("id");
+
+  let character;
+
+  try {
+    character = MISE.trouverPersonnage(characterId);
+  } catch {
+    alert("Personnage introuvable.");
+    window.location.replace("index.html");
+    return;
+  }
+
+  const reserveNames = MISE.RESERVES;
+
+  const bonusNames = {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 5
+  };
+
+  function returnToGame() {
+    const url = new URL(
+      "jeu.html",
+      window.location.href
+    );
+
+    url.searchParams.set("id", characterId);
+
+    window.location.href = url.toString();
+  }
+
+  function refreshCharacter() {
+    character = MISE.trouverPersonnage(characterId);
+  }
+
+  function renderReserves() {
+    const root = $("reserves");
+    root.replaceChildren();
+
+    for (const key of MISE.ATTRIBUTS) {
+      const row = document.createElement("div");
+      row.className = "detail-row";
+
+      const name = document.createElement("span");
+      name.textContent = reserveNames[key];
+
+      const value = document.createElement("strong");
+
+      value.textContent =
+        character.pa[key] +
+        " / " +
+        MISE.maximumPA(character, key) +
+        " PA";
+
+      row.append(name, value);
+      root.append(row);
+    }
+  }
+
+  function renderSkills() {
+    const select = $("skill");
+
+    select.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Choisir une compétence";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+
+    select.append(placeholder);
+
+    const noSkill = document.createElement("option");
+    noSkill.value = "none";
+    noSkill.textContent = "Sans compétence (+0)";
+
+    select.append(noSkill);
+
+    for (const skill of character.skills) {
+      const option = document.createElement("option");
+
+      option.value = skill.id;
+
+      option.textContent =
+        skill.name +
+        " (+" +
+        (bonusNames[skill.level] || 0) +
+        ")";
+
+      select.append(option);
+    }
+  }
+
+  function resetFields() {
+    $("action-form").reset();
+
+    $("reserve").selectedIndex = 0;
+    $("skill").selectedIndex = 0;
+    $("sd").selectedIndex = 0;
+
+    $("modifier").value = "0";
+    $("stake").value = "";
+
+    $("preview").textContent = "";
+  }
+
+  function updatePreview() {
+    const reserve = $("reserve").value;
+    const skillId = $("skill").value;
+
+    const stakeText = $("stake").value;
+    const sdText = $("sd").value;
+
+    if (
+      !reserve ||
+      !skillId ||
+      stakeText === "" ||
+      sdText === ""
+    ) {
+      $("preview").textContent = "";
+      return;
+    }
+
+    const stake = Number(stakeText);
+    const sd = Number(sdText);
+    const modifier = Number($("modifier").value);
+
+    if (!Number.isInteger(stake) || stake < 0) {
+      $("preview").textContent = "";
+      return;
+    }
+
+    try {
+      const bonus = skillId === "none"
+        ? 0
+        : MISE.bonusCompetence(character, skillId);
+
+      $("preview").textContent =
+        "Score : " +
+        (stake + bonus) +
+        " · SD ajusté : " +
+        (sd + modifier) +
+        " · PA disponibles : " +
+        character.pa[reserve];
+
+    } catch {
+      $("preview").textContent = "";
+    }
+  }
+
+  function resolveAction(event) {
+    event.preventDefault();
+
+    $("error").textContent = "";
+
+    const reserve = $("reserve").value;
+    const skillId = $("skill").value;
+
+    const stakeText = $("stake").value;
+
+    if (!reserve || !skillId || stakeText === "") {
+      $("error").textContent =
+        "Complétez les champs de l'action.";
+      return;
+    }
+
+    const stake = Number(stakeText);
+
+    if (!Number.isInteger(stake) || stake < 0) {
+      $("error").textContent =
+        "La mise doit être un entier positif ou nul.";
+      return;
+    }
+
+    try {
+      const result = MISE.resoudreAction({
+        personnageId: characterId,
+        reserve,
+        competenceId: skillId === "none"
+          ? null
+          : skillId,
+        mise: stake,
+        sd: Number($("sd").value),
+        ajustement: Number($("modifier").value)
+      });
+
+      refreshCharacter();
+      renderReserves();
+
+      $("result-panel").hidden = false;
+
+      $("result").textContent =
+        (result.reussite ? "RÉUSSITE" : "ÉCHEC") +
+        "\nScore : " + result.score +
+        " · SD : " + result.sdAjuste +
+        "\nMise dépensée : " +
+        result.mise + " PA de " +
+        reserveNames[reserve] +
+        "\nPA restants : " +
+        result.paRestants +
+        " / " +
+        MISE.maximumPA(character, reserve);
+
+      $("result").style.whiteSpace = "pre-line";
+
+      resetFields();
+
+    } catch (error) {
+      $("error").textContent = error.message;
+    }
+  }
+
+  $("character-name").textContent = character.name;
+
+  $("action-form").addEventListener(
+    "submit",
+    resolveAction
+  );
+
+  for (const id of [
+    "reserve",
+    "skill",
+    "sd",
+    "modifier",
+    "stake"
+  ]) {
+    $(id).addEventListener("input", updatePreview);
+    $(id).addEventListener("change", updatePreview);
+  }
+
+  $("back").onclick = returnToGame;
+  $("return").onclick = returnToGame;
+
+  renderReserves();
+  renderSkills();
+  resetFields();
+
+})();
+</script>
+
+</body>
+  </html>
