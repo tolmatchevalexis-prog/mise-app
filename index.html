@@ -20,12 +20,12 @@
 
 <link rel="stylesheet" href="style.css">
 
+<!-- APPLICATION MOBILE -->
+<link rel="manifest" href="./manifest.json">
+
 <style>
 
-/* ==========================================
-   CARTOUCHES INDÉPENDANTS
-   Spécifiques à la fiche de personnage
-   ========================================== */
+/* CARTOUCHES */
 
 .mise-cards {
   display: grid;
@@ -107,10 +107,7 @@
 
 <main class="app">
 
-
-<!-- ======================================
-     ACCUEIL
-     ====================================== -->
+<!-- ACCUEIL -->
 
 <section id="home">
 
@@ -119,7 +116,6 @@
   <div id="cards" class="stack"></div>
 
   <div class="home-bottom">
-
     <button
       class="box primary"
       id="create"
@@ -127,15 +123,12 @@
     >
       Créer un nouveau personnage
     </button>
-
   </div>
 
 </section>
 
 
-<!-- ======================================
-     CRÉATION ET MODIFICATION
-     ====================================== -->
+<!-- CRÉATION ET MODIFICATION -->
 
 <section id="form" hidden>
 
@@ -146,9 +139,7 @@
       id="form-back"
       type="button"
       aria-label="Retour"
-    >
-      ←
-    </button>
+    >←</button>
 
     <h1 id="form-heading">
       Nouveau personnage
@@ -156,14 +147,9 @@
 
   </div>
 
-
-  <!-- NOM -->
-
   <label class="field">
 
-    <span class="label">
-      Nom
-    </span>
+    <span class="label">Nom</span>
 
     <input
       id="name"
@@ -176,7 +162,6 @@
 
   </label>
 
-
   <!-- ATTRIBUTS -->
 
   <div
@@ -186,46 +171,36 @@
   >
 
     <div class="attribute">
-
       <span class="attribute-label">
         Physique
       </span>
-
       <div
         class="dots"
         id="dots-physique"
       ></div>
-
     </div>
 
     <div class="attribute">
-
       <span class="attribute-label">
         Mental
       </span>
-
       <div
         class="dots"
         id="dots-mental"
       ></div>
-
     </div>
 
     <div class="attribute">
-
       <span class="attribute-label">
         Social
       </span>
-
       <div
         class="dots"
         id="dots-social"
       ></div>
-
     </div>
 
   </div>
-
 
   <!-- PORTRAIT -->
 
@@ -263,7 +238,6 @@
 
   </div>
 
-
   <!-- COMPÉTENCES -->
 
   <button
@@ -281,7 +255,6 @@
   >
     Aucune compétence enregistrée
   </p>
-
 
   <!-- ATOUTS -->
 
@@ -301,14 +274,11 @@
     Aucun Atout enregistré
   </p>
 
-
   <!-- HISTORIQUE -->
 
   <label class="field">
 
-    <span class="label">
-      Historique
-    </span>
+    <span class="label">Historique</span>
 
     <textarea
       id="history"
@@ -318,15 +288,11 @@
 
   </label>
 
-
   <p
     id="form-error"
     class="error"
     role="alert"
   ></p>
-
-
-  <!-- VALIDATION -->
 
   <div class="actions">
 
@@ -351,9 +317,7 @@
 </section>
 
 
-<!-- ======================================
-     COMPÉTENCES
-     ====================================== -->
+<!-- COMPÉTENCES -->
 
 <section id="skills" hidden>
 
@@ -364,24 +328,16 @@
       id="skills-back"
       type="button"
       aria-label="Retour"
-    >
-      ←
-    </button>
+    >←</button>
 
     <h1>Compétences</h1>
 
   </div>
 
-
-  <!-- COMPÉTENCES ENREGISTRÉES -->
-
   <div
     id="skill-list"
     class="mise-cards"
   ></div>
-
-
-  <!-- NOUVELLE COMPÉTENCE -->
 
   <div class="group">
 
@@ -402,9 +358,6 @@
       >
 
     </label>
-
-
-    <!-- CARACTÉRISTIQUE ASSOCIÉE -->
 
     <label class="field">
 
@@ -442,9 +395,6 @@
 
     </label>
 
-
-    <!-- MAÎTRISE -->
-
     <div class="label">
       Niveau de maîtrise
     </div>
@@ -462,9 +412,6 @@
 
     </div>
 
-
-    <!-- DESCRIPTION -->
-
     <label class="field group">
 
       <span class="label">
@@ -479,13 +426,11 @@
 
     </label>
 
-
     <p
       id="skill-error"
       class="error"
       role="alert"
     ></p>
-
 
     <button
       class="box primary"
@@ -496,9 +441,6 @@
     </button>
 
   </div>
-
-
-  <!-- RETOUR -->
 
   <div class="actions">
 
@@ -515,9 +457,7 @@
 </section>
 
 
-<!-- ======================================
-     ATOUTS
-     ====================================== -->
+<!-- ATOUTS -->
 
 <section id="atouts" hidden>
 
@@ -528,24 +468,16 @@
       id="atouts-back"
       type="button"
       aria-label="Retour"
-    >
-      ←
-    </button>
+    >←</button>
 
     <h1>Atouts</h1>
 
   </div>
 
-
-  <!-- ATOUTS ENREGISTRÉS -->
-
   <div
     id="atout-list"
     class="mise-cards"
   ></div>
-
-
-  <!-- NOUVEL ATOUT -->
 
   <div class="group">
 
@@ -565,9 +497,6 @@
       >
 
     </label>
-
-
-    <!-- RÉSERVE -->
 
     <label class="field">
 
@@ -596,9 +525,6 @@
 
     </label>
 
-
-    <!-- COÛT -->
-
     <label class="field">
 
       <span class="label">
@@ -617,9 +543,6 @@
 
     </label>
 
-
-    <!-- DESCRIPTION -->
-
     <label class="field">
 
       <span class="label">
@@ -634,13 +557,11 @@
 
     </label>
 
-
     <p
       id="atout-error"
       class="error"
       role="alert"
     ></p>
-
 
     <button
       class="box primary"
@@ -651,9 +572,6 @@
     </button>
 
   </div>
-
-
-  <!-- RETOUR -->
 
   <div class="actions">
 
@@ -670,9 +588,7 @@
 </section>
 
 
-<!-- ======================================
-     FICHE DU PERSONNAGE
-     ====================================== -->
+<!-- FICHE DU PERSONNAGE -->
 
 <section id="detail" hidden>
 
@@ -683,16 +599,11 @@
       id="detail-back"
       type="button"
       aria-label="Retour à l'accueil"
-    >
-      ←
-    </button>
+    >←</button>
 
     <h1>Personnage</h1>
 
   </div>
-
-
-  <!-- PORTRAIT -->
 
   <img
     id="detail-portrait"
@@ -701,30 +612,16 @@
     hidden
   >
 
-
-  <!-- NOM -->
-
   <div
     class="detail-name"
     id="detail-name"
   ></div>
 
-
-  <!-- ATTRIBUTS -->
-
   <h2>Attributs</h2>
-
   <div id="detail-attrs"></div>
 
-
-  <!-- RÉSERVES -->
-
   <h2>Réserves de PA</h2>
-
   <div id="detail-reserves"></div>
-
-
-  <!-- COMPÉTENCES -->
 
   <h2>Compétences</h2>
 
@@ -733,9 +630,6 @@
     class="mise-cards"
   ></div>
 
-
-  <!-- ATOUTS -->
-
   <h2>Atouts</h2>
 
   <div
@@ -743,18 +637,12 @@
     class="mise-cards"
   ></div>
 
-
-  <!-- HISTORIQUE -->
-
   <h2>Historique</h2>
 
   <p
     id="detail-history"
     class="detail-history"
   ></p>
-
-
-  <!-- ACTIONS -->
 
   <div class="actions">
 
@@ -776,7 +664,6 @@
 
   </div>
 
-
   <button
     class="danger"
     id="delete-character"
@@ -790,20 +677,14 @@
 </main>
 
 
-<!-- ======================================
-     APPLICATION
-     ====================================== -->
+<!-- APPLICATION -->
 
 <script>
-
 (() => {
 
 "use strict";
 
-
-/* ========================================
-   CONFIGURATION
-   ======================================== */
+/* CONFIGURATION */
 
 const $ = id =>
   document.getElementById(id);
@@ -858,34 +739,24 @@ const baseMax = value =>
   value * 3 + 5;
 
 
-/* ========================================
-   ÉTAT DE L'APPLICATION
-   ======================================== */
+/* ÉTAT */
 
 let personnages = [];
-
 let brouillon = null;
-
 let personnageSelectionne = null;
-
 let niveauChoisi = 1;
 
 let portraitEnAttente = null;
-
 let supprimerPortrait = false;
 
 let urlApercu = null;
-
 let urlPortraitFiche = null;
 
 let versionApercu = 0;
-
 let versionFiche = 0;
 
 
-/* ========================================
-   CHARGEMENT DES PERSONNAGES
-   ======================================== */
+/* CHARGEMENT */
 
 try {
 
@@ -904,9 +775,7 @@ try {
 }
 
 
-/* ========================================
-   SAUVEGARDE
-   ======================================== */
+/* SAUVEGARDE */
 
 function sauvegarder() {
 
@@ -928,9 +797,7 @@ function sauvegarder() {
 }
 
 
-/* ========================================
-   RÉSERVES ET BLESSURES
-   ======================================== */
+/* RÉSERVES */
 
 function maximumPA(personnage, attribut) {
 
@@ -1011,9 +878,7 @@ function preparerPersonnage(personnage) {
 }
 
 
-/* ========================================
-   PORTRAITS — INDEXEDDB
-   ======================================== */
+/* PORTRAITS — INDEXEDDB */
 
 let promesseBase = null;
 
@@ -1196,9 +1061,7 @@ async function effacerPortrait(id) {
 }
 
 
-/* ========================================
-   AFFICHAGE DES IMAGES
-   ======================================== */
+/* AFFICHAGE DES IMAGES */
 
 function afficherImage(element, image, type) {
 
@@ -1289,9 +1152,7 @@ async function chargerPortraitFiche(id) {
 }
 
 
-/* ========================================
-   NAVIGATION
-   ======================================== */
+/* NAVIGATION */
 
 function afficherPage(page) {
 
@@ -1320,9 +1181,7 @@ function afficherPage(page) {
 }
 
 
-/* ========================================
-   CERCLES DES ATTRIBUTS
-   ======================================== */
+/* CERCLES DES ATTRIBUTS */
 
 function afficherCercles(
   elementId,
@@ -1366,9 +1225,7 @@ function afficherCercles(
 }
 
 
-/* ========================================
-   ACCUEIL
-   ======================================== */
+/* ACCUEIL */
 
 function afficherAccueil() {
 
@@ -1403,9 +1260,7 @@ function afficherAccueil() {
 }
 
 
-/* ========================================
-   NOUVEAU PERSONNAGE
-   ======================================== */
+/* NOUVEAU PERSONNAGE */
 
 function nouveauPersonnage() {
 
@@ -1441,9 +1296,7 @@ function nouveauPersonnage() {
 }
 
 
-/* ========================================
-   ÉDITION
-   ======================================== */
+/* ÉDITION */
 
 function ouvrirEdition(personnage) {
 
@@ -1540,9 +1393,7 @@ function actualiserCompteurs() {
 }
 
 
-/* ========================================
-   CRÉATION D'UN CARTOUCHE
-   ======================================== */
+/* CARTOUCHES */
 
 function creerCartouche(
   nom,
@@ -1578,10 +1429,6 @@ function creerCartouche(
 }
 
 
-/* ========================================
-   LISTE VIDE
-   ======================================== */
-
 function afficherListeVide(conteneur, texte) {
 
   const paragraphe = document.createElement("p");
@@ -1595,19 +1442,9 @@ function afficherListeVide(conteneur, texte) {
 }
 
 
-/* ========================================
-   ASSOCIATION COMPÉTENCE / CARACTÉRISTIQUE
-   ======================================== */
+/* ASSOCIATION COMPÉTENCE / CARACTÉRISTIQUE */
 
 function reserveCompetence(competence) {
-
-  /*
-    Les compétences existantes peuvent ne pas
-    posséder de réserve.
-
-    Ne jamais leur attribuer arbitrairement
-    une valeur par défaut.
-  */
 
   if (
     competence &&
@@ -1649,9 +1486,7 @@ function informationsCompetence(competence) {
 }
 
 
-/* ========================================
-   COMPÉTENCES — ÉDITEUR
-   ======================================== */
+/* COMPÉTENCES — ÉDITEUR */
 
 function afficherCompetences() {
 
@@ -1676,20 +1511,9 @@ function afficherCompetences() {
       competence.description || ""
     );
 
-
-    /*
-      Pour les compétences anciennes,
-      il est possible de compléter
-      la caractéristique sans les recréer.
-
-      Cette possibilité permet également
-      de corriger une association erronée.
-    */
-
     const actions = document.createElement("div");
 
     actions.className = "mise-card-actions";
-
 
     const choix = document.createElement("select");
 
@@ -1700,14 +1524,12 @@ function afficherCompetences() {
       "Caractéristique de " + competence.name
     );
 
-
     const options = [
       ["", "Choisir une caractéristique"],
       ["physique", "Physique — Vigueur"],
       ["mental", "Mental — Volonté"],
       ["social", "Social — Influence"]
     ];
-
 
     for (const [valeur, texte] of options) {
 
@@ -1720,9 +1542,8 @@ function afficherCompetences() {
 
     }
 
-
-    choix.value = reserveCompetence(competence) || "";
-
+    choix.value =
+      reserveCompetence(competence) || "";
 
     choix.onchange = () => {
 
@@ -1736,7 +1557,6 @@ function afficherCompetences() {
 
     };
 
-
     const retirer = document.createElement("button");
 
     retirer.type = "button";
@@ -1748,7 +1568,6 @@ function afficherCompetences() {
       "Retirer " + competence.name
     );
 
-
     retirer.onclick = () => {
 
       brouillon.skills =
@@ -1759,7 +1578,6 @@ function afficherCompetences() {
       afficherCompetences();
 
     };
-
 
     actions.append(choix, retirer);
 
@@ -1774,28 +1592,20 @@ function afficherCompetences() {
 }
 
 
-/* ========================================
-   NIVEAU DE MAÎTRISE
-   ======================================== */
+/* NIVEAU DE MAÎTRISE */
 
 function afficherNiveau() {
 
   afficherCercles(
-
     "level-dots",
-
     niveauChoisi,
 
     valeur => {
-
       niveauChoisi = valeur;
-
       afficherNiveau();
-
     },
 
     "Niveau de maîtrise"
-
   );
 
   $("level-label").textContent =
@@ -1806,9 +1616,7 @@ function afficherNiveau() {
 }
 
 
-/* ========================================
-   ATOUTS — ÉDITEUR
-   ======================================== */
+/* ATOUTS — ÉDITEUR */
 
 function afficherAtouts() {
 
@@ -1837,11 +1645,9 @@ function afficherAtouts() {
       atout.description || ""
     );
 
-
     const actions = document.createElement("div");
 
     actions.className = "mise-card-actions";
-
 
     const retirer = document.createElement("button");
 
@@ -1854,7 +1660,6 @@ function afficherAtouts() {
       "Retirer " + atout.name
     );
 
-
     retirer.onclick = () => {
 
       brouillon.atouts =
@@ -1865,7 +1670,6 @@ function afficherAtouts() {
       afficherAtouts();
 
     };
-
 
     actions.append(retirer);
 
@@ -1878,9 +1682,7 @@ function afficherAtouts() {
 }
 
 
-/* ========================================
-   LIGNES DE LA FICHE
-   ======================================== */
+/* LIGNES DE LA FICHE */
 
 function ajouterLigne(
   conteneur,
@@ -1889,15 +1691,12 @@ function ajouterLigne(
 ) {
 
   const ligne = document.createElement("div");
-
   ligne.className = "detail-row";
 
   const titre = document.createElement("span");
-
   titre.textContent = libelle;
 
   const donnees = document.createElement("strong");
-
   donnees.textContent = valeur;
 
   ligne.append(titre, donnees);
@@ -1907,9 +1706,7 @@ function ajouterLigne(
 }
 
 
-/* ========================================
-   PERSONNAGE SÉLECTIONNÉ
-   ======================================== */
+/* PERSONNAGE SÉLECTIONNÉ */
 
 function personnageActuel() {
 
@@ -1921,9 +1718,7 @@ function personnageActuel() {
 }
 
 
-/* ========================================
-   FICHE DU PERSONNAGE
-   ======================================== */
+/* AFFICHAGE DE LA FICHE */
 
 function afficherFiche() {
 
@@ -1944,20 +1739,11 @@ function afficherFiche() {
 
   chargerPortraitFiche(personnage.id);
 
-
-  /* ATTRIBUTS */
-
   const zoneAttributs = $("detail-attrs");
-
   zoneAttributs.replaceChildren();
 
-
-  /* RÉSERVES */
-
   const zoneReserves = $("detail-reserves");
-
   zoneReserves.replaceChildren();
-
 
   for (const attribut of ATTRS) {
 
@@ -1977,7 +1763,6 @@ function afficherFiche() {
     );
 
   }
-
 
   /* COMPÉTENCES */
 
@@ -2005,7 +1790,6 @@ function afficherFiche() {
     zoneCompetences.append(carte);
 
   }
-
 
   /* ATOUTS */
 
@@ -2038,7 +1822,6 @@ function afficherFiche() {
 
   }
 
-
   /* HISTORIQUE */
 
   $("detail-history").textContent =
@@ -2047,10 +1830,7 @@ function afficherFiche() {
 }
 
 
-/* ========================================
-   ÉVÉNEMENTS
-   ======================================== */
-
+/* ÉVÉNEMENTS */
 
 /* CRÉATION */
 
@@ -2075,9 +1855,7 @@ $("cancel").onclick = () => {
 };
 
 
-/* ========================================
-   PORTRAITS
-   ======================================== */
+/* IMPORTER UN PORTRAIT */
 
 $("portrait-file").onchange = () => {
 
@@ -2098,7 +1876,6 @@ $("portrait-file").onchange = () => {
   versionApercu++;
 
   portraitEnAttente = fichier;
-
   supprimerPortrait = false;
 
   afficherImage(
@@ -2112,12 +1889,13 @@ $("portrait-file").onchange = () => {
 };
 
 
+/* RETIRER UN PORTRAIT */
+
 $("portrait-remove").onclick = () => {
 
   versionApercu++;
 
   portraitEnAttente = null;
-
   supprimerPortrait = true;
 
   $("portrait-file").value = "";
@@ -2131,9 +1909,7 @@ $("portrait-remove").onclick = () => {
 };
 
 
-/* ========================================
-   OUVRIR LES COMPÉTENCES
-   ======================================== */
+/* OUVRIR LES COMPÉTENCES */
 
 $("open-skills").onclick = () => {
 
@@ -2142,9 +1918,7 @@ $("open-skills").onclick = () => {
   niveauChoisi = 1;
 
   $("skill-name").value = "";
-
   $("skill-reserve").value = "";
-
   $("skill-description").value = "";
 
   $("skill-error").textContent = "";
@@ -2154,23 +1928,18 @@ $("open-skills").onclick = () => {
 };
 
 
-/* ========================================
-   RETOUR DES COMPÉTENCES
-   ======================================== */
+/* RETOUR DES COMPÉTENCES */
 
 $("skills-back").onclick =
 $("skills-done").onclick = () => {
 
   actualiserCompteurs();
-
   afficherPage("form");
 
 };
 
 
-/* ========================================
-   AJOUTER UNE COMPÉTENCE
-   ======================================== */
+/* AJOUTER UNE COMPÉTENCE */
 
 $("add-skill").onclick = () => {
 
@@ -2179,7 +1948,6 @@ $("add-skill").onclick = () => {
 
   const reserve =
     $("skill-reserve").value;
-
 
   if (!nom) {
 
@@ -2190,7 +1958,6 @@ $("add-skill").onclick = () => {
 
   }
 
-
   if (!ATTRS.includes(reserve)) {
 
     $("skill-error").textContent =
@@ -2200,13 +1967,11 @@ $("add-skill").onclick = () => {
 
   }
 
-
   const existe = brouillon.skills.some(
     competence =>
       competence.name.toLocaleLowerCase("fr") ===
       nom.toLocaleLowerCase("fr")
   );
-
 
   if (existe) {
 
@@ -2217,20 +1982,11 @@ $("add-skill").onclick = () => {
 
   }
 
-
   brouillon.skills.push({
 
     id: uid(),
-
     name: nom,
-
     level: niveauChoisi,
-
-    /*
-      La caractéristique associée
-      détermine la réserve de PA.
-    */
-
     reserve: reserve,
 
     description:
@@ -2238,11 +1994,8 @@ $("add-skill").onclick = () => {
 
   });
 
-
   $("skill-name").value = "";
-
   $("skill-reserve").value = "";
-
   $("skill-description").value = "";
 
   $("skill-error").textContent = "";
@@ -2254,22 +2007,16 @@ $("add-skill").onclick = () => {
 };
 
 
-/* ========================================
-   OUVRIR LES ATOUTS
-   ======================================== */
+/* OUVRIR LES ATOUTS */
 
 $("open-atouts").onclick = () => {
 
   synchroniserChamps();
 
   $("atout-name").value = "";
-
   $("atout-description").value = "";
-
   $("atout-reserve").value = "physique";
-
   $("atout-cost").value = "1";
-
   $("atout-error").textContent = "";
 
   afficherPage("atouts");
@@ -2277,23 +2024,18 @@ $("open-atouts").onclick = () => {
 };
 
 
-/* ========================================
-   RETOUR DES ATOUTS
-   ======================================== */
+/* RETOUR DES ATOUTS */
 
 $("atouts-back").onclick =
 $("atouts-done").onclick = () => {
 
   actualiserCompteurs();
-
   afficherPage("form");
 
 };
 
 
-/* ========================================
-   AJOUTER UN ATOUT
-   ======================================== */
+/* AJOUTER UN ATOUT */
 
 $("add-atout").onclick = () => {
 
@@ -2306,7 +2048,6 @@ $("add-atout").onclick = () => {
   const reserve =
     $("atout-reserve").value;
 
-
   if (!nom) {
 
     $("atout-error").textContent =
@@ -2315,7 +2056,6 @@ $("add-atout").onclick = () => {
     return;
 
   }
-
 
   if (
     !Number.isInteger(cout) ||
@@ -2330,7 +2070,6 @@ $("add-atout").onclick = () => {
 
   }
 
-
   if (!ATTRS.includes(reserve)) {
 
     $("atout-error").textContent =
@@ -2340,13 +2079,11 @@ $("add-atout").onclick = () => {
 
   }
 
-
   const existe = brouillon.atouts.some(
     atout =>
       atout.name.toLocaleLowerCase("fr") ===
       nom.toLocaleLowerCase("fr")
   );
-
 
   if (existe) {
 
@@ -2357,15 +2094,11 @@ $("add-atout").onclick = () => {
 
   }
 
-
   brouillon.atouts.push({
 
     id: uid(),
-
     name: nom,
-
     cost: cout,
-
     reserve: reserve,
 
     description:
@@ -2373,13 +2106,9 @@ $("add-atout").onclick = () => {
 
   });
 
-
   $("atout-name").value = "";
-
   $("atout-description").value = "";
-
   $("atout-cost").value = "1";
-
   $("atout-error").textContent = "";
 
   afficherAtouts();
@@ -2387,9 +2116,7 @@ $("add-atout").onclick = () => {
 };
 
 
-/* ========================================
-   ENREGISTRER LE PERSONNAGE
-   ======================================== */
+/* ENREGISTRER LE PERSONNAGE */
 
 $("save").onclick = async () => {
 
@@ -2397,7 +2124,6 @@ $("save").onclick = async () => {
 
   brouillon.name =
     brouillon.name.trim();
-
 
   if (!brouillon.name) {
 
@@ -2408,16 +2134,11 @@ $("save").onclick = async () => {
 
   }
 
-
   const nouveau = !brouillon.id;
 
-
   /*
-    Un nouveau personnage commence
-    avec toutes ses réserves pleines.
-
-    Les personnages existants
-    conservent leurs PA disponibles.
+    Les nouveaux personnages commencent
+    avec leurs réserves de PA pleines.
   */
 
   if (nouveau) {
@@ -2433,12 +2154,14 @@ $("save").onclick = async () => {
 
   }
 
-
   preparerPersonnage(brouillon);
-
 
   const anciens = personnages;
 
+  /*
+    Les personnages existants conservent
+    leurs PA disponibles.
+  */
 
   if (!nouveau) {
 
@@ -2453,7 +2176,6 @@ $("save").onclick = async () => {
 
   }
 
-
   const nouveaux = [
 
     ...personnages.filter(
@@ -2465,9 +2187,7 @@ $("save").onclick = async () => {
 
   ];
 
-
   personnages = nouveaux;
-
 
   if (!sauvegarder()) {
 
@@ -2484,13 +2204,11 @@ $("save").onclick = async () => {
 
   }
 
-
   const bouton = $("save");
 
   bouton.disabled = true;
 
   let erreurPortrait = false;
-
 
   try {
 
@@ -2519,11 +2237,9 @@ $("save").onclick = async () => {
 
   }
 
-
   personnageSelectionne = brouillon.id;
 
   afficherPage("detail");
-
 
   if (erreurPortrait) {
 
@@ -2537,9 +2253,7 @@ $("save").onclick = async () => {
 };
 
 
-/* ========================================
-   RETOUR À L'ACCUEIL
-   ======================================== */
+/* RETOUR À L'ACCUEIL */
 
 $("detail-back").onclick = () => {
 
@@ -2548,9 +2262,7 @@ $("detail-back").onclick = () => {
 };
 
 
-/* ========================================
-   MODIFIER LE PERSONNAGE
-   ======================================== */
+/* MODIFIER LE PERSONNAGE */
 
 $("edit").onclick = () => {
 
@@ -2558,17 +2270,13 @@ $("edit").onclick = () => {
     personnageActuel();
 
   if (personnage) {
-
     ouvrirEdition(personnage);
-
   }
 
 };
 
 
-/* ========================================
-   SUPPRIMER LE PERSONNAGE
-   ======================================== */
+/* SUPPRIMER LE PERSONNAGE */
 
 $("delete-character").onclick = async () => {
 
@@ -2576,7 +2284,6 @@ $("delete-character").onclick = async () => {
     personnageActuel();
 
   if (!personnage) return;
-
 
   const confirmation = confirm(
     "Supprimer définitivement « " +
@@ -2586,14 +2293,12 @@ $("delete-character").onclick = async () => {
 
   if (!confirmation) return;
 
-
   const anciens = personnages;
 
   personnages = personnages.filter(
     element =>
       element.id !== personnage.id
   );
-
 
   if (!sauvegarder()) {
 
@@ -2606,7 +2311,6 @@ $("delete-character").onclick = async () => {
     return;
 
   }
-
 
   try {
 
@@ -2623,7 +2327,6 @@ $("delete-character").onclick = async () => {
 
   }
 
-
   personnageSelectionne = null;
 
   afficherPage("home");
@@ -2631,9 +2334,7 @@ $("delete-character").onclick = async () => {
 };
 
 
-/* ========================================
-   JOUER CE PERSONNAGE
-   ======================================== */
+/* JOUER CE PERSONNAGE */
 
 $("play").onclick = () => {
 
@@ -2641,7 +2342,6 @@ $("play").onclick = () => {
     personnageActuel();
 
   if (!personnage) return;
-
 
   const adresse = new URL(
     "jeu.html",
@@ -2659,16 +2359,13 @@ $("play").onclick = () => {
 };
 
 
-/* ========================================
-   DÉMARRAGE
-   ======================================== */
+/* DÉMARRAGE */
 
 const parametres = new URLSearchParams(
   window.location.search
 );
 
 const idRetour = parametres.get("id");
-
 
 if (
   idRetour &&
@@ -2678,7 +2375,6 @@ if (
 ) {
 
   personnageSelectionne = idRetour;
-
   afficherPage("detail");
 
 } else {
@@ -2688,6 +2384,41 @@ if (
 }
 
 })();
+</script>
+
+
+<!-- ======================================
+     APPLICATION MOBILE — PWA
+     ====================================== -->
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(registration => {
+
+        console.log(
+          "M.I.S.E. — Service Worker enregistré.",
+          registration.scope
+        );
+
+      })
+      .catch(error => {
+
+        console.error(
+          "M.I.S.E. — Erreur du service worker :",
+          error
+        );
+
+      });
+
+  });
+
+}
 
 </script>
 
