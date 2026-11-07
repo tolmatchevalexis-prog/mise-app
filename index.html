@@ -1,1 +1,675 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff">
+<title>M.I.S.E. — Personnages</title>
+<style>
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #151515;
+  background: white;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid #777;
+  outline-offset: 3px;
+}
+.app {
+  max-width: 470px;
+  min-height: 100dvh;
+  margin: auto;
+  padding: 32px 24px max(24px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
+.brand {
+  text-align: center;
+  font-size: clamp(36px, 10vw, 50px);
+  font-weight: 400;
+  letter-spacing: .2em;
+  padding-left: .2em;
+  margin: 12px 0 70px;
+}
+.stack { display: grid; gap: 18px; }
+.home-bottom { margin-top: auto; padding-top: 65px; }
+.box {
+  border: 1.5px solid #191919;
+  border-radius: 13px;
+  background: #fff;
+  width: 100%;
+  color: #151515;
+  min-height: 60px;
+  padding: 12px 16px;
+}
+.box:hover { background: #f6f6f6; }
+.card {
+  text-align: left;
+  font-size: 19px;
+  padding: 17px 21px;
+  overflow-wrap: anywhere;
+}
+.primary { font-weight: 600; }
+.secondary {
+  border-color: #aaa;
+  font-weight: 400;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 32px;
+}
+.heading h1 {
+  font-size: 22px;
+  font-weight: 550;
+  margin: 0;
+}
+.back {
+  border: 0;
+  background: transparent;
+  font-size: 27px;
+  padding: 5px 10px 5px 0;
+}
+.field {
+  display: grid;
+  gap: 9px;
+  margin: 0 0 26px;
+}
+.field-label {
+  font-weight: 550;
+  font-size: 15px;
+}
+.input {
+  width: 100%;
+  border: 1.5px solid #191919;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: white;
+  color: #151515;
+}
+.long {
+  min-height: 180px;
+  resize: vertical;
+}
+.attributes { margin: 8px 0 36px; }
+.attribute {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+}
+.attribute-label { font-size: 19px; }
+.dots { display: flex; gap: 10px; }
+.dot {
+  width: 26px;
+  height: 26px;
+  border: 1.6px solid #111;
+  border-radius: 50%;
+  padding: 0;
+  background: #fff;
+  flex: none;
+}
+.dot.active { background: #151515; }
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 18px;
+}
+.arrow span:last-child {
+  font-size: 25px;
+  font-weight: 300;
+}
+.subtle { color: #666; font-size: 14px; }
+.count { margin: 8px 0 28px; }
+.actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.error {
+  color: #a00000;
+  min-height: 19px;
+  font-size: 14px;
+}
+.skillrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #ccc;
+  padding: 13px 0;
+}
+.skillrow p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 13px;
+}
+.small {
+  background: white;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 8px;
+}
+.group { margin-top: 30px; }
+.detail-name {
+  font-size: 27px;
+  overflow-wrap: anywhere;
+  margin: 4px 0 30px;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding: 12px 0;
+}
+.detail-list {
+  list-style: none;
+  margin: 12px 0 28px;
+  padding: 0;
+}
+.detail-list li {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+}
+.detail-history {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+h2 {
+  font-size: 17px;
+  font-weight: 550;
+  margin-top: 28px;
+}
+section[hidden] { display: none; }
 
+@media (min-width: 650px) {
+  body { background: #f5f5f5; }
+  .app {
+    background: white;
+    box-shadow: 0 0 20px #00000010;
+  }
+}
+@media (max-width: 360px) {
+  .app { padding-inline: 15px; }
+  .dots { gap: 7px; }
+  .dot { width: 23px; height: 23px; }
+  .attribute-label { font-size: 17px; }
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+<!-- ACCUEIL -->
+<section id="home">
+  <header class="brand">M.I.S.E.</header>
+  <div id="cards" class="stack"></div>
+  <div class="home-bottom">
+    <button class="box primary" id="create">
+      Créer un nouveau personnage
+    </button>
+  </div>
+</section>
+
+<!-- CRÉATION DU PERSONNAGE -->
+<section id="form" hidden>
+  <div class="heading">
+    <button class="back" id="form-back" aria-label="Retour">←</button>
+    <h1 id="form-heading">Nouveau personnage</h1>
+  </div>
+
+  <label class="field">
+    <span class="field-label">Nom</span>
+    <input id="name" class="input"
+      placeholder="Nom du personnage" maxlength="100">
+  </label>
+
+  <div class="attributes" role="group" aria-label="Attributs">
+    <div class="attribute">
+      <span class="attribute-label">Physique</span>
+      <div class="dots" id="dots-physique"></div>
+    </div>
+    <div class="attribute">
+      <span class="attribute-label">Mental</span>
+      <div class="dots" id="dots-mental"></div>
+    </div>
+    <div class="attribute">
+      <span class="attribute-label">Social</span>
+      <div class="dots" id="dots-social"></div>
+    </div>
+  </div>
+
+  <button class="box arrow" id="open-skills">
+    <span>Compétences</span>
+    <span aria-hidden="true">→</span>
+  </button>
+  <p class="subtle count" id="count">
+    Aucune compétence enregistrée
+  </p>
+
+  <label class="field">
+    <span class="field-label">Historique</span>
+    <textarea id="history" class="input long"
+      placeholder="Histoire du personnage (facultatif)"></textarea>
+  </label>
+
+  <p id="form-error" class="error" role="alert"></p>
+
+  <div class="actions">
+    <button class="box secondary" id="cancel">Annuler</button>
+    <button class="box primary" id="save">
+      Valider le personnage
+    </button>
+  </div>
+</section>
+
+<!-- COMPÉTENCES -->
+<section id="skills" hidden>
+  <div class="heading">
+    <button class="back" id="skills-back" aria-label="Retour">←</button>
+    <h1>Compétences</h1>
+  </div>
+
+  <div id="skill-list"></div>
+
+  <div class="group">
+    <label class="field">
+      <span class="field-label">Nom de la compétence</span>
+      <input class="input" id="skill-name" maxlength="100">
+    </label>
+
+    <div class="field-label">Niveau de maîtrise</div>
+    <div class="attribute">
+      <span id="level-label">Novice +1</span>
+      <div class="dots" id="level-dots"></div>
+    </div>
+
+    <label class="field group">
+      <span class="field-label">Description (facultative)</span>
+      <textarea class="input long" id="skill-description"
+        style="min-height:110px"></textarea>
+    </label>
+
+    <p id="skill-error" class="error" role="alert"></p>
+
+    <button class="box primary" id="add-skill">
+      Ajouter la compétence
+    </button>
+  </div>
+
+  <div class="actions">
+    <button class="box secondary" id="skills-done">
+      Retour au personnage
+    </button>
+  </div>
+</section>
+
+<!-- FICHE DU PERSONNAGE -->
+<section id="detail" hidden>
+  <div class="heading">
+    <button class="back" id="detail-back" aria-label="Retour">←</button>
+    <h1>Personnage</h1>
+  </div>
+
+  <div class="detail-name" id="detail-name"></div>
+  <div id="detail-attrs"></div>
+
+  <h2>Compétences</h2>
+  <ul id="detail-skills" class="detail-list"></ul>
+
+  <h2>Historique</h2>
+  <p id="detail-history" class="detail-history"></p>
+
+  <div class="actions">
+    <button class="box primary" id="edit">
+      Modifier le personnage
+    </button>
+  </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+'use strict';
+
+const $ = id => document.getElementById(id);
+
+const KEY = 'mise-app-characters-v1';
+
+const labels = ['Novice', 'Confirmé', 'Expert', 'Maître'];
+const bonus = [1, 2, 3, 5];
+const attrs = ['physique', 'mental', 'social'];
+
+let chars = [];
+let draft = null;
+let selected = null;
+let level = 1;
+
+try {
+  const x = JSON.parse(localStorage.getItem(KEY) || '[]');
+  if (Array.isArray(x)) chars = x;
+} catch (e) {}
+
+const clone = x => JSON.parse(JSON.stringify(x));
+
+function view(id) {
+  for (const x of ['home', 'form', 'skills', 'detail']) {
+    $(x).hidden = x !== id;
+  }
+
+  window.scrollTo(0, 0);
+
+  if (id === 'home') home();
+  if (id === 'detail') detail();
+  if (id === 'skills') skills();
+}
+
+function circles(parent, value, fn, label) {
+  parent.replaceChildren();
+
+  for (let i = 1; i <= 4; i++) {
+    let b = document.createElement('button');
+
+    b.type = 'button';
+    b.className = 'dot' + (i <= value ? ' active' : '');
+
+    b.setAttribute('aria-label', label + ' ' + i + ' sur 4');
+    b.setAttribute('aria-pressed', String(i <= value));
+
+    b.addEventListener('click', () => fn(i));
+    parent.append(b);
+  }
+}
+
+function home() {
+  const list = $('cards');
+  list.replaceChildren();
+
+  for (const c of chars) {
+    const b = document.createElement('button');
+
+    b.className = 'box card';
+    b.textContent = c.name;
+
+    b.addEventListener('click', () => {
+      selected = c.id;
+      view('detail');
+    });
+
+    list.append(b);
+  }
+}
+
+function newChar() {
+  return {
+    id: null,
+    name: '',
+    physique: 1,
+    mental: 1,
+    social: 1,
+    history: '',
+    skills: []
+  };
+}
+
+function edit(c) {
+  draft = clone(c);
+
+  $('name').value = draft.name;
+  $('history').value = draft.history;
+
+  $('form-heading').textContent = draft.id
+    ? 'Modifier le personnage'
+    : 'Nouveau personnage';
+
+  $('form-error').textContent = '';
+
+  drawAttrs();
+  count();
+  view('form');
+}
+
+function drawAttrs() {
+  for (const k of attrs) {
+    circles($('dots-' + k), draft[k], n => {
+      draft[k] = n;
+      drawAttrs();
+    }, k);
+  }
+}
+
+function count() {
+  const n = draft.skills.length;
+
+  $('count').textContent = n
+    ? n + ' compétence' + (n > 1 ? 's' : '') +
+      ' enregistrée' + (n > 1 ? 's' : '')
+    : 'Aucune compétence enregistrée';
+}
+
+function sync() {
+  draft.name = $('name').value;
+  draft.history = $('history').value;
+}
+
+function skills() {
+  const root = $('skill-list');
+  root.replaceChildren();
+
+  for (const s of draft.skills) {
+    const row = document.createElement('div');
+    row.className = 'skillrow';
+
+    const label = document.createElement('div');
+
+    const t = document.createElement('div');
+    t.textContent = s.name;
+
+    const sub = document.createElement('p');
+    sub.textContent =
+      labels[s.level - 1] + ' +' + bonus[s.level - 1] +
+      (s.description ? ' — ' + s.description : '');
+
+    label.append(t, sub);
+
+    const del = document.createElement('button');
+    del.className = 'small';
+    del.textContent = 'Retirer';
+
+    del.setAttribute('aria-label', 'Retirer ' + s.name);
+
+    del.onclick = () => {
+      draft.skills = draft.skills.filter(x => x.id !== s.id);
+      skills();
+    };
+
+    row.append(label, del);
+    root.append(row);
+  }
+
+  if (!draft.skills.length) {
+    const p = document.createElement('p');
+    p.className = 'subtle';
+    p.textContent = 'Aucune compétence.';
+    root.append(p);
+  }
+
+  drawLevel();
+}
+
+function drawLevel() {
+  circles($('level-dots'), level, n => {
+    level = n;
+    drawLevel();
+  }, 'Niveau de maîtrise');
+
+  $('level-label').textContent =
+    labels[level - 1] + ' +' + bonus[level - 1];
+}
+
+function detail() {
+  const c = chars.find(x => x.id === selected);
+
+  if (!c) return view('home');
+
+  $('detail-name').textContent = c.name;
+
+  const a = $('detail-attrs');
+  a.replaceChildren();
+
+  for (const k of attrs) {
+    const row = document.createElement('div');
+    row.className = 'detail-row';
+
+    const name = document.createElement('span');
+    name.textContent = k[0].toUpperCase() + k.slice(1);
+
+    const val = document.createElement('strong');
+    val.textContent = c[k] + ' / 4';
+
+    row.append(name, val);
+    a.append(row);
+  }
+
+  const skills = $('detail-skills');
+  skills.replaceChildren();
+
+  for (const s of c.skills) {
+    const li = document.createElement('li');
+
+    li.textContent =
+      s.name + ' — ' +
+      labels[s.level - 1] +
+      ' (+' + bonus[s.level - 1] + ')' +
+      (s.description ? ' · ' + s.description : '');
+
+    skills.append(li);
+  }
+
+  if (!c.skills.length) {
+    const li = document.createElement('li');
+    li.className = 'subtle';
+    li.textContent = 'Aucune compétence.';
+    skills.append(li);
+  }
+
+  $('detail-history').textContent =
+    c.history || 'Aucun historique.';
+}
+
+$('create').onclick = () => edit(newChar());
+
+$('form-back').onclick =
+$('cancel').onclick = () => {
+  view(draft.id ? 'detail' : 'home');
+};
+
+$('open-skills').onclick = () => {
+  sync();
+
+  level = 1;
+
+  $('skill-name').value = '';
+  $('skill-description').value = '';
+  $('skill-error').textContent = '';
+
+  view('skills');
+};
+
+$('skills-back').onclick =
+$('skills-done').onclick = () => {
+  count();
+  view('form');
+};
+
+$('add-skill').onclick = () => {
+  const name = $('skill-name').value.trim();
+
+  if (!name) {
+    $('skill-error').textContent = 'Indiquez un nom.';
+    return;
+  }
+
+  if (
+    draft.skills.some(
+      s => s.name.toLowerCase() === name.toLowerCase()
+    )
+  ) {
+    $('skill-error').textContent =
+      'Cette compétence existe déjà.';
+    return;
+  }
+
+  draft.skills.push({
+    id: crypto.randomUUID(),
+    name,
+    level,
+    description: $('skill-description').value.trim()
+  });
+
+  $('skill-name').value = '';
+  $('skill-description').value = '';
+  $('skill-error').textContent = '';
+
+  level = 1;
+  skills();
+};
+
+$('save').onclick = () => {
+  sync();
+
+  draft.name = draft.name.trim();
+
+  if (!draft.name) {
+    $('form-error').textContent =
+      'Indiquez le nom du personnage.';
+    return;
+  }
+
+  if (!draft.id) {
+    draft.id = crypto.randomUUID();
+  }
+
+  const old = chars;
+
+  chars = [
+    ...chars.filter(x => x.id !== draft.id),
+    clone(draft)
+  ];
+
+  try {
+    localStorage.setItem(KEY, JSON.stringify(chars));
+  } catch (e) {
+    chars = old;
+    $('form-error').textContent =
+      'Impossible de sauvegarder sur cet appareil.';
+    return;
+  }
+
+  selected = draft.id;
+  view('detail');
+};
+
+$('detail-back').onclick = () => view('home');
+
+$('edit').onclick = () => {
+  const c = chars.find(x => x.id === selected);
+  if (c) edit(c);
+};
+
+view('home');
+
+})();
+</script>
+</body>
+  </html>
