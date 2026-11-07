@@ -1,15 +1,23 @@
 /*
 ========================================
 M.I.S.E.
-Service Worker — Version 1
+Service Worker — Version 2
 
+Application mobile
 Fonctionnement hors connexion
 ========================================
 */
 
 "use strict";
 
-const CACHE_NAME = "mise-app-v1";
+
+/*
+========================================
+CONFIGURATION DU CACHE
+========================================
+*/
+
+const CACHE_NAME = "mise-app-v2";
 
 const FILES_TO_CACHE = [
   "./",
@@ -19,7 +27,9 @@ const FILES_TO_CACHE = [
   "./opposition.html",
   "./app.js",
   "./style.css",
-  "./manifest.json"
+  "./manifest.json",
+  "./mise-icon-192.png",
+  "./mise-icon-512.png"
 ];
 
 
@@ -34,11 +44,17 @@ self.addEventListener("install", event => {
   event.waitUntil(
 
     caches.open(CACHE_NAME)
+
       .then(cache => {
+
         return cache.addAll(FILES_TO_CACHE);
+
       })
+
       .then(() => {
+
         return self.skipWaiting();
+
       })
 
   );
@@ -56,22 +72,32 @@ self.addEventListener("activate", event => {
 
   event.waitUntil(
 
-    caches.keys().then(names => {
+    caches.keys()
 
-      return Promise.all(
+      .then(names => {
 
-        names
-          .filter(name =>
-            name.startsWith("mise-app-") &&
-            name !== CACHE_NAME
-          )
-          .map(name => caches.delete(name))
+        return Promise.all(
 
-      );
+          names
 
-    }).then(() => {
-      return self.clients.claim();
-    })
+            .filter(name =>
+
+              name.startsWith("mise-app-") &&
+              name !== CACHE_NAME
+
+            )
+
+            .map(name => caches.delete(name))
+
+        );
+
+      })
+
+      .then(() => {
+
+        return self.clients.claim();
+
+      })
 
   );
 
@@ -86,9 +112,19 @@ FONCTIONNEMENT HORS CONNEXION
 
 self.addEventListener("fetch", event => {
 
+  /*
+    Nous ne traitons que les
+    requêtes de lecture.
+  */
+
   if (event.request.method !== "GET") {
     return;
   }
+
+
+  /*
+    Vérification de l'origine.
+  */
 
   const url = new URL(event.request.url);
 
@@ -96,11 +132,28 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  if (!url.pathname.startsWith(
-    new URL("./", self.registration.scope).pathname
-  )) {
+
+  /*
+    Limitation au répertoire M.I.S.E.
+  */
+
+  const repertoire = new URL(
+    "./",
+    self.registration.scope
+  ).pathname;
+
+  if (!url.pathname.startsWith(repertoire)) {
     return;
   }
+
+
+  /*
+    Priorité à Internet.
+
+    Si la connexion échoue,
+    utilisation des fichiers
+    enregistrés localement.
+  */
 
   event.respondWith(
 
@@ -110,12 +163,21 @@ self.addEventListener("fetch", event => {
 
         if (response && response.ok) {
 
-          const copy = response.clone();
+          const copie = response.clone();
 
           event.waitUntil(
-            caches.open(CACHE_NAME).then(cache => {
-              return cache.put(event.request, copy);
-            })
+
+            caches.open(CACHE_NAME)
+
+              .then(cache => {
+
+                return cache.put(
+                  event.request,
+                  copie
+                );
+
+              })
+
           );
 
         }
@@ -126,9 +188,12 @@ self.addEventListener("fetch", event => {
 
       .catch(() => {
 
-        return caches.match(event.request, {
-          ignoreSearch: true
-        });
+        return caches.match(
+          event.request,
+          {
+            ignoreSearch: true
+          }
+        );
 
       })
 
