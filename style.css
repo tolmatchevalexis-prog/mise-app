@@ -1,1 +1,865 @@
+/* ==================================================
+   M.I.S.E.
+   Maîtrise · Initiative · Synergie · Engagement
 
+   FEUILLE DE STYLE
+   Version 1.0
+
+   Typographie : Arial
+   Couleurs : noir et blanc
+
+   Deux espaces :
+   - Création : blanc sur noir
+   - Jeu : noir sur blanc (interface inversée)
+   ================================================== */
+
+
+/* --------------------------------------------------
+   1. VARIABLES
+   -------------------------------------------------- */
+
+:root {
+
+  /* Couleurs */
+
+  --noir: #111111;
+  --blanc: #ffffff;
+
+  --gris-clair: #dddddd;
+  --gris-moyen: #888888;
+  --gris-fonce: #555555;
+
+  /* Typographie */
+
+  --police: Arial, Helvetica, sans-serif;
+
+  --normal: 400;
+  --gras: 700;
+
+  /* Dimensions */
+
+  --largeur-page: 470px;
+
+  --arrondi: 12px;
+
+  --bordure: 1.5px solid var(--noir);
+
+  /* Espacements */
+
+  --espace-xs: 8px;
+  --espace-sm: 12px;
+  --espace-md: 20px;
+  --espace-lg: 30px;
+  --espace-xl: 50px;
+
+}
+
+
+/* --------------------------------------------------
+   2. BASE
+   -------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--police);
+  font-size: 16px;
+  font-weight: var(--normal);
+  line-height: 1.45;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background: var(--blanc);
+  color: var(--noir);
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--gris-moyen);
+  outline-offset: 3px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+
+/* --------------------------------------------------
+   3. STRUCTURE DES PAGES
+   -------------------------------------------------- */
+
+.app {
+
+  width: 100%;
+  max-width: var(--largeur-page);
+
+  min-height: 100dvh;
+
+  margin: 0 auto;
+
+  padding:
+    32px
+    24px
+    max(32px, env(safe-area-inset-bottom));
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--blanc);
+}
+
+section {
+  min-height: calc(100dvh - 64px);
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* --------------------------------------------------
+   4. TYPOGRAPHIE
+   -------------------------------------------------- */
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: var(--gras);
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: var(--gras);
+
+  margin-top: 30px;
+  margin-bottom: 14px;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: var(--gras);
+}
+
+p {
+  font-size: 16px;
+  font-weight: var(--normal);
+}
+
+.subtle {
+  color: var(--gris-fonce);
+  font-size: 14px;
+  font-weight: var(--normal);
+}
+
+
+/* --------------------------------------------------
+   5. IDENTITÉ M.I.S.E.
+   -------------------------------------------------- */
+
+.brand {
+
+  text-align: center;
+
+  font-family: var(--police);
+  font-weight: var(--normal);
+
+  font-size: clamp(36px, 10vw, 50px);
+
+  letter-spacing: 0.2em;
+
+  padding-left: 0.2em;
+
+  margin: 12px 0 65px;
+}
+
+
+/* --------------------------------------------------
+   6. NAVIGATION
+   -------------------------------------------------- */
+
+.heading {
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 30px;
+}
+
+.heading h1 {
+  margin: 0;
+}
+
+.back {
+
+  border: none;
+  background: transparent;
+
+  color: inherit;
+
+  font-size: 28px;
+  font-weight: var(--normal);
+
+  padding: 5px 12px 5px 0;
+}
+
+
+/* --------------------------------------------------
+   7. CARTOUCHES
+   -------------------------------------------------- */
+
+.box {
+
+  display: block;
+
+  width: 100%;
+  min-height: 60px;
+
+  padding: 14px 18px;
+
+  border: var(--bordure);
+  border-radius: var(--arrondi);
+
+  background: var(--blanc);
+  color: var(--noir);
+
+  font-weight: var(--normal);
+
+  text-align: center;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.box:active {
+  opacity: 0.75;
+}
+
+
+/* --------------------------------------------------
+   8. BOUTONS
+   -------------------------------------------------- */
+
+.primary {
+  font-weight: var(--gras);
+}
+
+.secondary {
+
+  border-color: var(--gris-moyen);
+
+  font-weight: var(--normal);
+}
+
+/* Action principale : entrer dans le jeu */
+
+#play,
+.play-button {
+
+  background: var(--noir);
+  color: var(--blanc);
+
+  border: 1.5px solid var(--noir);
+
+  font-weight: var(--gras);
+
+  text-align: center;
+}
+
+#play:active,
+.play-button:active {
+  background: var(--gris-fonce);
+}
+
+/* Boutons secondaires */
+
+.small {
+
+  padding: 8px 12px;
+
+  border: 1px solid var(--gris-moyen);
+  border-radius: 8px;
+
+  background: transparent;
+  color: inherit;
+
+  font-size: 14px;
+}
+
+/* Suppression */
+
+.danger {
+
+  margin-top: 30px;
+  padding: 12px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--noir);
+
+  font-size: 14px;
+  font-weight: var(--normal);
+
+  text-decoration: underline;
+
+  text-align: center;
+}
+
+
+/* --------------------------------------------------
+   9. ACCUEIL
+   -------------------------------------------------- */
+
+.stack {
+
+  display: grid;
+  gap: 18px;
+}
+
+.card {
+
+  min-height: 65px;
+
+  padding: 17px 21px;
+
+  text-align: left;
+
+  font-size: 19px;
+  font-weight: var(--normal);
+
+  overflow-wrap: anywhere;
+}
+
+.home-bottom {
+
+  margin-top: auto;
+  padding-top: 65px;
+}
+
+
+/* --------------------------------------------------
+   10. FORMULAIRES
+   -------------------------------------------------- */
+
+.field {
+
+  display: grid;
+  gap: 9px;
+
+  margin-bottom: 25px;
+}
+
+.label,
+.field-label {
+
+  font-size: 15px;
+  font-weight: var(--gras);
+}
+
+.input {
+
+  width: 100%;
+
+  padding: 14px 16px;
+
+  border: var(--bordure);
+  border-radius: var(--arrondi);
+
+  background: var(--blanc);
+  color: var(--noir);
+
+  font-size: 16px;
+  font-weight: var(--normal);
+}
+
+.input::placeholder {
+  color: var(--gris-moyen);
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+.long {
+  min-height: 155px;
+}
+
+select.input {
+  appearance: auto;
+}
+
+.group {
+  margin-top: 28px;
+}
+
+
+/* --------------------------------------------------
+   11. ATTRIBUTS
+   -------------------------------------------------- */
+
+.attributes {
+  margin: 5px 0 30px;
+}
+
+.attribute {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin: 18px 0;
+}
+
+.attribute-label {
+
+  font-size: 19px;
+  font-weight: var(--normal);
+}
+
+.dots {
+
+  display: flex;
+  gap: 9px;
+}
+
+.dot {
+
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  flex-shrink: 0;
+
+  border: 1.7px solid var(--noir);
+  border-radius: 50%;
+
+  background: var(--blanc);
+}
+
+.dot.active {
+  background: var(--noir);
+}
+
+
+/* --------------------------------------------------
+   12. COMPÉTENCES ET ATOUTS
+   -------------------------------------------------- */
+
+.arrow {
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: left;
+
+  font-size: 18px;
+}
+
+.arrow span:last-child {
+  font-size: 24px;
+}
+
+.count {
+
+  margin-top: 9px;
+  margin-bottom: 25px;
+}
+
+.skillrow {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid var(--gris-clair);
+}
+
+.skillrow div:first-child {
+
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.skillrow p {
+
+  margin: 5px 0 0;
+
+  color: var(--gris-fonce);
+
+  font-size: 13px;
+}
+
+
+/* --------------------------------------------------
+   13. PORTRAIT
+   -------------------------------------------------- */
+
+.portrait {
+
+  display: block;
+
+  max-width: 100%;
+  max-height: 240px;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  margin: 0 auto 22px;
+
+  border-radius: 8px;
+}
+
+.photo-actions {
+
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 25px;
+}
+
+
+/* --------------------------------------------------
+   14. FICHE DE PERSONNAGE
+   -------------------------------------------------- */
+
+.detail-name {
+
+  margin-bottom: 20px;
+
+  font-size: 28px;
+  font-weight: var(--gras);
+
+  overflow-wrap: anywhere;
+}
+
+.detail-row {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid var(--gris-clair);
+}
+
+.detail-row strong {
+  font-weight: var(--gras);
+}
+
+.detail-list {
+
+  list-style: none;
+
+  margin: 8px 0;
+  padding: 0;
+}
+
+.detail-list li {
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid var(--gris-clair);
+
+  overflow-wrap: anywhere;
+}
+
+.detail-history {
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  font-weight: var(--normal);
+}
+
+
+/* --------------------------------------------------
+   15. ACTIONS
+   -------------------------------------------------- */
+
+.actions {
+
+  display: grid;
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+.error {
+
+  min-height: 16px;
+
+  color: var(--noir);
+
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   INTERFACE DE JEU
+   ==================================================
+
+   Pour activer le thème :
+
+   <body class="game-page">
+
+   La classe "playing" reste compatible
+   avec notre premier prototype.
+
+   ================================================== */
+
+
+/* --------------------------------------------------
+   16. INVERSION GRAPHIQUE
+   -------------------------------------------------- */
+
+body.game-page,
+body.playing {
+
+  background: var(--noir);
+  color: var(--blanc);
+}
+
+body.game-page .app,
+body.playing .app {
+
+  background: var(--noir);
+  color: var(--blanc);
+}
+
+
+/* --------------------------------------------------
+   17. CARTOUCHES DU JEU
+   -------------------------------------------------- */
+
+body.game-page .box,
+body.playing .box {
+
+  background: var(--noir);
+  color: var(--blanc);
+
+  border-color: var(--blanc);
+}
+
+/* Actions principales : inversion */
+
+body.game-page .primary,
+body.playing .primary {
+
+  background: var(--blanc);
+  color: var(--noir);
+
+  border-color: var(--blanc);
+}
+
+/* Actions secondaires */
+
+body.game-page .secondary,
+body.playing .secondary {
+
+  background: var(--noir);
+  color: var(--blanc);
+
+  border-color: var(--gris-moyen);
+}
+
+
+/* --------------------------------------------------
+   18. TEXTES DU JEU
+   -------------------------------------------------- */
+
+body.game-page .subtle,
+body.playing .subtle {
+  color: var(--gris-clair);
+}
+
+body.game-page .detail-row,
+body.playing .detail-row {
+
+  border-bottom-color: var(--gris-fonce);
+}
+
+body.game-page .detail-list li,
+body.playing .detail-list li {
+
+  border-bottom-color: var(--gris-fonce);
+}
+
+
+/* --------------------------------------------------
+   19. COMPTEURS DE PA
+   -------------------------------------------------- */
+
+.reserve-counter {
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.reserve-counter strong {
+
+  min-width: 66px;
+
+  font-size: 17px;
+  font-weight: var(--gras);
+
+  text-align: center;
+}
+
+.counter {
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  border: 1.5px solid currentColor;
+  border-radius: 9px;
+
+  background: transparent;
+  color: inherit;
+
+  font-size: 22px;
+  font-weight: var(--normal);
+
+  line-height: 1;
+}
+
+
+/* --------------------------------------------------
+   20. ACTIVATION DES ATOUTS
+   -------------------------------------------------- */
+
+.atout-action {
+
+  display: grid;
+  gap: 8px;
+
+  margin: 12px 0 20px;
+}
+
+.atout-action .box {
+
+  min-height: 55px;
+
+  text-align: left;
+
+  font-weight: var(--gras);
+}
+
+.atout-action .subtle {
+
+  margin: 0;
+
+  font-size: 14px;
+}
+
+
+/* --------------------------------------------------
+   21. RESPONSIVE : ÉCRANS LARGES
+   -------------------------------------------------- */
+
+@media (min-width: 650px) {
+
+  body {
+    background: #f5f5f5;
+  }
+
+  .app {
+    background: var(--blanc);
+  }
+
+  body.game-page,
+  body.playing {
+    background: var(--noir);
+  }
+
+}
+
+
+/* --------------------------------------------------
+   22. RESPONSIVE : PETITS TÉLÉPHONES
+   -------------------------------------------------- */
+
+@media (max-width: 360px) {
+
+  .app {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .dots {
+    gap: 6px;
+  }
+
+  .dot {
+    width: 23px;
+    height: 23px;
+  }
+
+  .attribute-label {
+    font-size: 17px;
+  }
+
+  .reserve-counter {
+    gap: 7px;
+  }
+
+  .counter {
+    width: 34px;
+    height: 34px;
+  }
+
+  }
