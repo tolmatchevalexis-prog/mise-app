@@ -21,6 +21,75 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+
+/* ==========================================
+   CARTOUCHES DE LA FICHE DE JEU
+   ========================================== */
+
+.game-cards {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 20px;
+}
+
+.game-card {
+  padding: 16px 18px;
+  border: 1.5px solid #ffffff;
+  border-radius: 12px;
+  background: #111111;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.game-card-title {
+  margin: 0 0 6px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.game-card-meta {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.game-card-description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.game-card-button {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 14px;
+
+  border: 1.5px solid #ffffff;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #111111;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.game-card-button:disabled {
+  opacity: 0.35;
+}
+
+.game-empty {
+  margin: 8px 0 18px;
+  font-size: 14px;
+}
+
+</style>
+
 </head>
 
 <body class="game-page">
@@ -108,17 +177,20 @@
 
   <h2>Compétences</h2>
 
-  <ul
-    class="detail-list"
+  <div
+    class="game-cards"
     id="skills"
-  ></ul>
+  ></div>
 
 
   <!-- ATOUTS -->
 
   <h2>Atouts</h2>
 
-  <div id="atouts"></div>
+  <div
+    class="game-cards"
+    id="atouts"
+  ></div>
 
   <p
     class="subtle"
@@ -389,25 +461,17 @@ function counterRow(
 
   row.className = "detail-row";
 
-
   const title = document.createElement("span");
-
   title.textContent = label;
 
-
   const controls = document.createElement("div");
-
   controls.className = "reserve-counter";
-
 
   const minus = document.createElement("button");
 
   minus.type = "button";
-
   minus.className = "counter";
-
   minus.textContent = "−";
-
   minus.disabled = disableDecrease;
 
   minus.setAttribute(
@@ -417,20 +481,14 @@ function counterRow(
 
   minus.onclick = decrease;
 
-
   const number = document.createElement("strong");
-
   number.textContent = value;
-
 
   const plus = document.createElement("button");
 
   plus.type = "button";
-
   plus.className = "counter";
-
   plus.textContent = "+";
-
   plus.disabled = disableIncrease;
 
   plus.setAttribute(
@@ -439,7 +497,6 @@ function counterRow(
   );
 
   plus.onclick = increase;
-
 
   controls.append(
     minus,
@@ -472,9 +529,7 @@ function changePA(attribute, delta) {
   );
 
   if (!save()) {
-
     character.pa[attribute] = previous;
-
   }
 
   render();
@@ -494,26 +549,20 @@ function changeWounds(attribute, delta) {
   const previousPA =
     character.pa[attribute];
 
-
   character.wounds[attribute] = clamp(
     previousWounds + delta,
     0,
     20
   );
 
-
   const newMaximum = maximum(
     character,
     attribute
   );
 
-
   if (character.pa[attribute] > newMaximum) {
-
     character.pa[attribute] = newMaximum;
-
   }
-
 
   if (!save()) {
 
@@ -629,6 +678,66 @@ function renderWounds() {
 
 
 /* ==========================================
+   CRÉER UN CARTOUCHE
+   ========================================== */
+
+function createCard(
+  name,
+  information,
+  description = ""
+) {
+
+  const card = document.createElement("div");
+
+  card.className = "game-card";
+
+  const title = document.createElement("div");
+
+  title.className = "game-card-title";
+  title.textContent = name;
+
+  const meta = document.createElement("p");
+
+  meta.className = "game-card-meta";
+  meta.textContent = information;
+
+  card.append(title, meta);
+
+  if (description) {
+
+    const text = document.createElement("p");
+
+    text.className = "game-card-description";
+    text.textContent = description;
+
+    card.append(text);
+
+  }
+
+  return card;
+
+}
+
+
+/* ==========================================
+   ASSOCIATION DES COMPÉTENCES
+   ========================================== */
+
+function skillReserve(skill) {
+
+  if (
+    skill &&
+    ATTRS.includes(skill.reserve)
+  ) {
+    return skill.reserve;
+  }
+
+  return null;
+
+}
+
+
+/* ==========================================
    AFFICHER LES COMPÉTENCES
    ========================================== */
 
@@ -640,13 +749,12 @@ function renderSkills() {
 
   if (!character.skills.length) {
 
-    const item = document.createElement("li");
+    const text = document.createElement("p");
 
-    item.className = "subtle";
+    text.className = "game-empty subtle";
+    text.textContent = "Aucune compétence.";
 
-    item.textContent = "Aucune compétence.";
-
-    root.append(item);
+    root.append(text);
 
     return;
 
@@ -654,23 +762,33 @@ function renderSkills() {
 
   for (const skill of character.skills) {
 
-    const item = document.createElement("li");
-
     const bonus =
       BONUSES[skill.level - 1] || 0;
 
     const level =
       LEVELS[skill.level - 1] || "Non défini";
 
-    item.textContent =
-      skill.name +
-      " — " +
-      level +
-      " (+" +
-      bonus +
-      ")";
+    const reserve = skillReserve(skill);
 
-    root.append(item);
+    const association = reserve
+      ? ATTR_NAMES[reserve] +
+        " · " +
+        RESERVES[reserve]
+      : "Caractéristique à définir";
+
+    const card = createCard(
+      skill.name,
+
+      level +
+      " +" +
+      bonus +
+      " · " +
+      association,
+
+      skill.description || ""
+    );
+
+    root.append(card);
 
   }
 
@@ -687,10 +805,7 @@ function activateAtout(atout) {
 
   const attribute = atout.reserve;
 
-  const cost = Number(
-    atout.cost
-  );
-
+  const cost = Number(atout.cost);
 
   if (
     !ATTRS.includes(attribute) ||
@@ -705,7 +820,6 @@ function activateAtout(atout) {
 
   }
 
-
   if (character.pa[attribute] < cost) {
 
     output.textContent =
@@ -715,25 +829,19 @@ function activateAtout(atout) {
 
   }
 
-
   const previous = character.pa[attribute];
 
   character.pa[attribute] -= cost;
 
-
   if (!save()) {
 
     character.pa[attribute] = previous;
-
     return;
 
   }
 
-
   renderReserves();
-
   renderAtouts();
-
 
   output.textContent =
     atout.name +
@@ -756,13 +864,11 @@ function renderAtouts() {
 
   root.replaceChildren();
 
-
   if (!character.atouts.length) {
 
     const text = document.createElement("p");
 
-    text.className = "subtle";
-
+    text.className = "game-empty subtle";
     text.textContent = "Aucun Atout.";
 
     root.append(text);
@@ -771,28 +877,30 @@ function renderAtouts() {
 
   }
 
-
   for (const atout of character.atouts) {
 
-    const block = document.createElement("div");
+    const reserve = RESERVES[atout.reserve] ||
+      "Réserve inconnue";
 
-    block.className = "atout-action";
+    const card = createCard(
+      atout.name,
 
+      atout.cost +
+      " PA · " +
+      reserve,
+
+      atout.description || ""
+    );
 
     const button = document.createElement("button");
 
     button.type = "button";
-
-    button.className = "box";
+    button.className = "game-card-button";
 
     button.textContent =
-      atout.name +
-      " — Activer (−" +
+      "Activer — " +
       atout.cost +
-      " PA de " +
-      RESERVES[atout.reserve] +
-      ")";
-
+      " PA";
 
     const cost = Number(atout.cost);
 
@@ -802,31 +910,13 @@ function renderAtouts() {
       cost < 1 ||
       character.pa[atout.reserve] < cost;
 
-
     button.onclick = () => {
-
       activateAtout(atout);
-
     };
 
+    card.append(button);
 
-    block.append(button);
-
-
-    if (atout.description) {
-
-      const description = document.createElement("p");
-
-      description.className = "subtle";
-
-      description.textContent = atout.description;
-
-      block.append(description);
-
-    }
-
-
-    root.append(block);
+    root.append(card);
 
   }
 
@@ -907,7 +997,6 @@ function exitGame() {
   openPage("index.html");
 
 }
-
 
 $("back").onclick = exitGame;
 
