@@ -1068,18 +1068,57 @@ function resolveAction(event) {
 
 
     /*
-      Conserver le résultat visible.
+      Déterminer le résultat
+      selon les règles de M.I.S.E.
+
+      Score < SD : ÉCHEC
+      Score = SD : RÉUSSITE SIMPLE
+      Score > SD : RÉUSSITE ÉCLATANTE
+    */
+
+    let titreResultat;
+    let consequence;
+
+    if (result.reussiteEclatante) {
+
+      titreResultat =
+        "RÉUSSITE ÉCLATANTE";
+
+      consequence =
+        "L'objectif est atteint.\n" +
+        "Vous pouvez proposer un avantage " +
+        "supplémentaire au Narrateur.\n" +
+        "Cet avantage doit rester cohérent " +
+        "avec l'action et la situation.";
+
+    } else if (result.reussite) {
+
+      titreResultat =
+        "RÉUSSITE SIMPLE";
+
+      consequence =
+        "L'objectif annoncé est atteint.";
+
+    } else {
+
+      titreResultat =
+        "ÉCHEC";
+
+      consequence =
+        "L'action échoue. Le Narrateur " +
+        "décrit les conséquences annoncées.";
+
+    }
+
+
+    /*
+      Afficher le résultat.
     */
 
     $("result-panel").hidden = false;
 
-
     $("result").textContent =
-      (
-        result.reussite
-          ? "RÉUSSITE"
-          : "ÉCHEC"
-      ) +
+      titreResultat +
 
       "\n\n" +
 
@@ -1088,6 +1127,10 @@ function resolveAction(event) {
 
       "\nSD ajusté : " +
       result.sdAjuste +
+
+      "\n\n" +
+
+      consequence +
 
       "\n\n" +
 
@@ -1210,4 +1253,4 @@ resetFields();
 </script>
 
 </body>
-</html>
+  </html>
