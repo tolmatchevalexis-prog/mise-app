@@ -1,1 +1,879 @@
+<!doctype html>
+<html lang="fr">
 
+<head>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#111111">
+
+<title>M.I.S.E. — Opposition</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="game-page">
+
+<main class="app">
+
+<section id="opposition-page">
+
+  <!-- EN-TÊTE -->
+
+  <div class="heading">
+
+    <button
+      class="back"
+      id="back"
+      type="button"
+      aria-label="Retour au jeu"
+    >
+      ←
+    </button>
+
+    <h1>M.I.S.E.</h1>
+
+  </div>
+
+  <div
+    class="detail-name"
+    id="character-name"
+  ></div>
+
+  <h2>Résoudre une opposition</h2>
+
+  <!-- ÉTAT DU PERSONNAGE -->
+
+  <div id="reserves"></div>
+
+  <!-- FORMULAIRE -->
+
+  <form id="opposition-form">
+
+    <h2>Votre personnage</h2>
+
+    <!-- RÉSERVE -->
+
+    <label class="field">
+
+      <span class="label">
+        Réserve utilisée
+      </span>
+
+      <select
+        class="input"
+        id="reserve"
+        required
+      >
+
+        <option value="" selected disabled>
+          Choisir une réserve
+        </option>
+
+        <option value="physique">
+          Vigueur
+        </option>
+
+        <option value="mental">
+          Volonté
+        </option>
+
+        <option value="social">
+          Influence
+        </option>
+
+      </select>
+
+    </label>
+
+    <!-- COMPÉTENCE -->
+
+    <label class="field">
+
+      <span class="label">
+        Compétence
+      </span>
+
+      <select
+        class="input"
+        id="skill"
+        required
+      ></select>
+
+    </label>
+
+    <!-- MISE -->
+
+    <label class="field">
+
+      <span class="label">
+        Mise en PA
+      </span>
+
+      <input
+        class="input"
+        id="stake"
+        type="number"
+        min="1"
+        step="1"
+        placeholder="Nombre de PA"
+        required
+      >
+
+    </label>
+
+    <p
+      class="subtle"
+      id="stake-limit"
+    ></p>
+
+    <!-- POSTURE -->
+
+    <label class="field">
+
+      <span class="label">
+        Posture
+      </span>
+
+      <select
+        class="input"
+        id="posture"
+        required
+      >
+
+        <option value="" selected disabled>
+          Choisir une posture
+        </option>
+
+        <option value="offensive">
+          Offensive
+        </option>
+
+        <option value="defensive">
+          Défensive
+        </option>
+
+        <option value="economique">
+          Économique
+        </option>
+
+      </select>
+
+    </label>
+
+
+    <!-- ADVERSAIRE -->
+
+    <h2>Adversaire</h2>
+
+    <label class="field">
+
+      <span class="label">
+        Maîtrise adverse
+      </span>
+
+      <select
+        class="input"
+        id="enemy-bonus"
+        required
+      >
+
+        <option value="" selected disabled>
+          Choisir une maîtrise
+        </option>
+
+        <option value="0">
+          Sans compétence +0
+        </option>
+
+        <option value="1">
+          Novice +1
+        </option>
+
+        <option value="2">
+          Confirmé +2
+        </option>
+
+        <option value="3">
+          Expert +3
+        </option>
+
+        <option value="5">
+          Maître +5
+        </option>
+
+      </select>
+
+    </label>
+
+    <!-- MISE ADVERSE -->
+
+    <label class="field">
+
+      <span class="label">
+        Mise adverse en PA
+      </span>
+
+      <input
+        class="input"
+        id="enemy-stake"
+        type="number"
+        min="1"
+        step="1"
+        placeholder="Nombre de PA"
+        required
+      >
+
+    </label>
+
+    <!-- POSTURE ADVERSE -->
+
+    <label class="field">
+
+      <span class="label">
+        Posture adverse
+      </span>
+
+      <select
+        class="input"
+        id="enemy-posture"
+        required
+      >
+
+        <option value="" selected disabled>
+          Choisir une posture
+        </option>
+
+        <option value="offensive">
+          Offensive
+        </option>
+
+        <option value="defensive">
+          Défensive
+        </option>
+
+        <option value="economique">
+          Économique
+        </option>
+
+      </select>
+
+    </label>
+
+    <!-- RÉSOLUTION -->
+
+    <button
+      class="box primary"
+      id="resolve"
+      type="submit"
+    >
+      Résoudre l'opposition
+    </button>
+
+  </form>
+
+
+  <!-- RÉSULTAT -->
+
+  <div
+    id="result-panel"
+    hidden
+  >
+
+    <h2>Résultat</h2>
+
+    <p
+      id="result"
+      role="status"
+      aria-live="polite"
+      style="white-space:pre-line"
+    ></p>
+
+  </div>
+
+
+  <!-- ERREURS -->
+
+  <p
+    id="error"
+    class="subtle"
+    role="alert"
+  ></p>
+
+
+  <!-- RETOUR -->
+
+  <div class="actions group">
+
+    <button
+      class="box secondary"
+      id="return"
+      type="button"
+    >
+      Retour au jeu
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- MOTEUR M.I.S.E. -->
+
+<script src="app.js"></script>
+
+
+<!-- INTERFACE DES OPPOSITIONS -->
+
+<script>
+
+(() => {
+
+"use strict";
+
+
+/* ========================================
+   CONFIGURATION
+   ======================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+const params = new URLSearchParams(
+  window.location.search
+);
+
+const characterId = params.get("id");
+
+let character;
+
+
+/* ========================================
+   CHARGER LE PERSONNAGE
+   ======================================== */
+
+try {
+
+  character = MISE.trouverPersonnage(
+    characterId
+  );
+
+} catch {
+
+  alert(
+    "Personnage introuvable."
+  );
+
+  window.location.replace(
+    "index.html"
+  );
+
+  return;
+
+}
+
+
+/* ========================================
+   DONNÉES
+   ======================================== */
+
+const reserveNames = MISE.RESERVES;
+
+const skillBonuses = {
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 5
+};
+
+
+/* ========================================
+   RETOUR AU JEU
+   ======================================== */
+
+function returnToGame() {
+
+  const url = new URL(
+    "jeu.html",
+    window.location.href
+  );
+
+  url.searchParams.set(
+    "id",
+    characterId
+  );
+
+  window.location.href =
+    url.toString();
+
+}
+
+
+/* ========================================
+   ACTUALISER LE PERSONNAGE
+   ======================================== */
+
+function refreshCharacter() {
+
+  character = MISE.trouverPersonnage(
+    characterId
+  );
+
+}
+
+
+/* ========================================
+   AFFICHER LES RÉSERVES
+   ======================================== */
+
+function renderReserves() {
+
+  const root = $("reserves");
+
+  root.replaceChildren();
+
+  for (const key of MISE.ATTRIBUTS) {
+
+    const row = document.createElement(
+      "div"
+    );
+
+    row.className = "detail-row";
+
+    const name = document.createElement(
+      "span"
+    );
+
+    name.textContent = reserveNames[key];
+
+    const value = document.createElement(
+      "strong"
+    );
+
+    value.textContent =
+      character.pa[key] +
+      " / " +
+      MISE.maximumPA(character, key) +
+      " PA";
+
+    row.append(name, value);
+
+    root.append(row);
+
+  }
+
+}
+
+
+/* ========================================
+   AFFICHER LES COMPÉTENCES
+   ======================================== */
+
+function renderSkills() {
+
+  const select = $("skill");
+
+  select.replaceChildren();
+
+  const placeholder = document.createElement(
+    "option"
+  );
+
+  placeholder.value = "";
+
+  placeholder.textContent =
+    "Choisir une compétence";
+
+  placeholder.disabled = true;
+
+  placeholder.selected = true;
+
+  select.append(placeholder);
+
+  const noSkill = document.createElement(
+    "option"
+  );
+
+  noSkill.value = "none";
+
+  noSkill.textContent =
+    "Sans compétence (+0)";
+
+  select.append(noSkill);
+
+  for (const skill of character.skills) {
+
+    const option = document.createElement(
+      "option"
+    );
+
+    option.value = skill.id;
+
+    const bonus =
+      skillBonuses[skill.level] || 0;
+
+    option.textContent =
+      skill.name +
+      " (+" +
+      bonus +
+      ")";
+
+    select.append(option);
+
+  }
+
+}
+
+
+/* ========================================
+   LIMITE DE MISE
+   ======================================== */
+
+function updateLimit() {
+
+  const reserve = $("reserve").value;
+
+  if (!reserve) {
+
+    $("stake-limit").textContent = "";
+
+    return;
+
+  }
+
+  const maximum =
+    MISE.limiteMiseOpposition(
+      character,
+      reserve
+    );
+
+  const available =
+    character.pa[reserve];
+
+  const limit = Math.min(
+    maximum,
+    available
+  );
+
+  $("stake").max = limit;
+
+  $("stake-limit").textContent =
+    "Mise maximale : " +
+    maximum +
+    " PA. Disponibles : " +
+    available +
+    " PA.";
+
+}
+
+
+/* ========================================
+   RÉINITIALISER LES CHAMPS
+   ======================================== */
+
+function resetFields() {
+
+  $("opposition-form").reset();
+
+  $("reserve").selectedIndex = 0;
+
+  $("skill").selectedIndex = 0;
+
+  $("posture").selectedIndex = 0;
+
+  $("enemy-bonus").selectedIndex = 0;
+
+  $("enemy-posture").selectedIndex = 0;
+
+  $("stake").value = "";
+
+  $("enemy-stake").value = "";
+
+  $("stake-limit").textContent = "";
+
+  $("error").textContent = "";
+
+}
+
+
+/* ========================================
+   RÉSOLUTION DE L'OPPOSITION
+   ======================================== */
+
+function resolveOpposition(event) {
+
+  event.preventDefault();
+
+  $("error").textContent = "";
+
+  const reserve = $("reserve").value;
+
+  const skillId = $("skill").value;
+
+  const stakeText = $("stake").value;
+
+  const enemyStakeText =
+    $("enemy-stake").value;
+
+  const posture =
+    $("posture").value;
+
+  const enemyPosture =
+    $("enemy-posture").value;
+
+  const enemyBonusText =
+    $("enemy-bonus").value;
+
+
+  /* Vérifier les champs */
+
+  if (
+    !reserve ||
+    !skillId ||
+    !posture ||
+    !enemyPosture ||
+    enemyBonusText === "" ||
+    stakeText === "" ||
+    enemyStakeText === ""
+  ) {
+
+    $("error").textContent =
+      "Complétez tous les champs.";
+
+    return;
+
+  }
+
+
+  const stake = Number(stakeText);
+
+  const enemyStake = Number(
+    enemyStakeText
+  );
+
+  const enemyBonus = Number(
+    enemyBonusText
+  );
+
+
+  if (
+    !Number.isInteger(stake) ||
+    stake < 1
+  ) {
+
+    $("error").textContent =
+      "Votre mise doit être un entier positif.";
+
+    return;
+
+  }
+
+
+  if (
+    !Number.isInteger(enemyStake) ||
+    enemyStake < 1
+  ) {
+
+    $("error").textContent =
+      "La mise adverse doit être un entier positif.";
+
+    return;
+
+  }
+
+
+  /* Conserver les choix pour le résultat */
+
+  const selectedPosture = $("posture")
+    .selectedOptions[0].textContent.trim();
+
+  const selectedEnemyPosture =
+    $("enemy-posture")
+      .selectedOptions[0]
+      .textContent.trim();
+
+
+  /* Résolution par le moteur commun */
+
+  try {
+
+    const result = MISE.resoudreOpposition({
+
+      personnageId: characterId,
+
+      reserve: reserve,
+
+      competenceId:
+        skillId === "none"
+          ? null
+          : skillId,
+
+      miseJoueur: stake,
+
+      postureJoueur: posture,
+
+      miseAdverse: enemyStake,
+
+      bonusAdverse: enemyBonus,
+
+      postureAdverse: enemyPosture
+
+    });
+
+
+    /* Actualiser la fiche */
+
+    refreshCharacter();
+
+    renderReserves();
+
+
+    /* Préparer le texte du résultat */
+
+    let message = "";
+
+    if (result.egalite) {
+
+      message =
+        "ÉGALITÉ\n\n" +
+
+        "Votre score : " +
+        result.scoreJoueur +
+        "\n" +
+
+        "Score adverse : " +
+        result.scoreAdverse +
+        "\n\n" +
+
+        "Décision du Narrateur.\n" +
+
+        "Aucun PA débité automatiquement.";
+
+    } else {
+
+      message =
+        (
+          result.victoire
+            ? "VICTOIRE"
+            : "DÉFAITE"
+        ) +
+
+        "\n\n" +
+
+        "Votre posture : " +
+        selectedPosture +
+
+        "\nPosture adverse : " +
+        selectedEnemyPosture +
+
+        "\n\n" +
+
+        "Votre score : " +
+        result.scoreJoueur +
+
+        "\nScore adverse : " +
+        result.scoreAdverse +
+
+        "\nÉcart : " +
+        result.ecart +
+
+        "\n\n" +
+
+        "Mise payée : " +
+        result.misePayee +
+        " PA" +
+
+        "\nDégâts reçus : " +
+        result.degats +
+
+        "\nBlessures reçues : " +
+        result.blessures +
+
+        "\n\n" +
+
+        "PA restants : " +
+        result.paRestants +
+        " / " +
+        result.maximumRestant +
+
+        "\nBlessures totales : " +
+        result.blessuresTotales;
+
+      if (result.recuperation > 0) {
+
+        message +=
+          "\n\nPosture économique : " +
+          "+1 PA récupéré.";
+
+      }
+
+    }
+
+
+    /* Afficher le résultat */
+
+    $("result-panel").hidden = false;
+
+    $("result").textContent = message;
+
+
+    /* Vider les champs */
+
+    resetFields();
+
+
+  } catch (error) {
+
+    $("error").textContent =
+      error.message;
+
+  }
+
+}
+
+
+/* ========================================
+   ÉVÉNEMENTS
+   ======================================== */
+
+$("character-name").textContent =
+  character.name;
+
+$("opposition-form").addEventListener(
+  "submit",
+  resolveOpposition
+);
+
+$("reserve").addEventListener(
+  "change",
+  updateLimit
+);
+
+$("back").onclick = returnToGame;
+
+$("return").onclick = returnToGame;
+
+
+/* ========================================
+   DÉMARRAGE
+   ======================================== */
+
+renderReserves();
+
+renderSkills();
+
+resetFields();
+
+})();
+
+</script>
+
+</body>
+      </html>
